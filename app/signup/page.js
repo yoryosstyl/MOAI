@@ -2,31 +2,69 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function SignupPage() {
+  const router = useRouter();
+  const { signup, signInWithGoogle } = useAuth();
+
   const [formData, setFormData] = useState({
     displayName: '',
     email: '',
     password: '',
     confirmPassword: '',
   });
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
+    setError(''); // Clear error on input change
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: Implement Firebase authentication
-    console.log('Signup:', formData);
+
+    // Validation
+    if (formData.password !== formData.confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+
+    if (formData.password.length < 6) {
+      setError('Password must be at least 6 characters');
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+
+    const result = await signup(formData.email, formData.password, formData.displayName);
+
+    if (result.success) {
+      router.push('/profile');
+    } else {
+      setError(result.error);
+      setLoading(false);
+    }
   };
 
-  const handleGoogleSignup = () => {
-    // TODO: Implement Google authentication
-    console.log('Google signup');
+  const handleGoogleSignup = async () => {
+    setLoading(true);
+    setError('');
+
+    const result = await signInWithGoogle();
+
+    if (result.success) {
+      router.push('/profile');
+    } else {
+      setError(result.error);
+      setLoading(false);
+    }
   };
 
   return (
@@ -40,6 +78,13 @@ export default function SignupPage() {
 
         {/* Signup Form */}
         <div className="bg-white rounded-lg shadow-md p-8">
+          {/* Error Message */}
+          {error && (
+            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
+              <p className="text-sm text-red-600">{error}</p>
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Display Name */}
             <div>
@@ -112,9 +157,10 @@ export default function SignupPage() {
             {/* Submit Button */}
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition font-medium"
+              disabled={loading}
+              className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition font-medium disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Create Account
+              {loading ? 'Creating Account...' : 'Create Account'}
             </button>
           </form>
 
@@ -131,7 +177,8 @@ export default function SignupPage() {
           {/* Google Signup */}
           <button
             onClick={handleGoogleSignup}
-            className="w-full border border-gray-300 rounded-md py-2 px-4 flex items-center justify-center hover:bg-gray-50 transition"
+            disabled={loading}
+            className="w-full border border-gray-300 rounded-md py-2 px-4 flex items-center justify-center hover:bg-gray-50 transition disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
               <path

@@ -2,9 +2,18 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function Navbar() {
+  const router = useRouter();
+  const { user, logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
+
+  const handleLogout = async () => {
+    await logout();
+    router.push('/');
+  };
 
   return (
     <nav className="bg-white shadow-lg">
@@ -28,18 +37,38 @@ export default function Navbar() {
             <Link href="/about" className="text-gray-700 hover:text-blue-600 transition">
               About
             </Link>
-            <Link
-              href="/login"
-              className="text-gray-700 hover:text-blue-600 transition"
-            >
-              Login
-            </Link>
-            <Link
-              href="/signup"
-              className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
-            >
-              Sign Up
-            </Link>
+
+            {user ? (
+              <>
+                <Link
+                  href="/profile"
+                  className="text-gray-700 hover:text-blue-600 transition"
+                >
+                  {user.displayName || 'Profile'}
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700 transition"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  className="text-gray-700 hover:text-blue-600 transition"
+                >
+                  Login
+                </Link>
+                <Link
+                  href="/signup"
+                  className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
+                >
+                  Sign Up
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -89,18 +118,38 @@ export default function Navbar() {
               >
                 About
               </Link>
-              <Link
-                href="/login"
-                className="text-gray-700 hover:text-blue-600 transition py-2"
-              >
-                Login
-              </Link>
-              <Link
-                href="/signup"
-                className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition text-center"
-              >
-                Sign Up
-              </Link>
+
+              {user ? (
+                <>
+                  <Link
+                    href="/profile"
+                    className="text-gray-700 hover:text-blue-600 transition py-2"
+                  >
+                    {user.displayName || 'Profile'}
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700 transition text-center"
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    href="/login"
+                    className="text-gray-700 hover:text-blue-600 transition py-2"
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    href="/signup"
+                    className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition text-center"
+                  >
+                    Sign Up
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         )}
