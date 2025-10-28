@@ -54,10 +54,24 @@ export const AuthProvider = ({ children }) => {
         uid: result.user.uid,
         displayName: displayName,
         email: email,
-        telephone: '',
+        telephone: {
+          countryCode: '+30',
+          number: '',
+          whatsApp: false,
+          viber: false,
+          signal: false,
+        },
         bio: '',
         avatarUrl: '',
-        location: '',
+        location: {
+          address: '',
+          isVerified: false,
+        },
+        socialMedia: {
+          linkedin: '',
+          instagram: '',
+          facebook: '',
+        },
         privacy: {
           emailPublic: false,
           telephonePublic: false,
@@ -99,10 +113,24 @@ export const AuthProvider = ({ children }) => {
           uid: result.user.uid,
           displayName: result.user.displayName || '',
           email: result.user.email,
-          telephone: '',
+          telephone: {
+            countryCode: '+30',
+            number: '',
+            whatsApp: false,
+            viber: false,
+            signal: false,
+          },
           bio: '',
           avatarUrl: result.user.photoURL || '',
-          location: '',
+          location: {
+            address: '',
+            isVerified: false,
+          },
+          socialMedia: {
+            linkedin: '',
+            instagram: '',
+            facebook: '',
+          },
           privacy: {
             emailPublic: false,
             telephonePublic: false,

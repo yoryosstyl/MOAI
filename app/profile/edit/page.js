@@ -4,8 +4,11 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import ProtectedRoute from '@/components/ProtectedRoute';
+import AvatarUpload from '@/components/AvatarUpload';
+import LocationAutocomplete from '@/components/LocationAutocomplete';
 import { doc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import { countryCodes, validatePhoneNumber } from '@/utils/phoneUtils';
 
 export default function EditProfilePage() {
   const router = useRouter();
@@ -14,8 +17,23 @@ export default function EditProfilePage() {
   const [formData, setFormData] = useState({
     displayName: '',
     bio: '',
-    telephone: '',
-    location: '',
+    telephone: {
+      countryCode: '+30',
+      number: '',
+      whatsApp: false,
+      viber: false,
+      signal: false,
+    },
+    location: {
+      address: '',
+      isVerified: false,
+    },
+    socialMedia: {
+      linkedin: '',
+      instagram: '',
+      facebook: '',
+    },
+    avatarUrl: '',
     preferredContact: [],
     privacy: {
       emailPublic: false,
@@ -34,8 +52,23 @@ export default function EditProfilePage() {
       setFormData({
         displayName: userProfile.displayName || '',
         bio: userProfile.bio || '',
-        telephone: userProfile.telephone || '',
-        location: userProfile.location || '',
+        telephone: {
+          countryCode: userProfile.telephone?.countryCode || '+30',
+          number: userProfile.telephone?.number || '',
+          whatsApp: userProfile.telephone?.whatsApp || false,
+          viber: userProfile.telephone?.viber || false,
+          signal: userProfile.telephone?.signal || false,
+        },
+        location: {
+          address: userProfile.location?.address || '',
+          isVerified: userProfile.location?.isVerified || false,
+        },
+        socialMedia: {
+          linkedin: userProfile.socialMedia?.linkedin || '',
+          instagram: userProfile.socialMedia?.instagram || '',
+          facebook: userProfile.socialMedia?.facebook || '',
+        },
+        avatarUrl: userProfile.avatarUrl || '',
         preferredContact: userProfile.preferredContact || ['email'],
         privacy: {
           emailPublic: userProfile.privacy?.emailPublic || false,
@@ -51,6 +84,26 @@ export default function EditProfilePage() {
     setFormData((prev) => ({
       ...prev,
       [name]: value,
+    }));
+  };
+
+  const handlePhoneChange = (field, value) => {
+    setFormData((prev) => ({
+      ...prev,
+      telephone: {
+        ...prev.telephone,
+        [field]: value,
+      },
+    }));
+  };
+
+  const handleSocialMediaChange = (platform, value) => {
+    setFormData((prev) => ({
+      ...prev,
+      socialMedia: {
+        ...prev.socialMedia,
+        [platform]: value,
+      },
     }));
   };
 
@@ -78,11 +131,52 @@ export default function EditProfilePage() {
     });
   };
 
+  const handleLocationChange = (address) => {
+    setFormData((prev) => ({
+      ...prev,
+      location: {
+        ...prev.location,
+        address,
+      },
+    }));
+  };
+
+  const handleLocationVerifiedChange = (isVerified) => {
+    setFormData((prev) => ({
+      ...prev,
+      location: {
+        ...prev.location,
+        isVerified,
+      },
+    }));
+  };
+
+  const handleAvatarUpload = (url) => {
+    setFormData((prev) => ({
+      ...prev,
+      avatarUrl: url,
+    }));
+  };
+
+  const handleAvatarDelete = () => {
+    setFormData((prev) => ({
+      ...prev,
+      avatarUrl: '',
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
     setSuccess(false);
+
+    // Validate phone number if provided
+    if (formData.telephone.number && !validatePhoneNumber(formData.telephone.number)) {
+      setError('Phone number can only contain digits');
+      setLoading(false);
+      return;
+    }
 
     try {
       // Update user profile in Firestore
@@ -92,6 +186,8 @@ export default function EditProfilePage() {
         bio: formData.bio,
         telephone: formData.telephone,
         location: formData.location,
+        socialMedia: formData.socialMedia,
+        avatarUrl: formData.avatarUrl,
         preferredContact: formData.preferredContact,
         privacy: formData.privacy,
         updatedAt: serverTimestamp(),
@@ -137,7 +233,18 @@ export default function EditProfilePage() {
             )}
 
             {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-8">
+              {/* Avatar Upload */}
+              <div className="border-b pb-8">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Profile Picture</h3>
+                <AvatarUpload
+                  currentAvatarUrl={formData.avatarUrl}
+                  userId={user.uid}
+                  onUploadSuccess={handleAvatarUpload}
+                  onDelete={handleAvatarDelete}
+                />
+              </div>
+
               {/* Display Name */}
               <div>
                 <label htmlFor="displayName" className="block text-sm font-medium text-gray-700 mb-2">
@@ -171,45 +278,147 @@ export default function EditProfilePage() {
                 />
               </div>
 
-              {/* Telephone */}
+              {/* Phone Number with Country Code */}
               <div>
-                <label htmlFor="telephone" className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   Telephone
                 </label>
-                <input
-                  id="telephone"
-                  name="telephone"
-                  type="tel"
-                  value={formData.telephone}
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="+30 123 456 7890"
-                />
+                <div className="flex gap-2">
+                  <select
+                    value={formData.telephone.countryCode}
+                    onChange={(e) => handlePhoneChange('countryCode', e.target.value)}
+                    className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    {countryCodes.map((country) => (
+                      <option key={country.code} value={country.code}>
+                        {country.flag} {country.code}
+                      </option>
+                    ))}
+                  </select>
+                  <input
+                    type="tel"
+                    value={formData.telephone.number}
+                    onChange={(e) => {
+                      // Only allow digits
+                      const value = e.target.value.replace(/\D/g, '');
+                      handlePhoneChange('number', value);
+                    }}
+                    placeholder="1234567890"
+                    className="flex-1 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+
+                {/* Messaging Apps */}
+                {formData.telephone.number && (
+                  <div className="mt-3 space-y-2">
+                    <p className="text-sm text-gray-600">Available on:</p>
+                    <div className="flex flex-wrap gap-4">
+                      <label className="flex items-center">
+                        <input
+                          type="checkbox"
+                          checked={formData.telephone.whatsApp}
+                          onChange={(e) => handlePhoneChange('whatsApp', e.target.checked)}
+                          className="h-4 w-4 text-blue-600 rounded focus:ring-blue-500"
+                        />
+                        <span className="ml-2 text-sm text-gray-700">WhatsApp</span>
+                      </label>
+                      <label className="flex items-center">
+                        <input
+                          type="checkbox"
+                          checked={formData.telephone.viber}
+                          onChange={(e) => handlePhoneChange('viber', e.target.checked)}
+                          className="h-4 w-4 text-blue-600 rounded focus:ring-blue-500"
+                        />
+                        <span className="ml-2 text-sm text-gray-700">Viber</span>
+                      </label>
+                      <label className="flex items-center">
+                        <input
+                          type="checkbox"
+                          checked={formData.telephone.signal}
+                          onChange={(e) => handlePhoneChange('signal', e.target.checked)}
+                          className="h-4 w-4 text-blue-600 rounded focus:ring-blue-500"
+                        />
+                        <span className="ml-2 text-sm text-gray-700">Signal</span>
+                      </label>
+                    </div>
+                  </div>
+                )}
               </div>
 
-              {/* Location */}
+              {/* Location with Autocomplete */}
               <div>
-                <label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-2">
-                  Location
-                </label>
-                <input
-                  id="location"
-                  name="location"
-                  type="text"
-                  value={formData.location}
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Athens, Greece"
+                <LocationAutocomplete
+                  value={formData.location.address}
+                  onChange={handleLocationChange}
+                  onVerifiedChange={handleLocationVerifiedChange}
                 />
+                {formData.location.isVerified && (
+                  <p className="text-xs text-green-600 mt-1 flex items-center">
+                    <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    Verified address
+                  </p>
+                )}
+              </div>
+
+              {/* Social Media Links */}
+              <div className="border-t pt-8">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Social Media</h3>
+                <div className="space-y-4">
+                  <div>
+                    <label htmlFor="linkedin" className="block text-sm font-medium text-gray-700 mb-2">
+                      LinkedIn
+                    </label>
+                    <input
+                      id="linkedin"
+                      type="url"
+                      value={formData.socialMedia.linkedin}
+                      onChange={(e) => handleSocialMediaChange('linkedin', e.target.value)}
+                      placeholder="https://linkedin.com/in/yourprofile"
+                      className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="instagram" className="block text-sm font-medium text-gray-700 mb-2">
+                      Instagram
+                    </label>
+                    <input
+                      id="instagram"
+                      type="url"
+                      value={formData.socialMedia.instagram}
+                      onChange={(e) => handleSocialMediaChange('instagram', e.target.value)}
+                      placeholder="https://instagram.com/yourprofile"
+                      className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="facebook" className="block text-sm font-medium text-gray-700 mb-2">
+                      Facebook
+                    </label>
+                    <input
+                      id="facebook"
+                      type="url"
+                      value={formData.socialMedia.facebook}
+                      onChange={(e) => handleSocialMediaChange('facebook', e.target.value)}
+                      placeholder="https://facebook.com/yourprofile"
+                      className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+                </div>
               </div>
 
               {/* Preferred Contact Methods */}
-              <div>
+              <div className="border-t pt-8">
                 <label className="block text-sm font-medium text-gray-700 mb-3">
                   Preferred Contact Methods (select multiple)
                 </label>
-                <div className="space-y-2">
-                  {['email', 'telephone', 'website'].map((method) => (
+                <div className="grid grid-cols-2 gap-3">
+                  {['email', 'telephone', 'whatsapp', 'viber', 'signal', 'linkedin', 'instagram', 'facebook'].map((method) => (
                     <label key={method} className="flex items-center">
                       <input
                         type="checkbox"
@@ -224,13 +433,13 @@ export default function EditProfilePage() {
               </div>
 
               {/* Privacy Settings */}
-              <div className="border-t pt-6">
+              <div className="border-t pt-8">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Privacy Settings</h3>
                 <p className="text-sm text-gray-600 mb-4">
                   Choose which information is visible to other users
                 </p>
                 <div className="space-y-3">
-                  <label className="flex items-center justify-between">
+                  <label className="flex items-center justify-between p-3 bg-gray-50 rounded">
                     <span className="text-gray-700">Make email public</span>
                     <input
                       type="checkbox"
@@ -239,7 +448,7 @@ export default function EditProfilePage() {
                       className="h-5 w-5 text-blue-600 rounded focus:ring-blue-500"
                     />
                   </label>
-                  <label className="flex items-center justify-between">
+                  <label className="flex items-center justify-between p-3 bg-gray-50 rounded">
                     <span className="text-gray-700">Make telephone public</span>
                     <input
                       type="checkbox"
@@ -248,7 +457,7 @@ export default function EditProfilePage() {
                       className="h-5 w-5 text-blue-600 rounded focus:ring-blue-500"
                     />
                   </label>
-                  <label className="flex items-center justify-between">
+                  <label className="flex items-center justify-between p-3 bg-gray-50 rounded">
                     <span className="text-gray-700">Make location public</span>
                     <input
                       type="checkbox"
@@ -261,18 +470,18 @@ export default function EditProfilePage() {
               </div>
 
               {/* Action Buttons */}
-              <div className="flex gap-4 pt-6">
+              <div className="flex gap-4 pt-6 border-t">
                 <button
                   type="submit"
                   disabled={loading}
-                  className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 transition font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {loading ? 'Saving...' : 'Save Changes'}
                 </button>
                 <button
                   type="button"
                   onClick={() => router.push('/profile')}
-                  className="flex-1 bg-gray-200 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-300 transition font-medium"
+                  className="flex-1 bg-gray-200 text-gray-700 py-3 px-4 rounded-md hover:bg-gray-300 transition font-medium"
                 >
                   Cancel
                 </button>
