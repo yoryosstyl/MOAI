@@ -1,0 +1,66 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isImageFile() {
+      return request.resource.contentType.matches('image/.*') ||
+             request.resource.contentType == 'application/pdf';
+    }
+
+    function isValidSize() {
+      // Max 2MB = 2 * 1024 * 1024 bytes
+      return request.resource.size <= 2 * 1024 * 1024;
+    }
+
+    // User avatars
+    match /avatars/{userId}/{fileName} {
+      // Anyone can read avatars (for displaying user profiles)
+      allow read: if true;
+
+      // Users can only upload their own avatar
+      allow create, update: if isAuthenticated() &&
+                              request.auth.uid == userId &&
+                              isImageFile() &&
+                              isValidSize();
+
+      // Users can only delete their own avatar
+      allow delete: if isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Project images
+    match /projects/{projectId}/{fileName} {
+      // Anyone can read project images
+      allow read: if true;
+
+      // Only authenticated users can upload project images
+      // Additional ownership check will be done in the app
+      allow create, update: if isAuthenticated() &&
+                              isImageFile() &&
+                              isValidSize();
+
+      // Project images can be deleted by authenticated users
+      // Ownership verification done in the app
+      allow delete: if isAuthenticated();
+    }
+
+    // Toolkit resources
+    match /toolkits/{toolkitId}/{fileName} {
+      // Anyone can read toolkit resources
+      allow read: if true;
+
+      // Only authenticated users can upload toolkit resources
+      allow create, update: if isAuthenticated() &&
+                              isImageFile() &&
+                              isValidSize();
+
+      // Toolkit resources can be deleted by authenticated users
+      allow delete: if isAuthenticated();
+    }
+  }
+}
