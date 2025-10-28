@@ -2,20 +2,45 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function LoginPage() {
+  const router = useRouter();
+  const { login, signInWithGoogle } = useAuth();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: Implement Firebase authentication
-    console.log('Login:', { email, password });
+    setLoading(true);
+    setError('');
+
+    const result = await login(email, password);
+
+    if (result.success) {
+      router.push('/profile');
+    } else {
+      setError(result.error);
+      setLoading(false);
+    }
   };
 
-  const handleGoogleLogin = () => {
-    // TODO: Implement Google authentication
-    console.log('Google login');
+  const handleGoogleLogin = async () => {
+    setLoading(true);
+    setError('');
+
+    const result = await signInWithGoogle();
+
+    if (result.success) {
+      router.push('/profile');
+    } else {
+      setError(result.error);
+      setLoading(false);
+    }
   };
 
   return (
@@ -29,6 +54,13 @@ export default function LoginPage() {
 
         {/* Login Form */}
         <div className="bg-white rounded-lg shadow-md p-8">
+          {/* Error Message */}
+          {error && (
+            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
+              <p className="text-sm text-red-600">{error}</p>
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Email */}
             <div>
@@ -40,7 +72,10 @@ export default function LoginPage() {
                 type="email"
                 required
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setError('');
+                }}
                 className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="you@example.com"
               />
@@ -56,7 +91,10 @@ export default function LoginPage() {
                 type="password"
                 required
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setError('');
+                }}
                 className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="••••••••"
               />
@@ -72,9 +110,10 @@ export default function LoginPage() {
             {/* Submit Button */}
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition font-medium"
+              disabled={loading}
+              className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition font-medium disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Sign In
+              {loading ? 'Signing In...' : 'Sign In'}
             </button>
           </form>
 
@@ -91,7 +130,8 @@ export default function LoginPage() {
           {/* Google Login */}
           <button
             onClick={handleGoogleLogin}
-            className="w-full border border-gray-300 rounded-md py-2 px-4 flex items-center justify-center hover:bg-gray-50 transition"
+            disabled={loading}
+            className="w-full border border-gray-300 rounded-md py-2 px-4 flex items-center justify-center hover:bg-gray-50 transition disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
               <path
