@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import ProtectedRoute from '@/components/ProtectedRoute';
 
@@ -33,9 +34,12 @@ export default function ProfilePage() {
                 <p className="text-gray-600 mb-4">
                   {userProfile?.bio || 'No bio yet. Click Edit Profile to add one.'}
                 </p>
-                <button className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
+                <Link
+                  href="/profile/edit"
+                  className="inline-block bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
+                >
                   Edit Profile
-                </button>
+                </Link>
               </div>
             </div>
           </div>
@@ -67,39 +71,47 @@ export default function ProfilePage() {
 
           {/* Privacy Settings */}
           <div className="bg-white rounded-lg shadow-md p-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-6">Privacy Settings</h2>
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-semibold text-gray-900">Privacy Settings</h2>
+              <Link
+                href="/profile/edit"
+                className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+              >
+                Edit Privacy
+              </Link>
+            </div>
             <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <span className="text-gray-700">Make email public</span>
-                <input
-                  type="checkbox"
-                  checked={userProfile?.privacy?.emailPublic || false}
-                  readOnly
-                  className="h-5 w-5 text-blue-600"
-                />
+              <div className="flex items-center justify-between py-2">
+                <span className="text-gray-700">Email visibility</span>
+                <span className={`px-3 py-1 rounded-full text-sm ${
+                  userProfile?.privacy?.emailPublic
+                    ? 'bg-green-100 text-green-800'
+                    : 'bg-gray-100 text-gray-800'
+                }`}>
+                  {userProfile?.privacy?.emailPublic ? 'Public' : 'Private'}
+                </span>
               </div>
-              <div className="flex items-center justify-between">
-                <span className="text-gray-700">Make telephone public</span>
-                <input
-                  type="checkbox"
-                  checked={userProfile?.privacy?.telephonePublic || false}
-                  readOnly
-                  className="h-5 w-5 text-blue-600"
-                />
+              <div className="flex items-center justify-between py-2">
+                <span className="text-gray-700">Telephone visibility</span>
+                <span className={`px-3 py-1 rounded-full text-sm ${
+                  userProfile?.privacy?.telephonePublic
+                    ? 'bg-green-100 text-green-800'
+                    : 'bg-gray-100 text-gray-800'
+                }`}>
+                  {userProfile?.privacy?.telephonePublic ? 'Public' : 'Private'}
+                </span>
               </div>
-              <div className="flex items-center justify-between">
-                <span className="text-gray-700">Make location public</span>
-                <input
-                  type="checkbox"
-                  checked={userProfile?.privacy?.locationPublic || false}
-                  readOnly
-                  className="h-5 w-5 text-blue-600"
-                />
+              <div className="flex items-center justify-between py-2">
+                <span className="text-gray-700">Location visibility</span>
+                <span className={`px-3 py-1 rounded-full text-sm ${
+                  userProfile?.privacy?.locationPublic
+                    ? 'bg-green-100 text-green-800'
+                    : 'bg-gray-100 text-gray-800'
+                }`}>
+                  {userProfile?.privacy?.locationPublic ? 'Public' : 'Private'}
+                </span>
               </div>
             </div>
-            <p className="mt-4 text-sm text-gray-500">
-              Note: Privacy settings are currently read-only. Profile editing will be added soon.
-            </p>
           </div>
         </div>
       </div>

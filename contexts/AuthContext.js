@@ -132,6 +132,20 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Refresh user profile from Firestore
+  const refreshUserProfile = async () => {
+    if (user) {
+      try {
+        const userDoc = await getDoc(doc(db, 'users', user.uid));
+        if (userDoc.exists()) {
+          setUserProfile(userDoc.data());
+        }
+      } catch (error) {
+        console.error('Error refreshing profile:', error);
+      }
+    }
+  };
+
   const value = {
     user,
     userProfile,
@@ -140,6 +154,7 @@ export const AuthProvider = ({ children }) => {
     login,
     signInWithGoogle,
     logout,
+    refreshUserProfile,
   };
 
   return (
