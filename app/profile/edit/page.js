@@ -207,6 +207,17 @@ export default function EditProfilePage() {
     }
   };
 
+  // Don't render form if user is not loaded yet
+  if (!user) {
+    return (
+      <ProtectedRoute>
+        <div className="min-h-screen bg-gray-50 py-12 flex items-center justify-center">
+          <div className="text-gray-600">Loading...</div>
+        </div>
+      </ProtectedRoute>
+    );
+  }
+
   return (
     <ProtectedRoute>
       <div className="min-h-screen bg-gray-50 py-12">
