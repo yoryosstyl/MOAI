@@ -8,6 +8,13 @@ export default function LocationAutocomplete({ value, onChange, onVerifiedChange
   const inputRef = useRef(null);
   const autocompleteRef = useRef(null);
 
+  // Update inputValue when value prop changes (e.g., when profile data loads)
+  useEffect(() => {
+    if (value !== undefined && value !== null) {
+      setInputValue(value);
+    }
+  }, [value]);
+
   useEffect(() => {
     // Load Google Places Autocomplete
     // Note: This requires Google Maps API key
