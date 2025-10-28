@@ -1,0 +1,57 @@
+{
+  "nav": {
+    "projects": "Projects",
+    "toolkits": "Toolkits",
+    "about": "About",
+    "login": "Login",
+    "signup": "Sign Up"
+  },
+  "home": {
+    "title": "Welcome to MOAI",
+    "subtitle": "A collaborative platform for artists to share projects, discover creative toolkits, and connect with fellow creators.",
+    "browseProjects": "Browse Projects",
+    "discoverToolkits": "Discover Toolkits",
+    "joinCommunity": "Join Community"
+  },
+  "projects": {
+    "title": "Projects",
+    "subtitle": "Browse and discover creative projects from artists around the world",
+    "searchByTitle": "Search by title...",
+    "searchByTags": "Search by tags...",
+    "searchByLocation": "Search by location...",
+    "search": "Search",
+    "viewDetails": "View Details"
+  },
+  "toolkits": {
+    "title": "Toolkits",
+    "subtitle": "Discover curated toolkits and resources for art creation",
+    "searchToolkits": "Search toolkits...",
+    "allCategories": "All Categories",
+    "viewResources": "View Resources",
+    "share": "Share"
+  },
+  "auth": {
+    "welcomeBack": "Welcome Back",
+    "signInAccount": "Sign in to your MOAI account",
+    "createAccount": "Create Account",
+    "joinCommunity": "Join the MOAI community",
+    "email": "Email Address",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "displayName": "Display Name",
+    "forgotPassword": "Forgot password?",
+    "signIn": "Sign In",
+    "signInWithGoogle": "Sign in with Google",
+    "signUpWithGoogle": "Sign up with Google",
+    "dontHaveAccount": "Don't have an account?",
+    "alreadyHaveAccount": "Already have an account?"
+  },
+  "profile": {
+    "editProfile": "Edit Profile",
+    "profileInformation": "Profile Information",
+    "privacySettings": "Privacy Settings",
+    "makeEmailPublic": "Make email public",
+    "makeTelephonePublic": "Make telephone public",
+    "makeLocationPublic": "Make location public"
+  }
+}

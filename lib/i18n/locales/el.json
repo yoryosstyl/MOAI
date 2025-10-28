@@ -1,0 +1,57 @@
+{
+  "nav": {
+    "projects": "Έργα",
+    "toolkits": "Εργαλεία",
+    "about": "Σχετικά",
+    "login": "Σύνδεση",
+    "signup": "Εγγραφή"
+  },
+  "home": {
+    "title": "Καλώς ήρθατε στο MOAI",
+    "subtitle": "Μια πλατφόρμα συνεργασίας για καλλιτέχνες για να μοιραστούν έργα, να ανακαλύψουν δημιουργικά εργαλεία και να συνδεθούν με άλλους δημιουργούς.",
+    "browseProjects": "Περιήγηση Έργων",
+    "discoverToolkits": "Ανακαλύψτε Εργαλεία",
+    "joinCommunity": "Συμμετοχή στην Κοινότητα"
+  },
+  "projects": {
+    "title": "Έργα",
+    "subtitle": "Περιηγηθείτε και ανακαλύψτε δημιουργικά έργα από καλλιτέχνες σε όλο τον κόσμο",
+    "searchByTitle": "Αναζήτηση με τίτλο...",
+    "searchByTags": "Αναζήτηση με ετικέτες...",
+    "searchByLocation": "Αναζήτηση με τοποθεσία...",
+    "search": "Αναζήτηση",
+    "viewDetails": "Προβολή Λεπτομερειών"
+  },
+  "toolkits": {
+    "title": "Εργαλεία",
+    "subtitle": "Ανακαλύψτε επιμελημένα εργαλεία και πόρους για δημιουργία τέχνης",
+    "searchToolkits": "Αναζήτηση εργαλείων...",
+    "allCategories": "Όλες οι Κατηγορίες",
+    "viewResources": "Προβολή Πόρων",
+    "share": "Κοινοποίηση"
+  },
+  "auth": {
+    "welcomeBack": "Καλώς ήρθατε πίσω",
+    "signInAccount": "Συνδεθείτε στον λογαριασμό σας MOAI",
+    "createAccount": "Δημιουργία Λογαριασμού",
+    "joinCommunity": "Εγγραφείτε στην κοινότητα MOAI",
+    "email": "Διεύθυνση Email",
+    "password": "Κωδικός Πρόσβασης",
+    "confirmPassword": "Επιβεβαίωση Κωδικού",
+    "displayName": "Όνομα Εμφάνισης",
+    "forgotPassword": "Ξεχάσατε τον κωδικό;",
+    "signIn": "Σύνδεση",
+    "signInWithGoogle": "Σύνδεση με Google",
+    "signUpWithGoogle": "Εγγραφή με Google",
+    "dontHaveAccount": "Δεν έχετε λογαριασμό;",
+    "alreadyHaveAccount": "Έχετε ήδη λογαριασμό;"
+  },
+  "profile": {
+    "editProfile": "Επεξεργασία Προφίλ",
+    "profileInformation": "Πληροφορίες Προφίλ",
+    "privacySettings": "Ρυθμίσεις Απορρήτου",
+    "makeEmailPublic": "Δημόσιο email",
+    "makeTelephonePublic": "Δημόσιο τηλέφωνο",
+    "makeLocationPublic": "Δημόσια τοποθεσία"
+  }
+}
