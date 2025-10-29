@@ -129,16 +129,23 @@ export default function CreateToolkitPage() {
       const toolkitData = {
         ...formData,
         logoUrl,
-        status: 'approved', // Phase 1: Admin creates, auto-approved
-        author: 'MOAI', // Phase 1: All created by admin
+        status: isAdmin ? 'approved' : 'pending', // Admin = auto-approved, User = pending review
+        author: isAdmin ? 'MOAI' : user.displayName || user.email, // Admin = MOAI, User = their name
         submittedBy: user.uid,
+        submitterName: user.displayName || user.email,
+        submitterEmail: user.email,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       };
 
       await addDoc(collection(db, 'toolkits'), toolkitData);
 
-      router.push('/toolkits');
+      // Redirect based on status
+      if (isAdmin) {
+        router.push('/toolkits');
+      } else {
+        router.push('/toolkits?submitted=true');
+      }
     } catch (err) {
       console.error('Error creating toolkit:', err);
       setError('Failed to create toolkit. Please try again.');
@@ -146,28 +153,47 @@ export default function CreateToolkitPage() {
     }
   };
 
-  // Redirect if not admin
-  if (!isAdmin) {
-    return (
-      <ProtectedRoute>
-        <div className="min-h-screen bg-gray-50 py-12">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">Access Denied</h1>
-            <p className="text-gray-600 mb-4">You do not have permission to create toolkits.</p>
-          </div>
-        </div>
-      </ProtectedRoute>
-    );
-  }
-
   return (
     <ProtectedRoute>
       <div className="min-h-screen bg-gray-50 py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-8">
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">Add New Toolkit</h1>
-            <p className="text-gray-600">Add a new tool or software to the platform database</p>
+            <h1 className="text-4xl font-bold text-gray-900 mb-2">
+              {isAdmin ? 'Add New Toolkit' : 'Submit a Toolkit'}
+            </h1>
+            <p className="text-gray-600">
+              {isAdmin
+                ? 'Add a new tool or software to the platform database'
+                : 'Suggest a tool or software to be added to the database'}
+            </p>
           </div>
+
+          {/* User submission notice */}
+          {!isAdmin && (
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+              <div className="flex items-start">
+                <svg
+                  className="w-6 h-6 text-blue-600 mr-3 flex-shrink-0"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <div>
+                  <h3 className="text-sm font-semibold text-blue-900 mb-1">Under Review</h3>
+                  <p className="text-sm text-blue-800">
+                    Your submission will be reviewed by our team before being published. You'll receive a notification once it's been reviewed.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
 
           <div className="bg-white rounded-lg shadow-md p-8">
             {error && (
@@ -423,7 +449,9 @@ export default function CreateToolkitPage() {
                   disabled={saving || formData.platforms.length === 0}
                   className="flex-1 bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 transition font-medium disabled:opacity-50"
                 >
-                  {saving ? 'Creating...' : 'Create Toolkit'}
+                  {saving
+                    ? (isAdmin ? 'Creating...' : 'Submitting...')
+                    : (isAdmin ? 'Create Toolkit' : 'Submit for Review')}
                 </button>
                 <button
                   type="button"

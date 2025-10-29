@@ -111,22 +111,40 @@ export default function ToolkitsPage() {
                 Explore professional tools and software for creative work
               </p>
             </div>
-            {isAdmin && (
-              <Link
-                href="/toolkits/create"
-                className="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition font-medium"
-              >
-                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 4v16m8-8H4"
-                  />
-                </svg>
-                Add Toolkit
-              </Link>
-            )}
+            <div className="flex gap-3">
+              {isAdmin && (
+                <Link
+                  href="/toolkits/admin/review"
+                  className="inline-flex items-center px-6 py-3 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition font-medium"
+                >
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                  Review Submissions
+                </Link>
+              )}
+              {user && (
+                <Link
+                  href="/toolkits/create"
+                  className="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition font-medium"
+                >
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 4v16m8-8H4"
+                    />
+                  </svg>
+                  {isAdmin ? 'Add Toolkit' : 'Submit Toolkit'}
+                </Link>
+              )}
+            </div>
           </div>
         </div>
 
