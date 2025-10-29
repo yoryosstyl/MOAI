@@ -7,7 +7,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "deploy": "next build && npx firebase-tools deploy --only hosting"
   },
   "repository": {
     "type": "git",
@@ -18,11 +19,13 @@
   "license": "ISC",
   "dependencies": {
     "autoprefixer": "^10.4.21",
+    "browser-image-compression": "^2.0.2",
     "firebase": "^12.4.0",
     "next": "^16.0.0",
     "postcss": "^8.5.6",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "react-phone-number-input": "^3.4.13",
     "tailwindcss": "^3.4.1"
   }
 }
