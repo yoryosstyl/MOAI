@@ -30,16 +30,15 @@ export default function ProjectsPage() {
           ...doc.data(),
         }));
 
-        // Filter projects based on visibility
-        // Show: all public projects + user's own private projects
-        const visibleProjects = allProjects.filter((project) => {
+        // Filter to show ONLY public projects (same for logged in/out users)
+        // User's private projects appear only in "My Projects" page
+        const publicProjects = allProjects.filter((project) => {
           const isPublic = project.isPublic !== false; // default to public if not set
-          const isOwner = user && project.ownerId === user.uid;
-          return isPublic || isOwner;
+          return isPublic;
         });
 
-        setProjects(visibleProjects);
-        setFilteredProjects(visibleProjects);
+        setProjects(publicProjects);
+        setFilteredProjects(publicProjects);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching projects:', error);
