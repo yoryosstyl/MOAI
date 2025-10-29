@@ -5,6 +5,10 @@ import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { collection, query, where, orderBy, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import FavoriteButton from '@/components/FavoriteButton';
+import RatingDisplay from '@/components/RatingDisplay';
+import { getToolkitFavoriteCount } from '@/utils/favorites';
+import { getToolkitAverageRating } from '@/utils/reviews';
 
 export default function ToolkitsPage() {
   const { user } = useAuth();
@@ -38,8 +42,25 @@ export default function ToolkitsPage() {
           ...doc.data(),
         }));
 
-        setToolkits(toolkitsData);
-        setFilteredToolkits(toolkitsData);
+        // Fetch favorites and ratings for each toolkit
+        const toolkitsWithStats = await Promise.all(
+          toolkitsData.map(async (toolkit) => {
+            const [favoriteCount, ratingData] = await Promise.all([
+              getToolkitFavoriteCount(toolkit.id),
+              getToolkitAverageRating(toolkit.id),
+            ]);
+
+            return {
+              ...toolkit,
+              favoriteCount,
+              averageRating: ratingData.average,
+              reviewCount: ratingData.count,
+            };
+          })
+        );
+
+        setToolkits(toolkitsWithStats);
+        setFilteredToolkits(toolkitsWithStats);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching toolkits:', error);
@@ -304,8 +325,8 @@ export default function ToolkitsPage() {
                   </div>
 
                   {/* Tags */}
-                  {toolkit.tags && toolkit.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-1">
+                  {toolkit.tags && toolkit.tags.length > 0 ? (
+                    <div className="flex flex-wrap gap-1 mb-4">
                       {toolkit.tags.slice(0, 3).map((tag, index) => (
                         <span
                           key={index}
@@ -320,7 +341,27 @@ export default function ToolkitsPage() {
                         </span>
                       )}
                     </div>
+                  ) : (
+                    <div className="mb-4"></div>
                   )}
+
+                  {/* Stats: Favorites and Rating */}
+                  <div className="flex items-center gap-4 pt-4 border-t border-gray-100">
+                    <div className="flex items-center gap-2">
+                      <FavoriteButton
+                        toolkitId={toolkit.id}
+                        showCount={true}
+                        favoriteCount={toolkit.favoriteCount || 0}
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <RatingDisplay
+                        rating={toolkit.averageRating || 0}
+                        count={toolkit.reviewCount || 0}
+                        size="sm"
+                      />
+                    </div>
+                  </div>
                 </div>
               </Link>
             ))}
