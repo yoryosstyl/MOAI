@@ -22,6 +22,7 @@ export default function CreateProjectPage() {
     tags: [],
     size: 'medium',
     location: '',
+    isPublic: true,
     links: {
       googleDrive: '',
       website: '',
@@ -250,6 +251,33 @@ export default function CreateProjectPage() {
             {/* Step 1: Project Details Form */}
             {step === 1 && (
               <form onSubmit={handleSubmit} className="space-y-8">
+              {/* Privacy Toggle */}
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900">Project Visibility</h3>
+                    <p className="text-sm text-gray-600 mt-1">
+                      {formData.isPublic
+                        ? 'Public - Everyone can see this project'
+                        : 'Private - Only you can see this project'}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, isPublic: !formData.isPublic })}
+                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                      formData.isPublic ? 'bg-blue-600' : 'bg-gray-300'
+                    }`}
+                  >
+                    <span
+                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                        formData.isPublic ? 'translate-x-6' : 'translate-x-1'
+                      }`}
+                    />
+                  </button>
+                </div>
+              </div>
+
               {/* Project Name */}
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">

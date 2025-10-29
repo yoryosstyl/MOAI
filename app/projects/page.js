@@ -25,13 +25,21 @@ export default function ProjectsPage() {
         const q = query(projectsRef, orderBy('createdAt', 'desc'));
         const querySnapshot = await getDocs(q);
 
-        const projectsData = querySnapshot.docs.map((doc) => ({
+        const allProjects = querySnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
 
-        setProjects(projectsData);
-        setFilteredProjects(projectsData);
+        // Filter projects based on visibility
+        // Show: all public projects + user's own private projects
+        const visibleProjects = allProjects.filter((project) => {
+          const isPublic = project.isPublic !== false; // default to public if not set
+          const isOwner = user && project.ownerId === user.uid;
+          return isPublic || isOwner;
+        });
+
+        setProjects(visibleProjects);
+        setFilteredProjects(visibleProjects);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching projects:', error);
@@ -40,7 +48,7 @@ export default function ProjectsPage() {
     };
 
     fetchProjects();
-  }, []);
+  }, [user]);
 
   // Filter projects based on search criteria
   useEffect(() => {

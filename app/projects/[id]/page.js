@@ -75,6 +75,22 @@ export default function ProjectDetailPage() {
   }
 
   const isOwner = user && user.uid === project.ownerId;
+  const isPublic = project.isPublic !== false; // default to public if not set
+
+  // If project is private and user is not the owner, show not found
+  if (!isPublic && !isOwner) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-12">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Project Not Found</h1>
+          <p className="text-gray-600 mb-4">This project is private or does not exist.</p>
+          <Link href="/projects" className="text-blue-600 hover:text-blue-800">
+            ← Back to Projects
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 py-12">
@@ -108,7 +124,7 @@ export default function ProjectDetailPage() {
           <div className="p-8">
             <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-6">
               <div className="flex-1">
-                <div className="flex items-center gap-3 mb-3">
+                <div className="flex items-center gap-3 mb-3 flex-wrap">
                   <span className="px-3 py-1 text-sm font-medium bg-gray-100 text-gray-700 rounded">
                     {project.kindOfProject || 'Project'}
                   </span>
@@ -118,6 +134,16 @@ export default function ProjectDetailPage() {
                   <span className="px-3 py-1 text-sm font-medium bg-green-100 text-green-700 rounded capitalize">
                     {project.typeOfSharing}
                   </span>
+                  {/* Show visibility status */}
+                  {isOwner && (
+                    <span className={`px-3 py-1 text-sm font-medium rounded ${
+                      isPublic
+                        ? 'bg-green-100 text-green-700'
+                        : 'bg-yellow-100 text-yellow-700'
+                    }`}>
+                      {isPublic ? '👁️ Public' : '🔒 Private'}
+                    </span>
+                  )}
                 </div>
 
                 <h1 className="text-4xl font-bold text-gray-900 mb-4">{project.name}</h1>

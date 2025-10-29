@@ -28,8 +28,10 @@ service cloud.firestore {
 
     // Projects collection
     match /projects/{projectId} {
-      // Anyone can read projects (for browsing and discovery)
-      allow read: if true;
+      // Anyone can read public projects, only owners can read their private projects
+      // If isPublic is not set, default to public (for backward compatibility)
+      allow read: if resource.data.isPublic != false ||
+                     (isAuthenticated() && resource.data.ownerId == request.auth.uid);
 
       // Only authenticated users can create projects
       allow create: if isAuthenticated();
