@@ -1,4 +1,4 @@
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
 /**
@@ -26,25 +26,51 @@ export async function createNotification({ userId, type, title, message, link = 
 }
 
 /**
+ * Get admin user IDs by looking up their emails in the users collection
+ */
+async function getAdminUserIds() {
+  const adminEmails = ['yoryos.styl@gmail.com', 'stavros.roussos@gmail.com'];
+  const adminIds = [];
+
+  try {
+    const usersRef = collection(db, 'users');
+
+    for (const email of adminEmails) {
+      const q = query(usersRef, where('email', '==', email));
+      const querySnapshot = await getDocs(q);
+
+      querySnapshot.forEach((doc) => {
+        adminIds.push(doc.id);
+      });
+    }
+  } catch (error) {
+    console.error('Error fetching admin IDs:', error);
+  }
+
+  return adminIds;
+}
+
+/**
  * Notify admins about a new toolkit submission
  */
 export async function notifyAdminsNewToolkit(toolkitId, toolkitName, submitterName) {
-  const adminEmails = ['yoryos.styl@gmail.com', 'stavros.roussos@gmail.com'];
-
-  // Get admin user IDs from their emails
-  // For now, we'll use a simpler approach - notify by email
-  // In production, you'd query users collection to get UIDs
-
   const title = 'New Toolkit Submission';
   const message = `${submitterName} has submitted "${toolkitName}" for review.`;
   const link = `/toolkits/admin/review`;
 
-  // Note: This assumes admins have been authenticated at least once
-  // A better approach would be to query the users collection for admin UIDs
-  // For now, this serves as a placeholder structure
+  // Get admin user IDs
+  const adminIds = await getAdminUserIds();
 
-  // TODO: Implement admin UID lookup when messaging system is complete
-  console.log('Admin notification:', { title, message, link });
+  // Create notification for each admin
+  for (const adminId of adminIds) {
+    await createNotification({
+      userId: adminId,
+      type: 'toolkit_submitted',
+      title,
+      message,
+      link,
+    });
+  }
 }
 
 /**
