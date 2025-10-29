@@ -6,6 +6,12 @@ import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { doc, getDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import FavoriteButton from '@/components/FavoriteButton';
+import RatingDisplay from '@/components/RatingDisplay';
+import ReviewForm from '@/components/ReviewForm';
+import ReviewList from '@/components/ReviewList';
+import { getToolkitFavoriteCount } from '@/utils/favorites';
+import { getToolkitReviews, getUserReview, getToolkitAverageRating } from '@/utils/reviews';
 
 export default function ToolkitDetailPage() {
   const params = useParams();
@@ -13,26 +19,85 @@ export default function ToolkitDetailPage() {
   const { user } = useAuth();
   const [toolkit, setToolkit] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [favoriteCount, setFavoriteCount] = useState(0);
+  const [averageRating, setAverageRating] = useState({ average: 0, count: 0 });
+  const [reviews, setReviews] = useState([]);
+  const [userReview, setUserReview] = useState(null);
+  const [showReviewForm, setShowReviewForm] = useState(false);
+  const [editingReview, setEditingReview] = useState(null);
 
   // Check if user is admin
   const isAdmin = user?.email === 'yoryos.styl@gmail.com' || user?.email === 'stavros.roussos@gmail.com';
 
   useEffect(() => {
-    const fetchToolkit = async () => {
+    const fetchToolkitData = async () => {
       try {
+        // Fetch toolkit
         const toolkitDoc = await getDoc(doc(db, 'toolkits', params.id));
         if (toolkitDoc.exists()) {
           setToolkit({ id: toolkitDoc.id, ...toolkitDoc.data() });
         }
+
+        // Fetch favorites count
+        const favCount = await getToolkitFavoriteCount(params.id);
+        setFavoriteCount(favCount);
+
+        // Fetch average rating
+        const avgRating = await getToolkitAverageRating(params.id);
+        setAverageRating(avgRating);
+
+        // Fetch reviews
+        await loadReviews();
+
         setLoading(false);
       } catch (error) {
-        console.error('Error fetching toolkit:', error);
+        console.error('Error fetching toolkit data:', error);
         setLoading(false);
       }
     };
 
-    fetchToolkit();
+    fetchToolkitData();
   }, [params.id]);
+
+  // Fetch user's review when user changes
+  useEffect(() => {
+    const fetchUserReview = async () => {
+      if (user && params.id) {
+        const review = await getUserReview(user.uid, params.id);
+        setUserReview(review);
+      } else {
+        setUserReview(null);
+      }
+    };
+
+    fetchUserReview();
+  }, [user, params.id]);
+
+  const loadReviews = async () => {
+    const toolkitReviews = await getToolkitReviews(params.id);
+    setReviews(toolkitReviews);
+  };
+
+  const handleReviewSubmitted = async () => {
+    // Reload reviews and ratings
+    await loadReviews();
+    const avgRating = await getToolkitAverageRating(params.id);
+    setAverageRating(avgRating);
+
+    // Refresh user review
+    if (user) {
+      const review = await getUserReview(user.uid, params.id);
+      setUserReview(review);
+    }
+
+    setShowReviewForm(false);
+    setEditingReview(null);
+  };
+
+  const handleEditReview = (review) => {
+    setEditingReview(review);
+    setShowReviewForm(true);
+  };
 
   const handleDelete = async () => {
     if (!confirm('Are you sure you want to delete this toolkit?')) return;
@@ -135,6 +200,23 @@ export default function ToolkitDetailPage() {
                 </div>
 
                 <h1 className="text-4xl font-bold text-white mb-2">{toolkit.name}</h1>
+
+                <div className="flex items-center gap-4 mb-3">
+                  <div className="flex items-center gap-2">
+                    <FavoriteButton
+                      toolkitId={toolkit.id}
+                      showCount={true}
+                      favoriteCount={favoriteCount}
+                    />
+                  </div>
+                  <div className="bg-white px-3 py-1.5 rounded-md">
+                    <RatingDisplay
+                      rating={averageRating.average}
+                      count={averageRating.count}
+                      size="sm"
+                    />
+                  </div>
+                </div>
 
                 <div className="flex items-center text-white text-sm">
                   <span>Added by {toolkit.author}</span>
@@ -246,6 +328,64 @@ export default function ToolkitDetailPage() {
               </div>
             )}
           </div>
+        </div>
+
+        {/* Reviews Section */}
+        <div className="mt-8 bg-white rounded-lg shadow-md p-8">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-semibold text-gray-900">Reviews</h2>
+            {user && !userReview && !showReviewForm && (
+              <button
+                onClick={() => setShowReviewForm(true)}
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+              >
+                Write a Review
+              </button>
+            )}
+          </div>
+
+          {/* Review Form */}
+          {showReviewForm && (
+            <div className="mb-6">
+              <ReviewForm
+                toolkitId={toolkit.id}
+                existingReview={editingReview || userReview}
+                onReviewSubmitted={handleReviewSubmitted}
+                onCancel={() => {
+                  setShowReviewForm(false);
+                  setEditingReview(null);
+                }}
+              />
+            </div>
+          )}
+
+          {/* User's existing review (collapsed) */}
+          {userReview && !showReviewForm && (
+            <div className="mb-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-900 mb-1">Your Review</p>
+                  <RatingDisplay rating={userReview.rating} size="sm" />
+                  {userReview.review && (
+                    <p className="text-sm text-gray-700 mt-2">{userReview.review}</p>
+                  )}
+                </div>
+                <button
+                  onClick={() => handleEditReview(userReview)}
+                  className="text-sm text-blue-600 hover:text-blue-800"
+                >
+                  Edit
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Reviews List */}
+          <ReviewList
+            reviews={reviews}
+            currentUserId={user?.uid}
+            onEditReview={handleEditReview}
+          />
         </div>
       </div>
     </div>

@@ -112,5 +112,40 @@ service cloud.firestore {
       // Conversations cannot be deleted
       allow delete: if false;
     }
+
+    // Favorites collection
+    match /favorites/{favoriteId} {
+      // Anyone can read favorites (for counts, etc.)
+      allow read: if true;
+
+      // Only authenticated users can create favorites
+      allow create: if isAuthenticated() &&
+                      request.resource.data.userId == request.auth.uid;
+
+      // Users can only delete their own favorites
+      allow delete: if isAuthenticated() &&
+                      resource.data.userId == request.auth.uid;
+
+      // Favorites cannot be updated (delete and recreate instead)
+      allow update: if false;
+    }
+
+    // Reviews collection (includes ratings)
+    match /reviews/{reviewId} {
+      // Anyone can read reviews
+      allow read: if true;
+
+      // Only authenticated users can create reviews
+      allow create: if isAuthenticated() &&
+                      request.resource.data.userId == request.auth.uid;
+
+      // Users can only update their own reviews
+      allow update: if isAuthenticated() &&
+                      resource.data.userId == request.auth.uid;
+
+      // Users can only delete their own reviews
+      allow delete: if isAuthenticated() &&
+                      resource.data.userId == request.auth.uid;
+    }
   }
 }
