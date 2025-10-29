@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
-import { collection, query, where, orderBy, getDocs, doc, updateDoc, limit } from 'firebase/firestore';
+import { collection, query, where, orderBy, getDocs, doc, updateDoc, deleteDoc, writeBatch, limit } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
 export default function NotificationBell() {
@@ -82,6 +82,40 @@ export default function NotificationBell() {
     setShowDropdown(false);
   };
 
+  const handleDeleteNotification = async (e, notificationId) => {
+    e.preventDefault();
+    e.stopPropagation();
+    try {
+      await deleteDoc(doc(db, 'notifications', notificationId));
+
+      // Update local state
+      const deletedNotif = notifications.find((n) => n.id === notificationId);
+      setNotifications(notifications.filter((n) => n.id !== notificationId));
+      if (deletedNotif && !deletedNotif.read) {
+        setUnreadCount((prev) => Math.max(0, prev - 1));
+      }
+    } catch (error) {
+      console.error('Error deleting notification:', error);
+    }
+  };
+
+  const handleClearAllNotifications = async () => {
+    if (!confirm('Clear all notifications?')) return;
+
+    try {
+      const batch = writeBatch(db);
+      notifications.forEach((notif) => {
+        batch.delete(doc(db, 'notifications', notif.id));
+      });
+      await batch.commit();
+
+      setNotifications([]);
+      setUnreadCount(0);
+    } catch (error) {
+      console.error('Error clearing notifications:', error);
+    }
+  };
+
   if (!user) return null;
 
   return (
@@ -133,49 +167,67 @@ export default function NotificationBell() {
               </div>
             ) : (
               notifications.map((notification) => (
-                <Link
+                <div
                   key={notification.id}
-                  href={notification.link || '#'}
-                  onClick={() => handleNotificationClick(notification)}
-                  className={`block px-4 py-3 hover:bg-gray-50 transition border-b border-gray-100 ${
+                  className={`relative px-4 py-3 hover:bg-gray-50 transition border-b border-gray-100 ${
                     !notification.read ? 'bg-blue-50' : ''
                   }`}
                 >
-                  <div className="flex items-start">
-                    <div className="flex-1">
-                      <p className="text-sm font-medium text-gray-900">
-                        {notification.title}
-                      </p>
-                      <p className="text-xs text-gray-600 mt-1">
-                        {notification.message}
-                      </p>
-                      <p className="text-xs text-gray-400 mt-1">
-                        {notification.createdAt
-                          ? new Date(
-                              notification.createdAt.toDate
-                                ? notification.createdAt.toDate()
-                                : notification.createdAt
-                            ).toLocaleDateString()
-                          : 'Just now'}
-                      </p>
-                    </div>
-                    {!notification.read && (
-                      <div className="ml-2 flex-shrink-0">
-                        <div className="h-2 w-2 bg-blue-600 rounded-full"></div>
+                  <Link
+                    href={notification.link || '#'}
+                    onClick={() => handleNotificationClick(notification)}
+                    className="block"
+                  >
+                    <div className="flex items-start">
+                      <div className="flex-1 pr-8">
+                        <p className="text-sm font-medium text-gray-900">
+                          {notification.title}
+                        </p>
+                        <p className="text-xs text-gray-600 mt-1">
+                          {notification.message}
+                        </p>
+                        <p className="text-xs text-gray-400 mt-1">
+                          {notification.createdAt
+                            ? new Date(
+                                notification.createdAt.toDate
+                                  ? notification.createdAt.toDate()
+                                  : notification.createdAt
+                              ).toLocaleDateString()
+                            : 'Just now'}
+                        </p>
                       </div>
-                    )}
-                  </div>
-                </Link>
+                      {!notification.read && (
+                        <div className="ml-2 flex-shrink-0">
+                          <div className="h-2 w-2 bg-blue-600 rounded-full"></div>
+                        </div>
+                      )}
+                    </div>
+                  </Link>
+                  {/* Delete button */}
+                  <button
+                    onClick={(e) => handleDeleteNotification(e, notification.id)}
+                    className="absolute top-3 right-3 text-gray-400 hover:text-red-600 text-xl font-bold leading-none"
+                    aria-label="Delete notification"
+                  >
+                    ×
+                  </button>
+                </div>
               ))
             )}
           </div>
 
           {/* Footer */}
           {notifications.length > 0 && (
-            <div className="px-4 py-3 border-t border-gray-200 text-center">
+            <div className="px-4 py-3 border-t border-gray-200">
+              <button
+                onClick={handleClearAllNotifications}
+                className="w-full text-sm text-red-600 hover:text-red-700 font-medium py-2 mb-2"
+              >
+                Clear All Notifications
+              </button>
               <button
                 onClick={() => setShowDropdown(false)}
-                className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+                className="w-full text-sm text-blue-600 hover:text-blue-800 font-medium py-2"
               >
                 Close
               </button>
