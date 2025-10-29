@@ -4,7 +4,8 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import ProtectedRoute from '@/components/ProtectedRoute';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import ProjectImageUpload from '@/components/ProjectImageUpload';
+import { collection, addDoc, updateDoc, doc, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
 export default function CreateProjectPage() {
@@ -34,8 +35,11 @@ export default function CreateProjectPage() {
   });
 
   const [tagInput, setTagInput] = useState('');
+  const [projectImages, setProjectImages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [step, setStep] = useState(1); // 1 = form, 2 = images
+  const [createdProjectId, setCreatedProjectId] = useState(null);
 
   const projectTypes = [
     'Visual Arts',
@@ -155,21 +159,47 @@ export default function CreateProjectPage() {
         ...formData,
         ownerId: user.uid,
         ownerName: userProfile?.displayName || user.displayName,
-        images: [], // Will be added in next step (image upload)
+        images: [],
         thumbnailUrl: '',
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       };
 
       const docRef = await addDoc(collection(db, 'projects'), projectData);
+      setCreatedProjectId(docRef.id);
 
-      // Redirect to project page or image upload
-      router.push(`/projects/${docRef.id}`);
+      // Move to step 2 (image upload)
+      setLoading(false);
+      setStep(2);
     } catch (err) {
       console.error('Error creating project:', err);
       setError('Failed to create project. Please try again.');
       setLoading(false);
     }
+  };
+
+  const handleFinish = async () => {
+    // Update project with images
+    if (createdProjectId && projectImages.length > 0) {
+      try {
+        const projectRef = doc(db, 'projects', createdProjectId);
+        await updateDoc(projectRef, {
+          images: projectImages,
+          thumbnailUrl: projectImages[0] || '',
+          updatedAt: serverTimestamp(),
+        });
+      } catch (err) {
+        console.error('Error updating project images:', err);
+      }
+    }
+
+    // Redirect to project page
+    router.push(`/projects/${createdProjectId}`);
+  };
+
+  const handleSkipImages = () => {
+    // Skip image upload and go directly to project
+    router.push(`/projects/${createdProjectId}`);
   };
 
   if (!user) {
@@ -189,8 +219,25 @@ export default function CreateProjectPage() {
           <div className="bg-white rounded-lg shadow-md p-8">
             {/* Header */}
             <div className="mb-8">
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">Create New Project</h1>
-              <p className="text-gray-600">Share your artistic collaboration opportunity with the community</p>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                {step === 1 ? 'Create New Project' : 'Add Project Images'}
+              </h1>
+              <p className="text-gray-600">
+                {step === 1
+                  ? 'Share your artistic collaboration opportunity with the community'
+                  : 'Upload images to showcase your project (optional)'}
+              </p>
+
+              {/* Step Indicator */}
+              <div className="flex items-center mt-4 gap-2">
+                <div className={`flex items-center justify-center w-8 h-8 rounded-full ${step === 1 ? 'bg-blue-600 text-white' : 'bg-green-600 text-white'}`}>
+                  {step === 1 ? '1' : '✓'}
+                </div>
+                <div className={`h-1 w-12 ${step === 2 ? 'bg-blue-600' : 'bg-gray-300'}`}></div>
+                <div className={`flex items-center justify-center w-8 h-8 rounded-full ${step === 2 ? 'bg-blue-600 text-white' : 'bg-gray-300 text-gray-600'}`}>
+                  2
+                </div>
+              </div>
             </div>
 
             {/* Error Message */}
@@ -200,8 +247,9 @@ export default function CreateProjectPage() {
               </div>
             )}
 
-            {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-8">
+            {/* Step 1: Project Details Form */}
+            {step === 1 && (
+              <form onSubmit={handleSubmit} className="space-y-8">
               {/* Project Name */}
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
@@ -515,7 +563,7 @@ export default function CreateProjectPage() {
                   disabled={loading}
                   className="flex-1 bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 transition font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {loading ? 'Creating...' : 'Create Project'}
+                  {loading ? 'Creating...' : 'Next: Add Images'}
                 </button>
                 <button
                   type="button"
@@ -526,6 +574,38 @@ export default function CreateProjectPage() {
                 </button>
               </div>
             </form>
+            )}
+
+            {/* Step 2: Image Upload */}
+            {step === 2 && createdProjectId && (
+              <div className="space-y-6">
+                <ProjectImageUpload
+                  projectId={createdProjectId}
+                  currentImages={projectImages}
+                  onImagesChange={setProjectImages}
+                />
+
+                {/* Navigation Buttons */}
+                <div className="flex gap-4 pt-6 border-t">
+                  <button
+                    type="button"
+                    onClick={handleFinish}
+                    className="flex-1 bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 transition font-medium"
+                  >
+                    {projectImages.length > 0 ? 'Finish & View Project' : 'Skip & View Project'}
+                  </button>
+                  {projectImages.length === 0 && (
+                    <button
+                      type="button"
+                      onClick={handleSkipImages}
+                      className="flex-1 bg-gray-200 text-gray-700 py-3 px-4 rounded-md hover:bg-gray-300 transition font-medium"
+                    >
+                      Skip Images
+                    </button>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
