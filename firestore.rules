@@ -12,6 +12,12 @@ service cloud.firestore {
       return isAuthenticated() && request.auth.uid == userId;
     }
 
+    function isAdmin() {
+      return isAuthenticated() &&
+             (request.auth.token.email == 'yoryos.styl@gmail.com' ||
+              request.auth.token.email == 'stavros.roussos@gmail.com');
+    }
+
     // Users collection
     match /users/{userId} {
       // Anyone can read user profiles (for discovery and collaboration)
@@ -52,11 +58,11 @@ service cloud.firestore {
       // Only authenticated users can create toolkits
       allow create: if isAuthenticated();
 
-      // Only the creator can update or delete
-      allow update: if isAuthenticated() &&
-                      resource.data.createdBy == request.auth.uid;
-      allow delete: if isAuthenticated() &&
-                      resource.data.createdBy == request.auth.uid;
+      // Admins can update/delete any toolkit, or the creator can update/delete their own
+      allow update: if isAdmin() ||
+                      (isAuthenticated() && resource.data.submittedBy == request.auth.uid);
+      allow delete: if isAdmin() ||
+                      (isAuthenticated() && resource.data.submittedBy == request.auth.uid);
     }
 
     // Messages collection (for future messaging feature)
