@@ -41,6 +41,12 @@ export default function Navbar() {
             {user ? (
               <>
                 <Link
+                  href="/my-projects"
+                  className="text-gray-700 hover:text-blue-600 transition"
+                >
+                  My Projects
+                </Link>
+                <Link
                   href="/profile"
                   className="text-gray-700 hover:text-blue-600 transition"
                 >
