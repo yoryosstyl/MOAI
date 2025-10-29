@@ -7,6 +7,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { collection, query, where, orderBy, getDocs, doc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import { notifyUserToolkitApproved, notifyUserToolkitRejected } from '@/utils/notifications';
 
 export default function AdminReviewPage() {
   const router = useRouter();
@@ -54,6 +55,10 @@ export default function AdminReviewPage() {
   const handleApprove = async (toolkitId) => {
     if (!confirm('Approve this toolkit?')) return;
 
+    // Find the toolkit to get submitter info
+    const toolkit = toolkits.find((t) => t.id === toolkitId);
+    if (!toolkit) return;
+
     setProcessing(true);
     try {
       const toolkitRef = doc(db, 'toolkits', toolkitId);
@@ -62,6 +67,13 @@ export default function AdminReviewPage() {
         reviewedAt: serverTimestamp(),
         reviewedBy: user.uid,
       });
+
+      // Notify the submitter
+      await notifyUserToolkitApproved(
+        toolkit.submittedBy,
+        toolkitId,
+        toolkit.name
+      );
 
       // Remove from list
       setToolkits(toolkits.filter((t) => t.id !== toolkitId));
@@ -94,6 +106,13 @@ export default function AdminReviewPage() {
         reviewedAt: serverTimestamp(),
         reviewedBy: user.uid,
       });
+
+      // Notify the submitter
+      await notifyUserToolkitRejected(
+        selectedToolkit.submittedBy,
+        selectedToolkit.name,
+        rejectionReason.trim()
+      );
 
       // Remove from list
       setToolkits(toolkits.filter((t) => t.id !== selectedToolkit.id));

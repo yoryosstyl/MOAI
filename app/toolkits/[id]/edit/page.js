@@ -8,6 +8,7 @@ import { doc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '@/lib/firebase';
 import imageCompression from 'browser-image-compression';
+import { notifyUserToolkitApproved } from '@/utils/notifications';
 
 export default function EditToolkitPage() {
   const params = useParams();
@@ -40,6 +41,7 @@ export default function EditToolkitPage() {
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [toolkitData, setToolkitData] = useState(null); // Store full toolkit data for notifications
 
   const categories = [
     '3D & Animation',
@@ -64,6 +66,7 @@ export default function EditToolkitPage() {
         const toolkitDoc = await getDoc(doc(db, 'toolkits', params.id));
         if (toolkitDoc.exists()) {
           const data = toolkitDoc.data();
+          setToolkitData(data); // Store full data for notifications
           setFormData({
             name: data.name || '',
             category: data.category || '',
@@ -204,6 +207,15 @@ export default function EditToolkitPage() {
         reviewedAt: serverTimestamp(),
         reviewedBy: user.uid,
       });
+
+      // Notify the submitter if this was a user submission
+      if (toolkitData && toolkitData.submittedBy) {
+        await notifyUserToolkitApproved(
+          toolkitData.submittedBy,
+          params.id,
+          formData.name
+        );
+      }
 
       router.push('/toolkits/admin/review');
     } catch (err) {

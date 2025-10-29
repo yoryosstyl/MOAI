@@ -65,6 +65,21 @@ service cloud.firestore {
                       (isAuthenticated() && resource.data.submittedBy == request.auth.uid);
     }
 
+    // Notifications collection
+    match /notifications/{notificationId} {
+      // Users can only read their own notifications
+      allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
+
+      // System can create notifications (via client-side functions)
+      allow create: if isAuthenticated();
+
+      // Users can update their own notifications (mark as read)
+      allow update: if isAuthenticated() && resource.data.userId == request.auth.uid;
+
+      // Users can delete their own notifications
+      allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+    }
+
     // Messages collection (for future messaging feature)
     match /messages/{messageId} {
       // Users can only read messages where they are sender or recipient

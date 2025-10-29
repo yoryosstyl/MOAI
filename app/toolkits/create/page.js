@@ -8,6 +8,7 @@ import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '@/lib/firebase';
 import imageCompression from 'browser-image-compression';
+import { notifyAdminsNewToolkit } from '@/utils/notifications';
 
 export default function CreateToolkitPage() {
   const router = useRouter();
@@ -138,7 +139,16 @@ export default function CreateToolkitPage() {
         updatedAt: serverTimestamp(),
       };
 
-      await addDoc(collection(db, 'toolkits'), toolkitData);
+      const docRef = await addDoc(collection(db, 'toolkits'), toolkitData);
+
+      // Notify admins if this is a user submission (not admin)
+      if (!isAdmin) {
+        await notifyAdminsNewToolkit(
+          docRef.id,
+          formData.name,
+          user.displayName || user.email
+        );
+      }
 
       // Redirect based on status
       if (isAdmin) {
