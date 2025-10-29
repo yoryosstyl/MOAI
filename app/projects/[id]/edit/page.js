@@ -142,7 +142,7 @@ export default function EditProjectPage() {
         updatedAt: serverTimestamp(),
       });
 
-      router.push(`/projects/${params.id}`);
+      router.push('/my-projects');
     } catch (err) {
       console.error('Error updating project:', err);
       setError('Failed to update project');
@@ -502,7 +502,7 @@ export default function EditProjectPage() {
                   {saving ? 'Saving...' : 'Save All Changes'}
                 </button>
                 <Link
-                  href={`/projects/${params.id}`}
+                  href="/my-projects"
                   className="flex-1 bg-gray-200 text-gray-700 py-3 px-4 rounded-md hover:bg-gray-300 transition font-medium text-center"
                 >
                   Cancel

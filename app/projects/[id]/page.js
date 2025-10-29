@@ -97,7 +97,7 @@ export default function ProjectDetailPage() {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Back Button */}
         <Link
-          href="/projects"
+          href={isOwner ? "/my-projects" : "/projects"}
           className="inline-flex items-center text-blue-600 hover:text-blue-800 mb-6"
         >
           <svg
@@ -113,7 +113,7 @@ export default function ProjectDetailPage() {
               d="M15 19l-7-7 7-7"
             />
           </svg>
-          Back to Projects
+          {isOwner ? "Back to My Projects" : "Back to Projects"}
         </Link>
 
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
