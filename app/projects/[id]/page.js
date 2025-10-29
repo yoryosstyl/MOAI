@@ -7,12 +7,6 @@ import { useAuth } from '@/contexts/AuthContext';
 import { doc, getDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
-// Generate static params for static export
-// Return empty array to handle all routes client-side
-export async function generateStaticParams() {
-  return [];
-}
-
 export default function ProjectDetailPage() {
   const params = useParams();
   const router = useRouter();
