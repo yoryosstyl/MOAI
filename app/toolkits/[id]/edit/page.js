@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { doc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
@@ -12,7 +12,11 @@ import imageCompression from 'browser-image-compression';
 export default function EditToolkitPage() {
   const params = useParams();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { user } = useAuth();
+
+  // Check if accessed from review page
+  const isReviewMode = searchParams.get('review') === 'true';
 
   // Check if user is admin
   const isAdmin = user?.email === 'yoryos.styl@gmail.com' || user?.email === 'stavros.roussos@gmail.com';
@@ -143,35 +147,77 @@ export default function EditToolkitPage() {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const saveToolkit = async () => {
+    let logoUrl = logoPreview;
+
+    // Upload new logo if changed
+    if (logoFile) {
+      const timestamp = Date.now();
+      const storageRef = ref(storage, `toolkits/logos/${timestamp}_${logoFile.name}`);
+      await uploadBytes(storageRef, logoFile);
+      logoUrl = await getDownloadURL(storageRef);
+    }
+
+    // Update toolkit document
+    const toolkitRef = doc(db, 'toolkits', params.id);
+    await updateDoc(toolkitRef, {
+      ...formData,
+      logoUrl,
+      updatedAt: serverTimestamp(),
+    });
+  };
+
+  const handleSave = async (e) => {
     e.preventDefault();
     setSaving(true);
     setError('');
 
     try {
-      let logoUrl = logoPreview;
+      await saveToolkit();
 
-      // Upload new logo if changed
-      if (logoFile) {
-        const timestamp = Date.now();
-        const storageRef = ref(storage, `toolkits/logos/${timestamp}_${logoFile.name}`);
-        await uploadBytes(storageRef, logoFile);
-        logoUrl = await getDownloadURL(storageRef);
+      // Redirect based on mode
+      if (isReviewMode) {
+        router.push('/toolkits/admin/review');
+      } else {
+        router.push(`/toolkits/${params.id}`);
       }
-
-      // Update toolkit document
-      const toolkitRef = doc(db, 'toolkits', params.id);
-      await updateDoc(toolkitRef, {
-        ...formData,
-        logoUrl,
-        updatedAt: serverTimestamp(),
-      });
-
-      router.push(`/toolkits/${params.id}`);
     } catch (err) {
       console.error('Error updating toolkit:', err);
       setError('Failed to update toolkit. Please try again.');
       setSaving(false);
+    }
+  };
+
+  const handleSaveAndApprove = async (e) => {
+    e.preventDefault();
+    setSaving(true);
+    setError('');
+
+    try {
+      // Save the toolkit
+      await saveToolkit();
+
+      // Approve the toolkit
+      const toolkitRef = doc(db, 'toolkits', params.id);
+      await updateDoc(toolkitRef, {
+        status: 'approved',
+        reviewedAt: serverTimestamp(),
+        reviewedBy: user.uid,
+      });
+
+      router.push('/toolkits/admin/review');
+    } catch (err) {
+      console.error('Error saving and approving toolkit:', err);
+      setError('Failed to save and approve toolkit. Please try again.');
+      setSaving(false);
+    }
+  };
+
+  const handleCancel = () => {
+    if (isReviewMode) {
+      router.push('/toolkits/admin/review');
+    } else {
+      router.push(`/toolkits/${params.id}`);
     }
   };
 
@@ -215,7 +261,7 @@ export default function EditToolkitPage() {
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-8">
+            <form onSubmit={handleSave} className="space-y-8">
               {/* Basic Information */}
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Basic Information</h3>
@@ -439,20 +485,53 @@ export default function EditToolkitPage() {
 
               {/* Submit Buttons */}
               <div className="flex gap-4 pt-6 border-t">
-                <button
-                  type="submit"
-                  disabled={saving || formData.platforms.length === 0}
-                  className="flex-1 bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 transition font-medium disabled:opacity-50"
-                >
-                  {saving ? 'Saving...' : 'Save Changes'}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => router.push(`/toolkits/${params.id}`)}
-                  className="flex-1 bg-gray-200 text-gray-700 py-3 px-4 rounded-md hover:bg-gray-300 transition font-medium"
-                >
-                  Cancel
-                </button>
+                {isReviewMode ? (
+                  <>
+                    {/* Review Mode: 3 buttons */}
+                    <button
+                      type="submit"
+                      disabled={saving || formData.platforms.length === 0}
+                      className="flex-1 bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 transition font-medium disabled:opacity-50"
+                    >
+                      {saving ? 'Saving...' : 'Save'}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleSaveAndApprove}
+                      disabled={saving || formData.platforms.length === 0}
+                      className="flex-1 bg-green-600 text-white py-3 px-4 rounded-md hover:bg-green-700 transition font-medium disabled:opacity-50"
+                    >
+                      {saving ? 'Saving...' : 'Save & Approve'}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleCancel}
+                      disabled={saving}
+                      className="flex-1 bg-gray-200 text-gray-700 py-3 px-4 rounded-md hover:bg-gray-300 transition font-medium disabled:opacity-50"
+                    >
+                      Cancel
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    {/* Normal Mode: 2 buttons */}
+                    <button
+                      type="submit"
+                      disabled={saving || formData.platforms.length === 0}
+                      className="flex-1 bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 transition font-medium disabled:opacity-50"
+                    >
+                      {saving ? 'Saving...' : 'Save Changes'}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleCancel}
+                      disabled={saving}
+                      className="flex-1 bg-gray-200 text-gray-700 py-3 px-4 rounded-md hover:bg-gray-300 transition font-medium disabled:opacity-50"
+                    >
+                      Cancel
+                    </button>
+                  </>
+                )}
               </div>
             </form>
           </div>
