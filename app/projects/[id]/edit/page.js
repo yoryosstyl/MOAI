@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import ProjectImageUpload from '@/components/ProjectImageUpload';
+import LocationAutocomplete from '@/components/LocationAutocomplete';
 import { doc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
@@ -102,6 +103,10 @@ export default function EditProjectPage() {
       ...prev,
       links: { ...prev.links, [linkType]: value },
     }));
+  };
+
+  const handleLocationChange = (address) => {
+    setFormData((prev) => ({ ...prev, location: address }));
   };
 
   const handleContactChange = (field, value) => {
@@ -397,14 +402,10 @@ export default function EditProjectPage() {
 
               {/* Location */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Location</label>
-                <input
-                  name="location"
-                  type="text"
+                <LocationAutocomplete
                   value={formData.location}
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="City, Country or 'Remote'"
+                  onChange={handleLocationChange}
+                  onVerifiedChange={() => {}} // Not needed for projects
                 />
               </div>
 
