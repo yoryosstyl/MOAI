@@ -1,10 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
+  // Removed 'output: export' to support dynamic routes with user-generated content
+  // Static export doesn't work well with dynamic project pages
   images: {
     unoptimized: true,
   },
-  // Trailing slash for better static hosting compatibility
   trailingSlash: true,
 }
 
