@@ -151,7 +151,11 @@ export default function NotificationBell() {
                       </p>
                       <p className="text-xs text-gray-400 mt-1">
                         {notification.createdAt
-                          ? new Date(notification.createdAt.toDate()).toLocaleDateString()
+                          ? new Date(
+                              notification.createdAt.toDate
+                                ? notification.createdAt.toDate()
+                                : notification.createdAt
+                            ).toLocaleDateString()
                           : 'Just now'}
                       </p>
                     </div>
