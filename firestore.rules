@@ -55,5 +55,20 @@ service cloud.firestore {
       allow delete: if isAuthenticated() &&
                       resource.data.createdBy == request.auth.uid;
     }
+
+    // News collection
+    match /news/{newsId} {
+      // Anyone can read approved news
+      allow read: if resource.data.status == 'approved';
+
+      // Only authenticated users can create news
+      allow create: if isAuthenticated();
+
+      // Admins can update/delete any news, or the submitter can update/delete their own
+      allow update: if isAdmin() ||
+                      (isAuthenticated() && resource.data.submittedBy == request.auth.uid);
+      allow delete: if isAdmin() ||
+                      (isAuthenticated() && resource.data.submittedBy == request.auth.uid);
+    }
   }
 }

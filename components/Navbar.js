@@ -31,6 +31,9 @@ export default function Navbar() {
             <Link href="/projects" className="text-gray-700 hover:text-blue-600 transition">
               Projects
             </Link>
+            <Link href="/news" className="text-gray-700 hover:text-blue-600 transition">
+              News
+            </Link>
             <Link href="/toolkits" className="text-gray-700 hover:text-blue-600 transition">
               Toolkits
             </Link>
@@ -105,6 +108,12 @@ export default function Navbar() {
                 className="text-gray-700 hover:text-blue-600 transition py-2"
               >
                 Projects
+              </Link>
+              <Link
+                href="/news"
+                className="text-gray-700 hover:text-blue-600 transition py-2"
+              >
+                News
               </Link>
               <Link
                 href="/toolkits"
