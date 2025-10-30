@@ -49,17 +49,19 @@ service cloud.firestore {
 
     // Toolkits collection
     match /toolkits/{toolkitId} {
-      // Anyone can read toolkits
-      allow read: if true;
+      // Anyone can read approved toolkits, admins can read all, submitters can read their own
+      allow read: if resource.data.status == 'approved' ||
+                     isAdmin() ||
+                     (isAuthenticated() && resource.data.submittedBy == request.auth.uid);
 
       // Only authenticated users can create toolkits
       allow create: if isAuthenticated();
 
-      // Only the creator can update or delete
-      allow update: if isAuthenticated() &&
-                      resource.data.createdBy == request.auth.uid;
-      allow delete: if isAuthenticated() &&
-                      resource.data.createdBy == request.auth.uid;
+      // Admins can update/delete any toolkit, or the submitter can update/delete their own
+      allow update: if isAdmin() ||
+                      (isAuthenticated() && resource.data.submittedBy == request.auth.uid);
+      allow delete: if isAdmin() ||
+                      (isAuthenticated() && resource.data.submittedBy == request.auth.uid);
     }
 
     // News collection
