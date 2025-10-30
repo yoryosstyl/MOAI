@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import ConversationList from '@/components/ConversationList';
@@ -15,6 +16,8 @@ import {
 } from '@/utils/messages';
 
 export default function MessagesPage() {
+  const searchParams = useSearchParams();
+  const conversationIdFromUrl = searchParams?.get('conversation');
   const { user, userProfile } = useAuth();
   const [conversations, setConversations] = useState([]);
   const [selectedConversation, setSelectedConversation] = useState(null);
@@ -31,6 +34,14 @@ export default function MessagesPage() {
         const convs = await getUserConversations(user.uid);
         setConversations(convs);
         setLoading(false);
+
+        // Auto-select conversation from URL parameter
+        if (conversationIdFromUrl && convs.length > 0) {
+          const targetConv = convs.find((c) => c.id === conversationIdFromUrl);
+          if (targetConv && !selectedConversation) {
+            setSelectedConversation(targetConv);
+          }
+        }
       } catch (error) {
         console.error('Error fetching conversations:', error);
         setLoading(false);
@@ -42,7 +53,7 @@ export default function MessagesPage() {
     // Refresh conversations every 10 seconds
     const interval = setInterval(fetchConversations, 10000);
     return () => clearInterval(interval);
-  }, [user]);
+  }, [user, conversationIdFromUrl]);
 
   // Fetch messages when conversation is selected
   useEffect(() => {
