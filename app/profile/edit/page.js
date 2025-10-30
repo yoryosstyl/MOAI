@@ -20,9 +20,6 @@ export default function EditProfilePage() {
     telephone: {
       countryCode: '+30',
       number: '',
-      whatsApp: false,
-      viber: false,
-      signal: false,
     },
     location: {
       address: '',
@@ -34,7 +31,6 @@ export default function EditProfilePage() {
       facebook: '',
     },
     avatarUrl: '',
-    preferredContact: [],
     privacy: {
       emailPublic: false,
       telephonePublic: false,
@@ -55,9 +51,6 @@ export default function EditProfilePage() {
         telephone: {
           countryCode: userProfile.telephone?.countryCode || '+30',
           number: userProfile.telephone?.number || '',
-          whatsApp: userProfile.telephone?.whatsApp || false,
-          viber: userProfile.telephone?.viber || false,
-          signal: userProfile.telephone?.signal || false,
         },
         location: {
           address: userProfile.location?.address || '',
@@ -69,7 +62,6 @@ export default function EditProfilePage() {
           facebook: userProfile.socialMedia?.facebook || '',
         },
         avatarUrl: userProfile.avatarUrl || '',
-        preferredContact: userProfile.preferredContact || ['email'],
         privacy: {
           emailPublic: userProfile.privacy?.emailPublic || false,
           telephonePublic: userProfile.privacy?.telephonePublic || false,
@@ -115,20 +107,6 @@ export default function EditProfilePage() {
         [field]: !prev.privacy[field],
       },
     }));
-  };
-
-  const handleContactChange = (method) => {
-    setFormData((prev) => {
-      const currentContacts = prev.preferredContact;
-      const isSelected = currentContacts.includes(method);
-
-      return {
-        ...prev,
-        preferredContact: isSelected
-          ? currentContacts.filter((m) => m !== method)
-          : [...currentContacts, method],
-      };
-    });
   };
 
   const handleLocationChange = (address) => {
@@ -318,42 +296,6 @@ export default function EditProfilePage() {
                     className="flex-1 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
-
-                {/* Messaging Apps */}
-                {formData.telephone.number && (
-                  <div className="mt-3 space-y-2">
-                    <p className="text-sm text-gray-600">Available on:</p>
-                    <div className="flex flex-wrap gap-4">
-                      <label className="flex items-center">
-                        <input
-                          type="checkbox"
-                          checked={formData.telephone.whatsApp}
-                          onChange={(e) => handlePhoneChange('whatsApp', e.target.checked)}
-                          className="h-4 w-4 text-blue-600 rounded focus:ring-blue-500"
-                        />
-                        <span className="ml-2 text-sm text-gray-700">WhatsApp</span>
-                      </label>
-                      <label className="flex items-center">
-                        <input
-                          type="checkbox"
-                          checked={formData.telephone.viber}
-                          onChange={(e) => handlePhoneChange('viber', e.target.checked)}
-                          className="h-4 w-4 text-blue-600 rounded focus:ring-blue-500"
-                        />
-                        <span className="ml-2 text-sm text-gray-700">Viber</span>
-                      </label>
-                      <label className="flex items-center">
-                        <input
-                          type="checkbox"
-                          checked={formData.telephone.signal}
-                          onChange={(e) => handlePhoneChange('signal', e.target.checked)}
-                          className="h-4 w-4 text-blue-600 rounded focus:ring-blue-500"
-                        />
-                        <span className="ml-2 text-sm text-gray-700">Signal</span>
-                      </label>
-                    </div>
-                  </div>
-                )}
               </div>
 
               {/* Location with Autocomplete */}
@@ -420,26 +362,6 @@ export default function EditProfilePage() {
                       className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
-                </div>
-              </div>
-
-              {/* Preferred Contact Methods */}
-              <div className="border-t pt-8">
-                <label className="block text-sm font-medium text-gray-700 mb-3">
-                  Preferred Contact Methods (select multiple)
-                </label>
-                <div className="grid grid-cols-2 gap-3">
-                  {['email', 'telephone', 'whatsapp', 'viber', 'signal', 'linkedin', 'instagram', 'facebook'].map((method) => (
-                    <label key={method} className="flex items-center">
-                      <input
-                        type="checkbox"
-                        checked={formData.preferredContact.includes(method)}
-                        onChange={() => handleContactChange(method)}
-                        className="h-4 w-4 text-blue-600 rounded focus:ring-blue-500"
-                      />
-                      <span className="ml-2 text-gray-700 capitalize">{method}</span>
-                    </label>
-                  ))}
                 </div>
               </div>
 

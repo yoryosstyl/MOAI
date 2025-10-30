@@ -80,7 +80,7 @@ export default function AboutPage() {
               <div className="ml-3">
                 <h3 className="text-lg font-semibold text-gray-900">Artist Connections</h3>
                 <p className="text-gray-600">
-                  Connect with other artists, send messages, and collaborate on projects.
+                  Connect with other artists and collaborate on projects.
                 </p>
               </div>
             </div>

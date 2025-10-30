@@ -8,7 +8,6 @@ A mobile-responsive website for artist collaboration, allowing artists to share 
 - **Project Sharing**: Artists can create, edit, and share their projects
 - **Toolkit Discovery**: Browse and search curated toolkits for art creation
 - **User Profiles**: Customizable profiles with privacy controls
-- **Messaging**: One-to-one messaging between artists (coming soon)
 - **Multilingual**: Support for English and Greek
 - **Mobile Responsive**: Works seamlessly on all devices
 
@@ -162,12 +161,7 @@ Once deployed, you can add your custom domain `moaiart.net` in the Vercel dashbo
 - [ ] Project detail pages
 - [ ] Infinite scroll
 
-### Phase 3: Communication
-- [ ] One-to-one messaging
-- [ ] Email notifications
-- [ ] Unread message counts
-
-### Phase 4: Admin & Moderation
+### Phase 3: Admin & Moderation
 - [ ] Admin dashboard
 - [ ] User and project moderation
 - [ ] Cost monitoring and alerts
@@ -179,8 +173,6 @@ See `lib/dataModels.js` for detailed schema definitions:
 - **User Profile**: Display name, avatar, bio, contact info, privacy settings
 - **Project**: Title, description, images, tags, links, contact person
 - **Toolkit**: Title, description, category, tags, resources
-- **Message**: Sender, recipient, content, timestamps
-- **Conversation**: Participants, last message, unread counts
 
 ## Image Requirements
 
