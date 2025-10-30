@@ -47,12 +47,6 @@ export default function Navbar() {
                 >
                   My Projects
                 </Link>
-                <Link
-                  href="/messages"
-                  className="text-gray-700 hover:text-blue-600 transition"
-                >
-                  Messages
-                </Link>
                 <NotificationBell />
                 <Link
                   href="/profile"
@@ -140,12 +134,6 @@ export default function Navbar() {
                     className="text-gray-700 hover:text-blue-600 transition py-2"
                   >
                     My Projects
-                  </Link>
-                  <Link
-                    href="/messages"
-                    className="text-gray-700 hover:text-blue-600 transition py-2"
-                  >
-                    Messages
                   </Link>
                   <Link
                     href="/profile"
