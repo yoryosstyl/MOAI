@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
+import NotificationBell from './NotificationBell';
 
 export default function Navbar() {
   const router = useRouter();
@@ -43,6 +44,13 @@ export default function Navbar() {
 
             {user ? (
               <>
+                <Link
+                  href="/my-projects"
+                  className="text-gray-700 hover:text-blue-600 transition"
+                >
+                  My Projects
+                </Link>
+                <NotificationBell />
                 <Link
                   href="/profile"
                   className="text-gray-700 hover:text-blue-600 transition"
@@ -130,6 +138,12 @@ export default function Navbar() {
 
               {user ? (
                 <>
+                  <Link
+                    href="/my-projects"
+                    className="text-gray-700 hover:text-blue-600 transition py-2"
+                  >
+                    My Projects
+                  </Link>
                   <Link
                     href="/profile"
                     className="text-gray-700 hover:text-blue-600 transition py-2"
