@@ -2,19 +2,34 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { collection, query, where, orderBy, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
 export default function NewsPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const { user } = useAuth();
   const [news, setNews] = useState([]);
   const [filteredNews, setFilteredNews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [showSubmittedMessage, setShowSubmittedMessage] = useState(false);
 
   // Check if user is admin
   const isAdmin = user?.email === 'yoryos.styl@gmail.com' || user?.email === 'stavros.roussos@gmail.com';
+
+  // Check for submission success message
+  useEffect(() => {
+    if (searchParams.get('submitted') === 'true') {
+      setShowSubmittedMessage(true);
+      // Clear the URL parameter after a delay
+      setTimeout(() => {
+        router.replace('/news');
+      }, 100);
+    }
+  }, [searchParams, router]);
 
   // Fetch all approved news
   useEffect(() => {
@@ -118,6 +133,41 @@ export default function NewsPage() {
             </div>
           </div>
         </div>
+
+        {/* Submission Success Message */}
+        {showSubmittedMessage && (
+          <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-8">
+            <div className="flex items-start">
+              <svg
+                className="w-6 h-6 text-green-600 mr-3 flex-shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <div>
+                <h3 className="text-sm font-semibold text-green-900 mb-1">News Submitted Successfully!</h3>
+                <p className="text-sm text-green-800">
+                  Your news article has been submitted for review. You'll receive a notification once it's been reviewed by our team.
+                </p>
+              </div>
+              <button
+                onClick={() => setShowSubmittedMessage(false)}
+                className="ml-auto text-green-600 hover:text-green-800"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Search */}
         <div className="bg-white rounded-lg shadow-md p-6 mb-8">

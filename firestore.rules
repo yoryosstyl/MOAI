@@ -64,8 +64,10 @@ service cloud.firestore {
 
     // News collection
     match /news/{newsId} {
-      // Anyone can read approved news
-      allow read: if resource.data.status == 'approved';
+      // Anyone can read approved news, admins can read all news, submitters can read their own
+      allow read: if resource.data.status == 'approved' ||
+                     isAdmin() ||
+                     (isAuthenticated() && resource.data.submittedBy == request.auth.uid);
 
       // Only authenticated users can create news
       allow create: if isAuthenticated();
