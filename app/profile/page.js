@@ -54,6 +54,58 @@ export default function ProfilePage() {
             </div>
           </div>
 
+          {/* Interests & Competencies */}
+          {((userProfile?.interests && userProfile.interests.length > 0) ||
+            (userProfile?.competencies && userProfile.competencies.length > 0)) && (
+            <div className="bg-white rounded-lg shadow-md p-8 mb-8">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-semibold text-gray-900">Interests & Skills</h2>
+                <Link
+                  href="/profile/edit"
+                  className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                >
+                  Edit
+                </Link>
+              </div>
+
+              <div className="space-y-6">
+                {/* Interests */}
+                {userProfile.interests && userProfile.interests.length > 0 && (
+                  <div>
+                    <label className="text-sm font-medium text-gray-500 mb-2 block">Interests</label>
+                    <div className="flex flex-wrap gap-2">
+                      {userProfile.interests.map((interest, index) => (
+                        <span
+                          key={index}
+                          className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium"
+                        >
+                          {interest}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Competencies */}
+                {userProfile.competencies && userProfile.competencies.length > 0 && (
+                  <div>
+                    <label className="text-sm font-medium text-gray-500 mb-2 block">Competencies / Skills</label>
+                    <div className="flex flex-wrap gap-2">
+                      {userProfile.competencies.map((competency, index) => (
+                        <span
+                          key={index}
+                          className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium"
+                        >
+                          {competency}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
           {/* Contact Information */}
           <div className="bg-white rounded-lg shadow-md p-8 mb-8">
             <div className="flex justify-between items-center mb-6">
