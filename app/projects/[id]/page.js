@@ -12,6 +12,7 @@ export default function ProjectDetailPage() {
   const router = useRouter();
   const { user } = useAuth();
   const [project, setProject] = useState(null);
+  const [owner, setOwner] = useState(null);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState(false);
 
@@ -21,7 +22,20 @@ export default function ProjectDetailPage() {
         const projectDoc = await getDoc(doc(db, 'projects', params.id));
 
         if (projectDoc.exists()) {
-          setProject({ id: projectDoc.id, ...projectDoc.data() });
+          const projectData = { id: projectDoc.id, ...projectDoc.data() };
+          setProject(projectData);
+
+          // Fetch owner profile
+          if (projectData.ownerId) {
+            try {
+              const ownerDoc = await getDoc(doc(db, 'users', projectData.ownerId));
+              if (ownerDoc.exists()) {
+                setOwner({ uid: ownerDoc.id, ...ownerDoc.data() });
+              }
+            } catch (err) {
+              console.error('Error fetching owner:', err);
+            }
+          }
         } else {
           console.error('Project not found');
         }
@@ -50,6 +64,14 @@ export default function ProjectDetailPage() {
       console.error('Error deleting project:', error);
       alert('Failed to delete project');
       setDeleting(false);
+    }
+  };
+
+  const handleProfileClick = () => {
+    if (owner) {
+      // Store current project ID in session storage for back navigation
+      sessionStorage.setItem('returnToProject', params.id);
+      router.push(`/profile?uid=${owner.uid}`);
     }
   };
 
@@ -369,9 +391,45 @@ export default function ProjectDetailPage() {
               </div>
             )}
 
+            {/* Project Owner */}
+            {owner && (
+              <div className="border-t pt-6 mt-8">
+                <h2 className="text-2xl font-semibold text-gray-900 mb-4">Created By</h2>
+                <button
+                  onClick={handleProfileClick}
+                  className="flex items-center space-x-4 hover:bg-gray-50 p-4 rounded-lg transition-colors group w-full text-left"
+                >
+                  <div className="relative flex-shrink-0">
+                    {owner.avatarUrl ? (
+                      <img
+                        src={owner.avatarUrl}
+                        alt={owner.displayName}
+                        className="w-16 h-16 rounded-full object-cover ring-2 ring-gray-200 group-hover:ring-blue-500 transition-all"
+                      />
+                    ) : (
+                      <div className="w-16 h-16 rounded-full bg-blue-600 flex items-center justify-center text-white font-semibold text-2xl ring-2 ring-gray-200 group-hover:ring-blue-500 transition-all">
+                        {owner.displayName?.charAt(0).toUpperCase() || 'U'}
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-semibold text-lg text-gray-900 group-hover:text-blue-600 transition-colors">
+                      {owner.displayName}
+                    </p>
+                    {owner.bio && (
+                      <p className="text-sm text-gray-600 line-clamp-2 mt-1">{owner.bio}</p>
+                    )}
+                    <p className="text-sm text-blue-600 mt-1 group-hover:underline">
+                      View Profile →
+                    </p>
+                  </div>
+                </button>
+              </div>
+            )}
+
             {/* Contact Person */}
             {project.contactPerson && (
-              <div>
+              <div className="mt-8">
                 <h2 className="text-2xl font-semibold text-gray-900 mb-4">Contact</h2>
                 <div className="bg-gray-50 rounded-lg p-6">
                   <div className="flex items-start">

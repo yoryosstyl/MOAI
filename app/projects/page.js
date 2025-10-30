@@ -1,14 +1,17 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
-import { collection, query, orderBy, getDocs, where } from 'firebase/firestore';
+import { collection, query, orderBy, getDocs, where, doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
 export default function ProjectsPage() {
+  const router = useRouter();
   const { user } = useAuth();
   const [projects, setProjects] = useState([]);
+  const [projectOwners, setProjectOwners] = useState({});
   const [filteredProjects, setFilteredProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchFilters, setSearchFilters] = useState({
@@ -17,7 +20,7 @@ export default function ProjectsPage() {
     location: '',
   });
 
-  // Fetch all projects
+  // Fetch all projects and their owners
   useEffect(() => {
     const fetchProjects = async () => {
       try {
@@ -30,15 +33,30 @@ export default function ProjectsPage() {
           ...doc.data(),
         }));
 
-        // Filter to show ONLY public projects (same for logged in/out users)
-        // User's private projects appear only in "My Projects" page
+        // Filter to show ONLY public projects
         const publicProjects = allProjects.filter((project) => {
-          const isPublic = project.isPublic !== false; // default to public if not set
+          const isPublic = project.isPublic !== false;
           return isPublic;
         });
 
         setProjects(publicProjects);
         setFilteredProjects(publicProjects);
+
+        // Fetch owner info for each project
+        const owners = {};
+        for (const project of publicProjects) {
+          if (project.ownerId && !owners[project.ownerId]) {
+            try {
+              const ownerDoc = await getDoc(doc(db, 'users', project.ownerId));
+              if (ownerDoc.exists()) {
+                owners[project.ownerId] = { uid: ownerDoc.id, ...ownerDoc.data() };
+              }
+            } catch (err) {
+              console.error(`Error fetching owner ${project.ownerId}:`, err);
+            }
+          }
+        }
+        setProjectOwners(owners);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching projects:', error);
@@ -89,6 +107,18 @@ export default function ProjectsPage() {
       tags: '',
       location: '',
     });
+  };
+
+  const handleProfileClick = (ownerId, projectId, e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    // Store the current project ID for back navigation
+    sessionStorage.setItem('returnToProject', projectId);
+    router.push(`/profile?uid=${ownerId}`);
+  };
+
+  const handleProjectClick = (projectId) => {
+    router.push(`/projects/${projectId}`);
   };
 
   return (
@@ -214,114 +244,139 @@ export default function ProjectsPage() {
         {/* Projects Grid */}
         {!loading && filteredProjects.length > 0 && (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredProjects.map((project) => (
-              <Link
-                key={project.id}
-                href={`/projects/${project.id}`}
-                className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition group"
-              >
-                {/* Project Color Strip */}
+            {filteredProjects.map((project) => {
+              const owner = projectOwners[project.ownerId];
+
+              return (
                 <div
-                  className="h-2"
-                  style={{ backgroundColor: project.color || '#3B82F6' }}
-                />
+                  key={project.id}
+                  onClick={() => handleProjectClick(project.id)}
+                  className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition cursor-pointer"
+                >
+                  {/* Project Color Strip */}
+                  <div
+                    className="h-2"
+                    style={{ backgroundColor: project.color || '#3B82F6' }}
+                  />
 
-                {/* Project Thumbnail */}
-                <div className="h-48 bg-gray-200 flex items-center justify-center overflow-hidden">
-                  {project.thumbnailUrl || project.images?.[0] ? (
-                    <img
-                      src={project.thumbnailUrl || project.images[0]}
-                      alt={project.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                  ) : (
-                    <div className="text-center p-4">
-                      <svg
-                        className="w-12 h-12 mx-auto mb-2 text-gray-400"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                        />
-                      </svg>
-                      <span className="text-sm text-gray-400">No image</span>
-                    </div>
-                  )}
-                </div>
-
-                <div className="p-6">
-                  {/* Project Type Badge */}
-                  <div className="mb-3">
-                    <span className="inline-block px-2 py-1 text-xs font-medium bg-gray-100 text-gray-700 rounded">
-                      {project.kindOfProject || 'Project'}
-                    </span>
-                  </div>
-
-                  {/* Project Title */}
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition">
-                    {project.name}
-                  </h3>
-
-                  {/* Project Description */}
-                  <p className="text-gray-600 mb-4 line-clamp-2">
-                    {project.description}
-                  </p>
-
-                  {/* Tags */}
-                  {project.tags && project.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {project.tags.slice(0, 3).map((tag, index) => (
-                        <span
-                          key={index}
-                          className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded"
+                  {/* Project Thumbnail */}
+                  <div className="relative h-48 bg-gray-200 flex items-center justify-center overflow-hidden">
+                    {project.thumbnailUrl || project.images?.[0] ? (
+                      <img
+                        src={project.thumbnailUrl || project.images[0]}
+                        alt={project.name}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    ) : (
+                      <div className="text-center p-4">
+                        <svg
+                          className="w-12 h-12 mx-auto mb-2 text-gray-400"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
                         >
-                          {tag}
-                        </span>
-                      ))}
-                      {project.tags.length > 3 && (
-                        <span className="text-xs text-gray-500">
-                          +{project.tags.length - 3} more
-                        </span>
-                      )}
-                    </div>
-                  )}
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                          />
+                        </svg>
+                        <span className="text-sm text-gray-400">No image</span>
+                      </div>
+                    )}
 
-                  {/* Project Meta Info */}
-                  <div className="flex items-center justify-between text-sm text-gray-500">
-                    <div className="flex items-center">
-                      <svg
-                        className="w-4 h-4 mr-1"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
+                    {/* Author profile image - top right corner */}
+                    {owner && (
+                      <button
+                        onClick={(e) => handleProfileClick(project.ownerId, project.id, e)}
+                        className="absolute top-3 right-3 group"
+                        title={`View ${owner.displayName}'s profile`}
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                        />
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                        />
-                      </svg>
-                      <span>{project.location || 'Remote'}</span>
+                        {owner.avatarUrl ? (
+                          <img
+                            src={owner.avatarUrl}
+                            alt={owner.displayName}
+                            className="w-10 h-10 rounded-full object-cover border-2 border-white shadow-md hover:border-blue-500 transition-all group-hover:scale-110"
+                          />
+                        ) : (
+                          <div className="w-10 h-10 rounded-full bg-blue-600 border-2 border-white shadow-md flex items-center justify-center text-white font-semibold hover:border-blue-500 transition-all group-hover:scale-110">
+                            {owner.displayName?.charAt(0).toUpperCase() || 'U'}
+                          </div>
+                        )}
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="p-6">
+                    {/* Project Type Badge */}
+                    <div className="mb-3">
+                      <span className="inline-block px-2 py-1 text-xs font-medium bg-gray-100 text-gray-700 rounded">
+                        {project.kindOfProject || 'Project'}
+                      </span>
                     </div>
-                    <span className="text-blue-600 font-medium group-hover:underline">
-                      View Details →
-                    </span>
+
+                    {/* Project Title */}
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition">
+                      {project.name}
+                    </h3>
+
+                    {/* Project Description */}
+                    <p className="text-gray-600 mb-4 line-clamp-2">
+                      {project.description}
+                    </p>
+
+                    {/* Tags */}
+                    {project.tags && project.tags.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        {project.tags.slice(0, 3).map((tag, index) => (
+                          <span
+                            key={index}
+                            className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                        {project.tags.length > 3 && (
+                          <span className="text-xs text-gray-500">
+                            +{project.tags.length - 3} more
+                          </span>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Project Meta Info */}
+                    <div className="flex items-center justify-between text-sm text-gray-500">
+                      <div className="flex items-center">
+                        <svg
+                          className="w-4 h-4 mr-1"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                          />
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                          />
+                        </svg>
+                        <span>{project.location || 'Remote'}</span>
+                      </div>
+                      <span className="text-blue-600 font-medium group-hover:underline">
+                        View Details →
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </Link>
-            ))}
+              );
+            })}
           </div>
         )}
 
