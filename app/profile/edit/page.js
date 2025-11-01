@@ -20,9 +20,6 @@ export default function EditProfilePage() {
     telephone: {
       countryCode: '+30',
       number: '',
-      whatsApp: false,
-      viber: false,
-      signal: false,
     },
     location: {
       address: '',
@@ -34,10 +31,6 @@ export default function EditProfilePage() {
       facebook: '',
     },
     avatarUrl: '',
-    preferredContact: [],
-    interests: [],
-    competencies: [],
-    blockedUsers: [],
     privacy: {
       emailPublic: false,
       telephonePublic: false,
@@ -48,8 +41,6 @@ export default function EditProfilePage() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
-  const [newInterest, setNewInterest] = useState('');
-  const [newCompetency, setNewCompetency] = useState('');
 
   // Load user profile data when component mounts
   useEffect(() => {
@@ -60,9 +51,6 @@ export default function EditProfilePage() {
         telephone: {
           countryCode: userProfile.telephone?.countryCode || '+30',
           number: userProfile.telephone?.number || '',
-          whatsApp: userProfile.telephone?.whatsApp || false,
-          viber: userProfile.telephone?.viber || false,
-          signal: userProfile.telephone?.signal || false,
         },
         location: {
           address: userProfile.location?.address || '',
@@ -74,10 +62,6 @@ export default function EditProfilePage() {
           facebook: userProfile.socialMedia?.facebook || '',
         },
         avatarUrl: userProfile.avatarUrl || '',
-        preferredContact: userProfile.preferredContact || ['email'],
-        interests: userProfile.interests || [],
-        competencies: userProfile.competencies || [],
-        blockedUsers: userProfile.blockedUsers || [],
         privacy: {
           emailPublic: userProfile.privacy?.emailPublic || false,
           telephonePublic: userProfile.privacy?.telephonePublic || false,
@@ -125,20 +109,6 @@ export default function EditProfilePage() {
     }));
   };
 
-  const handleContactChange = (method) => {
-    setFormData((prev) => {
-      const currentContacts = prev.preferredContact;
-      const isSelected = currentContacts.includes(method);
-
-      return {
-        ...prev,
-        preferredContact: isSelected
-          ? currentContacts.filter((m) => m !== method)
-          : [...currentContacts, method],
-      };
-    });
-  };
-
   const handleLocationChange = (address) => {
     setFormData((prev) => ({
       ...prev,
@@ -173,42 +143,6 @@ export default function EditProfilePage() {
     }));
   };
 
-  const handleAddInterest = (e) => {
-    e.preventDefault();
-    if (newInterest.trim() && !formData.interests.includes(newInterest.trim())) {
-      setFormData((prev) => ({
-        ...prev,
-        interests: [...prev.interests, newInterest.trim()],
-      }));
-      setNewInterest('');
-    }
-  };
-
-  const handleRemoveInterest = (interest) => {
-    setFormData((prev) => ({
-      ...prev,
-      interests: prev.interests.filter((i) => i !== interest),
-    }));
-  };
-
-  const handleAddCompetency = (e) => {
-    e.preventDefault();
-    if (newCompetency.trim() && !formData.competencies.includes(newCompetency.trim())) {
-      setFormData((prev) => ({
-        ...prev,
-        competencies: [...prev.competencies, newCompetency.trim()],
-      }));
-      setNewCompetency('');
-    }
-  };
-
-  const handleRemoveCompetency = (competency) => {
-    setFormData((prev) => ({
-      ...prev,
-      competencies: prev.competencies.filter((c) => c !== competency),
-    }));
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -232,10 +166,6 @@ export default function EditProfilePage() {
         location: formData.location,
         socialMedia: formData.socialMedia,
         avatarUrl: formData.avatarUrl,
-        preferredContact: formData.preferredContact,
-        interests: formData.interests,
-        competencies: formData.competencies,
-        blockedUsers: formData.blockedUsers,
         privacy: formData.privacy,
         updatedAt: serverTimestamp(),
       });
@@ -336,102 +266,6 @@ export default function EditProfilePage() {
                 />
               </div>
 
-              {/* Interests */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Interests
-                </label>
-                <p className="text-xs text-gray-500 mb-2">
-                  Add areas of interest (e.g., Photography, 3D Animation, Music Production)
-                </p>
-                <div className="flex gap-2 mb-3">
-                  <input
-                    type="text"
-                    value={newInterest}
-                    onChange={(e) => setNewInterest(e.target.value)}
-                    onKeyPress={(e) => {
-                      if (e.key === 'Enter') {
-                        handleAddInterest(e);
-                      }
-                    }}
-                    placeholder="Add an interest..."
-                    className="flex-1 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                  <button
-                    type="button"
-                    onClick={handleAddInterest}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
-                  >
-                    Add
-                  </button>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {formData.interests.map((interest, index) => (
-                    <span
-                      key={index}
-                      className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
-                    >
-                      {interest}
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveInterest(interest)}
-                        className="text-blue-600 hover:text-blue-800 font-bold"
-                      >
-                        ×
-                      </button>
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Competencies */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Competencies / Skills
-                </label>
-                <p className="text-xs text-gray-500 mb-2">
-                  Add tools and skills you're proficient with (e.g., Blender, After Effects, Character Design)
-                </p>
-                <div className="flex gap-2 mb-3">
-                  <input
-                    type="text"
-                    value={newCompetency}
-                    onChange={(e) => setNewCompetency(e.target.value)}
-                    onKeyPress={(e) => {
-                      if (e.key === 'Enter') {
-                        handleAddCompetency(e);
-                      }
-                    }}
-                    placeholder="Add a competency..."
-                    className="flex-1 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                  <button
-                    type="button"
-                    onClick={handleAddCompetency}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
-                  >
-                    Add
-                  </button>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {formData.competencies.map((competency, index) => (
-                    <span
-                      key={index}
-                      className="inline-flex items-center gap-1 px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm"
-                    >
-                      {competency}
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveCompetency(competency)}
-                        className="text-green-600 hover:text-green-800 font-bold"
-                      >
-                        ×
-                      </button>
-                    </span>
-                  ))}
-                </div>
-              </div>
-
               {/* Phone Number with Country Code */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -461,42 +295,6 @@ export default function EditProfilePage() {
                     className="flex-1 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
-
-                {/* Messaging Apps */}
-                {formData.telephone.number && (
-                  <div className="mt-3 space-y-2">
-                    <p className="text-sm text-gray-600">Available on:</p>
-                    <div className="flex flex-wrap gap-4">
-                      <label className="flex items-center">
-                        <input
-                          type="checkbox"
-                          checked={formData.telephone.whatsApp}
-                          onChange={(e) => handlePhoneChange('whatsApp', e.target.checked)}
-                          className="h-4 w-4 text-blue-600 rounded focus:ring-blue-500"
-                        />
-                        <span className="ml-2 text-sm text-gray-700">WhatsApp</span>
-                      </label>
-                      <label className="flex items-center">
-                        <input
-                          type="checkbox"
-                          checked={formData.telephone.viber}
-                          onChange={(e) => handlePhoneChange('viber', e.target.checked)}
-                          className="h-4 w-4 text-blue-600 rounded focus:ring-blue-500"
-                        />
-                        <span className="ml-2 text-sm text-gray-700">Viber</span>
-                      </label>
-                      <label className="flex items-center">
-                        <input
-                          type="checkbox"
-                          checked={formData.telephone.signal}
-                          onChange={(e) => handlePhoneChange('signal', e.target.checked)}
-                          className="h-4 w-4 text-blue-600 rounded focus:ring-blue-500"
-                        />
-                        <span className="ml-2 text-sm text-gray-700">Signal</span>
-                      </label>
-                    </div>
-                  </div>
-                )}
               </div>
 
               {/* Location with Autocomplete */}
@@ -563,26 +361,6 @@ export default function EditProfilePage() {
                       className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
-                </div>
-              </div>
-
-              {/* Preferred Contact Methods */}
-              <div className="border-t pt-8">
-                <label className="block text-sm font-medium text-gray-700 mb-3">
-                  Preferred Contact Methods (select multiple)
-                </label>
-                <div className="grid grid-cols-2 gap-3">
-                  {['email', 'telephone', 'whatsapp', 'viber', 'signal', 'linkedin', 'instagram', 'facebook'].map((method) => (
-                    <label key={method} className="flex items-center">
-                      <input
-                        type="checkbox"
-                        checked={formData.preferredContact.includes(method)}
-                        onChange={() => handleContactChange(method)}
-                        className="h-4 w-4 text-blue-600 rounded focus:ring-blue-500"
-                      />
-                      <span className="ml-2 text-gray-700 capitalize">{method}</span>
-                    </label>
-                  ))}
                 </div>
               </div>
 

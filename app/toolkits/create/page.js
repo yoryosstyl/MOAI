@@ -314,7 +314,12 @@ export default function CreateToolkitPage() {
 
               {/* Platforms */}
               <div className="border-t pt-8">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Platforms *</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  Platforms (Optional)
+                </h3>
+                <p className="text-sm text-gray-600 mb-4">
+                  Select platforms if applicable. Leave empty if it applies to all or none.
+                </p>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {platforms.map((platform) => (
                     <button
@@ -331,9 +336,6 @@ export default function CreateToolkitPage() {
                     </button>
                   ))}
                 </div>
-                {formData.platforms.length === 0 && (
-                  <p className="text-sm text-red-600 mt-2">Please select at least one platform</p>
-                )}
               </div>
 
               {/* Logo */}
@@ -456,7 +458,7 @@ export default function CreateToolkitPage() {
               <div className="flex gap-4 pt-6 border-t">
                 <button
                   type="submit"
-                  disabled={saving || formData.platforms.length === 0}
+                  disabled={saving}
                   className="flex-1 bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 transition font-medium disabled:opacity-50"
                 >
                   {saving

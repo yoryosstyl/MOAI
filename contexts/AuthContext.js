@@ -57,9 +57,6 @@ export const AuthProvider = ({ children }) => {
         telephone: {
           countryCode: '+30',
           number: '',
-          whatsApp: false,
-          viber: false,
-          signal: false,
         },
         bio: '',
         avatarUrl: '',
@@ -77,7 +74,6 @@ export const AuthProvider = ({ children }) => {
           telephonePublic: false,
           locationPublic: false,
         },
-        preferredContact: ['email'],
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       });
@@ -116,9 +112,6 @@ export const AuthProvider = ({ children }) => {
           telephone: {
             countryCode: '+30',
             number: '',
-            whatsApp: false,
-            viber: false,
-            signal: false,
           },
           bio: '',
           avatarUrl: result.user.photoURL || '',
@@ -136,7 +129,6 @@ export const AuthProvider = ({ children }) => {
             telephonePublic: false,
             locationPublic: false,
           },
-          preferredContact: ['email'],
           createdAt: serverTimestamp(),
           updatedAt: serverTimestamp(),
         });

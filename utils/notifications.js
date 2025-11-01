@@ -98,3 +98,52 @@ export async function notifyUserToolkitRejected(userId, toolkitName, reason) {
     link: '/toolkits',
   });
 }
+
+/**
+ * Notify admins about a new news submission
+ */
+export async function notifyAdminsNewNews(newsId, newsTitle, submitterName) {
+  const title = 'New News Submission';
+  const message = `${submitterName} has submitted "${newsTitle}" for review.`;
+  const link = `/news/admin/review`;
+
+  // Get admin user IDs
+  const adminIds = await getAdminUserIds();
+
+  // Create notification for each admin
+  for (const adminId of adminIds) {
+    await createNotification({
+      userId: adminId,
+      type: 'news_submitted',
+      title,
+      message,
+      link,
+    });
+  }
+}
+
+/**
+ * Notify user about news approval
+ */
+export async function notifyUserNewsApproved(userId, newsId, newsTitle) {
+  await createNotification({
+    userId,
+    type: 'news_approved',
+    title: 'News Approved! 🎉',
+    message: `Your news article "${newsTitle}" has been approved and is now live.`,
+    link: `/news/${newsId}`,
+  });
+}
+
+/**
+ * Notify user about news rejection
+ */
+export async function notifyUserNewsRejected(userId, newsTitle, reason) {
+  await createNotification({
+    userId,
+    type: 'news_rejected',
+    title: 'News Submission Update',
+    message: `Your news article "${newsTitle}" was not approved. Reason: ${reason}`,
+    link: '/news',
+  });
+}
