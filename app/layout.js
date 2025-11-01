@@ -13,12 +13,12 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className="antialiased">
         {/* Google Maps API for location autocomplete */}
-        {process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY && (
-          <Script
-            src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places`}
-            strategy="beforeInteractive"
-          />
-        )}
+        <Script
+          src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places`}
+          strategy="lazyOnload"
+          onLoad={() => console.log('Google Maps API loaded successfully')}
+          onError={(e) => console.error('Error loading Google Maps API:', e)}
+        />
         <Providers>
           <Navbar />
           {children}
