@@ -166,7 +166,6 @@ export default function EditProfilePage() {
         location: formData.location,
         socialMedia: formData.socialMedia,
         avatarUrl: formData.avatarUrl,
-        preferredContact: formData.preferredContact,
         privacy: formData.privacy,
         updatedAt: serverTimestamp(),
       });
