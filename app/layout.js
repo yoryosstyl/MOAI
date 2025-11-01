@@ -15,9 +15,7 @@ export default function RootLayout({ children }) {
         {/* Google Maps API for location autocomplete */}
         <Script
           src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places`}
-          strategy="lazyOnload"
-          onLoad={() => console.log('Google Maps API loaded successfully')}
-          onError={(e) => console.error('Error loading Google Maps API:', e)}
+          strategy="afterInteractive"
         />
         <Providers>
           <Navbar />

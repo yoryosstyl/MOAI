@@ -23,6 +23,7 @@ export default function LocationAutocomplete({ value, onChange, onVerifiedChange
     const initAutocomplete = () => {
       if (typeof window !== 'undefined' && window.google && window.google.maps && window.google.maps.places) {
         try {
+          console.log('✅ Google Maps API loaded - initializing autocomplete');
           autocompleteRef.current = new window.google.maps.places.Autocomplete(
             inputRef.current,
             {
@@ -39,21 +40,22 @@ export default function LocationAutocomplete({ value, onChange, onVerifiedChange
               onVerifiedChange(true); // Address verified from Google
             }
           });
+          console.log('✅ Autocomplete initialized successfully');
         } catch (error) {
-          console.error('Error initializing Google Maps Autocomplete:', error);
+          console.error('❌ Error initializing Google Maps Autocomplete:', error);
           setIsManual(true);
         }
       } else {
         // Google Maps not loaded yet, try again after a delay
-        console.log('Waiting for Google Maps to load...');
+        console.log('⏳ Waiting for Google Maps to load...');
         const timeout = setTimeout(() => {
           if (typeof window !== 'undefined' && window.google && window.google.maps && window.google.maps.places) {
             initAutocomplete();
           } else {
-            console.warn('Google Maps API not available, falling back to manual input');
+            console.warn('⚠️ Google Maps API not available after waiting, falling back to manual input');
             setIsManual(true);
           }
-        }, 1000);
+        }, 1500);
         return () => clearTimeout(timeout);
       }
     };
