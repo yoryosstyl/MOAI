@@ -401,6 +401,23 @@ export default function EditProfilePage() {
                 </div>
               </div>
 
+              {/* Security Settings */}
+              <div className="border-t pt-8">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Security</h3>
+                <p className="text-sm text-gray-600 mb-4">
+                  Manage your account security settings
+                </p>
+                <Link
+                  href="/auth/change-password"
+                  className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                >
+                  <svg className="w-5 h-5 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+                  </svg>
+                  Change Password
+                </Link>
+              </div>
+
               {/* Action Buttons */}
               <div className="flex gap-4 pt-6 border-t">
                 <button
