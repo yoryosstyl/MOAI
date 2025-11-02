@@ -11,6 +11,7 @@ body {
   color: rgb(var(--foreground-rgb));
   background: rgb(var(--background-rgb));
   position: relative;
+  min-height: 100vh;
 }
 
 /* Subtle background image with transparency */
@@ -26,9 +27,18 @@ body::before {
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed;
-  opacity: 0.08;
+  opacity: 0.15;
   z-index: -1;
   pointer-events: none;
+}
+
+/* Make page backgrounds semi-transparent to show the background image */
+.bg-gray-50 {
+  background-color: rgba(249, 250, 251, 0.95) !important;
+}
+
+.bg-white {
+  background-color: rgba(255, 255, 255, 0.95) !important;
 }
 
 @layer utilities {
