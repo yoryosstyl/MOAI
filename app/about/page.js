@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-gray-50">
@@ -93,9 +95,9 @@ export default function AboutPage() {
           <p className="text-gray-700 mb-6">
             Have questions or suggestions? We'd love to hear from you!
           </p>
-          <button className="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition">
+          <Link href="/contact" className="inline-block bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition">
             Contact Us
-          </button>
+          </Link>
         </div>
       </div>
     </div>
