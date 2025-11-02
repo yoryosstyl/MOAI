@@ -18,6 +18,7 @@ export default function ProfilePage() {
   const [returnToProjectId, setReturnToProjectId] = useState(null);
 
   const viewedUid = searchParams.get('uid');
+  const isViewingOtherProfile = viewedUid && (!user || viewedUid !== user.uid);
   const isOwnProfile = !viewedUid || viewedUid === user?.uid;
   const displayProfile = isOwnProfile ? userProfile : viewedProfile;
 
@@ -69,20 +70,19 @@ export default function ProfilePage() {
   const showLocation = isOwnProfile || displayProfile?.privacy?.locationPublic;
 
   if (loading) {
-    return (
-      <ProtectedRoute>
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-            <p className="mt-4 text-gray-600">Loading profile...</p>
-          </div>
+    const loadingContent = (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading profile...</p>
         </div>
-      </ProtectedRoute>
+      </div>
     );
+
+    return isViewingOtherProfile ? loadingContent : <ProtectedRoute>{loadingContent}</ProtectedRoute>;
   }
 
-  return (
-    <ProtectedRoute>
+  const profileContent = (
       <div className="min-h-screen bg-gray-50 py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Back to Project button */}
@@ -388,6 +388,7 @@ export default function ProfilePage() {
           )}
         </div>
       </div>
-    </ProtectedRoute>
   );
+
+  return isViewingOtherProfile ? profileContent : <ProtectedRoute>{profileContent}</ProtectedRoute>;
 }
