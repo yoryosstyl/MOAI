@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export default function Home() {
   return (
     <div className="min-h-screen bg-gray-50">
@@ -26,9 +28,9 @@ export default function Home() {
             <p className="text-gray-600 mb-4">
               Explore creative projects shared by artists from around the world.
             </p>
-            <button className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
+            <Link href="/projects" className="inline-block bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
               View Projects
-            </button>
+            </Link>
           </div>
 
           {/* Toolkits Card */}
@@ -39,9 +41,9 @@ export default function Home() {
             <p className="text-gray-600 mb-4">
               Find curated toolkits and resources for your creative process.
             </p>
-            <button className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
+            <Link href="/toolkits" className="inline-block bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
               Browse Toolkits
-            </button>
+            </Link>
           </div>
 
           {/* Community Card */}
@@ -52,9 +54,9 @@ export default function Home() {
             <p className="text-gray-600 mb-4">
               Connect with artists and collaborate on exciting projects.
             </p>
-            <button className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
-              Sign Up
-            </button>
+            <Link href="/login" className="inline-block bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
+              Log In
+            </Link>
           </div>
         </div>
       </div>

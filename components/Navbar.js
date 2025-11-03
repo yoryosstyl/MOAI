@@ -21,9 +21,16 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           {/* Logo */}
-          <div className="flex items-center">
-            <Link href="/" className="flex items-center">
+          <div className="flex items-center space-x-3">
+            <Link href="/" className="flex items-center space-x-3">
               <span className="text-2xl font-bold text-blue-600">MOAI</span>
+              <span className="text-gray-400">|</span>
+              <img
+                src="/facta-non-verba-logo.png"
+                alt="Facta Non Verba"
+                className="h-10 w-auto"
+                onError={(e) => { e.target.style.display = 'none'; }}
+              />
             </Link>
           </div>
 
@@ -40,6 +47,9 @@ export default function Navbar() {
             </Link>
             <Link href="/about" className="text-gray-700 hover:text-blue-600 transition">
               About
+            </Link>
+            <Link href="/contact" className="text-gray-700 hover:text-blue-600 transition">
+              Contact
             </Link>
 
             {user ? (
@@ -134,6 +144,12 @@ export default function Navbar() {
                 className="text-gray-700 hover:text-blue-600 transition py-2"
               >
                 About
+              </Link>
+              <Link
+                href="/contact"
+                className="text-gray-700 hover:text-blue-600 transition py-2"
+              >
+                Contact
               </Link>
 
               {user ? (
