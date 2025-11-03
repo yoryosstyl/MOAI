@@ -2,7 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
+import { useTranslation } from '@/contexts/LanguageContext';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import AvatarUpload from '@/components/AvatarUpload';
 import LocationAutocomplete from '@/components/LocationAutocomplete';
@@ -13,6 +15,7 @@ import { countryCodes, validatePhoneNumber } from '@/utils/phoneUtils';
 export default function EditProfilePage() {
   const router = useRouter();
   const { user, userProfile, refreshUserProfile } = useAuth();
+  const { t } = useTranslation();
 
   const [formData, setFormData] = useState({
     displayName: '',
