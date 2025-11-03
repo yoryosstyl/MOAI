@@ -64,17 +64,20 @@
       "loginLink": "Log in"
     },
     "resetPassword": {
-      "title": "Reset Password",
+      "title": "Reset your password",
       "description": "Enter your email address and we'll send you a link to reset your password.",
-      "email": "Email Address",
-      "button": "Send Reset Link",
-      "backToLogin": "Back to Log In",
-      "success": "Password reset email sent! Check your inbox.",
+      "email": "Email address",
+      "button": "Send reset link",
+      "sending": "Sending...",
+      "backToLogin": "Back to login",
+      "noAccount": "Don't have an account? Sign up",
+      "successTitle": "Password reset email sent!",
+      "successMessage": "Check your inbox and follow the link to reset your password.",
       "errors": {
         "userNotFound": "No account found with this email address.",
         "invalidEmail": "Please enter a valid email address.",
         "tooManyRequests": "Too many requests. Please try again later.",
-        "generic": "Failed to send reset email. Please try again."
+        "generic": "Failed to send password reset email. Please try again."
       }
     },
     "changePassword": {
