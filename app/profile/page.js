@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
+import { useTranslation } from '@/contexts/LanguageContext';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { formatPhoneNumber } from '@/utils/phoneUtils';
 import { doc, getDoc } from 'firebase/firestore';
@@ -13,6 +14,7 @@ export default function ProfilePage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { user, userProfile } = useAuth();
+  const { t } = useTranslation();
   const [viewedProfile, setViewedProfile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [returnToProjectId, setReturnToProjectId] = useState(null);
@@ -74,7 +76,7 @@ export default function ProfilePage() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading profile...</p>
+          <p className="mt-4 text-gray-600">{t('profile.loadingProfile')}</p>
         </div>
       </div>
     );
@@ -94,7 +96,7 @@ export default function ProfilePage() {
               <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
-              Back to Project
+              {t('profile.backToProject')}
             </button>
           )}
 
@@ -122,14 +124,14 @@ export default function ProfilePage() {
                   {displayProfile?.displayName || 'Artist'}
                 </h1>
                 <p className="text-gray-600 mb-4 max-w-2xl">
-                  {displayProfile?.bio || (isOwnProfile ? 'No bio yet. Click Edit Profile to add one.' : 'No bio available')}
+                  {displayProfile?.bio || (isOwnProfile ? t('profile.noBioOwn') : t('profile.noBioOther'))}
                 </p>
                 {isOwnProfile && (
                   <Link
                     href="/profile/edit"
                     className="inline-block bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition font-medium"
                   >
-                    Edit Profile
+                    {t('profile.edit')}
                   </Link>
                 )}
               </div>
@@ -141,7 +143,7 @@ export default function ProfilePage() {
             (userProfile?.competencies && userProfile.competencies.length > 0)) && (
             <div className="bg-white rounded-lg shadow-md p-8 mb-8">
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-semibold text-gray-900">Interests & Skills</h2>
+                <h2 className="text-2xl font-semibold text-gray-900">{t("profile.interestsSkills")}</h2>
                 <Link
                   href="/profile/edit"
                   className="text-blue-600 hover:text-blue-800 text-sm font-medium"
@@ -191,7 +193,7 @@ export default function ProfilePage() {
           {/* Contact Information */}
           <div className="bg-white rounded-lg shadow-md p-8 mb-8">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-semibold text-gray-900">Contact Information</h2>
+              <h2 className="text-2xl font-semibold text-gray-900">{t("profile.contactInfo")}</h2>
               {isOwnProfile && (
                 <Link
                   href="/profile/edit"
@@ -268,7 +270,7 @@ export default function ProfilePage() {
           {hasSocialMedia && (
             <div className="bg-white rounded-lg shadow-md p-8 mb-8">
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-semibold text-gray-900">Social Media</h2>
+                <h2 className="text-2xl font-semibold text-gray-900">{t("profile.socialMedia")}</h2>
                 {isOwnProfile && (
                   <Link
                     href="/profile/edit"
@@ -344,7 +346,7 @@ export default function ProfilePage() {
           {isOwnProfile && (
             <div className="bg-white rounded-lg shadow-md p-8">
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-semibold text-gray-900">Privacy Settings</h2>
+                <h2 className="text-2xl font-semibold text-gray-900">{t("profile.privacySettings")}</h2>
                 <Link
                   href="/profile/edit"
                   className="text-blue-600 hover:text-blue-800 text-sm font-medium"

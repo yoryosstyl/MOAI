@@ -2,7 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
+import { useTranslation } from '@/contexts/LanguageContext';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import AvatarUpload from '@/components/AvatarUpload';
 import LocationAutocomplete from '@/components/LocationAutocomplete';
@@ -13,6 +15,7 @@ import { countryCodes, validatePhoneNumber } from '@/utils/phoneUtils';
 export default function EditProfilePage() {
   const router = useRouter();
   const { user, userProfile, refreshUserProfile } = useAuth();
+  const { t } = useTranslation();
 
   const [formData, setFormData] = useState({
     displayName: '',
@@ -151,7 +154,7 @@ export default function EditProfilePage() {
 
     // Validate phone number if provided
     if (formData.telephone.number && !validatePhoneNumber(formData.telephone.number)) {
-      setError('Phone number can only contain digits');
+      setError(t('profileEdit.phoneError'));
       setLoading(false);
       return;
     }
@@ -179,7 +182,7 @@ export default function EditProfilePage() {
       }, 1500);
     } catch (err) {
       console.error('Error updating profile:', err);
-      setError('Failed to update profile. Please try again.');
+      setError(t('profileEdit.errorGeneric'));
       setLoading(false);
     }
   };
@@ -189,7 +192,7 @@ export default function EditProfilePage() {
     return (
       <ProtectedRoute>
         <div className="min-h-screen bg-gray-50 py-12 flex items-center justify-center">
-          <div className="text-gray-600">Loading...</div>
+          <div className="text-gray-600">{t('profileEdit.loading')}</div>
         </div>
       </ProtectedRoute>
     );
@@ -202,14 +205,14 @@ export default function EditProfilePage() {
           <div className="bg-white rounded-lg shadow-md p-8">
             {/* Header */}
             <div className="mb-8">
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">Edit Profile</h1>
-              <p className="text-gray-600">Update your personal information and privacy settings</p>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">{t('profileEdit.title')}</h1>
+              <p className="text-gray-600">{t('profileEdit.subtitle')}</p>
             </div>
 
             {/* Success Message */}
             {success && (
               <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-md">
-                <p className="text-green-600">Profile updated successfully! Redirecting...</p>
+                <p className="text-green-600">{t('profileEdit.successMessage')}</p>
               </div>
             )}
 
@@ -224,7 +227,7 @@ export default function EditProfilePage() {
             <form onSubmit={handleSubmit} className="space-y-8">
               {/* Avatar Upload */}
               <div className="border-b pb-8">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Profile Picture</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('profileEdit.profilePicture')}</h3>
                 <AvatarUpload
                   currentAvatarUrl={formData.avatarUrl}
                   userId={user.uid}
@@ -236,7 +239,7 @@ export default function EditProfilePage() {
               {/* Display Name */}
               <div>
                 <label htmlFor="displayName" className="block text-sm font-medium text-gray-700 mb-2">
-                  Display Name *
+                  {t('profileEdit.displayNameRequired')}
                 </label>
                 <input
                   id="displayName"
@@ -246,14 +249,14 @@ export default function EditProfilePage() {
                   value={formData.displayName}
                   onChange={handleChange}
                   className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Your name"
+                  placeholder={t('profileEdit.displayNamePlaceholder')}
                 />
               </div>
 
               {/* Bio */}
               <div>
                 <label htmlFor="bio" className="block text-sm font-medium text-gray-700 mb-2">
-                  Bio
+                  {t('profileEdit.bio')}
                 </label>
                 <textarea
                   id="bio"
@@ -262,14 +265,14 @@ export default function EditProfilePage() {
                   value={formData.bio}
                   onChange={handleChange}
                   className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Tell us about yourself and your artistic work..."
+                  placeholder={t('profileEdit.bioPlaceholder')}
                 />
               </div>
 
               {/* Phone Number with Country Code */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Telephone
+                  {t('profileEdit.telephone')}
                 </label>
                 <div className="flex gap-2">
                   <select
@@ -291,7 +294,7 @@ export default function EditProfilePage() {
                       const value = e.target.value.replace(/\D/g, '');
                       handlePhoneChange('number', value);
                     }}
-                    placeholder="1234567890"
+                    placeholder={t('profileEdit.telephonePlaceholder')}
                     className="flex-1 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
@@ -313,51 +316,51 @@ export default function EditProfilePage() {
                         clipRule="evenodd"
                       />
                     </svg>
-                    Verified address
+                    {t('profileEdit.verifiedAddress')}
                   </p>
                 )}
               </div>
 
               {/* Social Media Links */}
               <div className="border-t pt-8">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Social Media</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('profileEdit.socialMedia')}</h3>
                 <div className="space-y-4">
                   <div>
                     <label htmlFor="linkedin" className="block text-sm font-medium text-gray-700 mb-2">
-                      LinkedIn
+                      {t('profileEdit.linkedin')}
                     </label>
                     <input
                       id="linkedin"
                       type="url"
                       value={formData.socialMedia.linkedin}
                       onChange={(e) => handleSocialMediaChange('linkedin', e.target.value)}
-                      placeholder="https://linkedin.com/in/yourprofile"
+                      placeholder={t('profileEdit.linkedinPlaceholder')}
                       className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
                   <div>
                     <label htmlFor="instagram" className="block text-sm font-medium text-gray-700 mb-2">
-                      Instagram
+                      {t('profileEdit.instagram')}
                     </label>
                     <input
                       id="instagram"
                       type="url"
                       value={formData.socialMedia.instagram}
                       onChange={(e) => handleSocialMediaChange('instagram', e.target.value)}
-                      placeholder="https://instagram.com/yourprofile"
+                      placeholder={t('profileEdit.instagramPlaceholder')}
                       className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
                   <div>
                     <label htmlFor="facebook" className="block text-sm font-medium text-gray-700 mb-2">
-                      Facebook
+                      {t('profileEdit.facebook')}
                     </label>
                     <input
                       id="facebook"
                       type="url"
                       value={formData.socialMedia.facebook}
                       onChange={(e) => handleSocialMediaChange('facebook', e.target.value)}
-                      placeholder="https://facebook.com/yourprofile"
+                      placeholder={t('profileEdit.facebookPlaceholder')}
                       className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
@@ -366,13 +369,13 @@ export default function EditProfilePage() {
 
               {/* Privacy Settings */}
               <div className="border-t pt-8">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Privacy Settings</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('profileEdit.privacySettings')}</h3>
                 <p className="text-sm text-gray-600 mb-4">
-                  Choose which information is visible to other users
+                  {t('profileEdit.privacyDescription')}
                 </p>
                 <div className="space-y-3">
                   <label className="flex items-center justify-between p-3 bg-gray-50 rounded">
-                    <span className="text-gray-700">Make email public</span>
+                    <span className="text-gray-700">{t('profileEdit.makeEmailPublic')}</span>
                     <input
                       type="checkbox"
                       checked={formData.privacy.emailPublic}
@@ -381,7 +384,7 @@ export default function EditProfilePage() {
                     />
                   </label>
                   <label className="flex items-center justify-between p-3 bg-gray-50 rounded">
-                    <span className="text-gray-700">Make telephone public</span>
+                    <span className="text-gray-700">{t('profileEdit.makeTelephonePublic')}</span>
                     <input
                       type="checkbox"
                       checked={formData.privacy.telephonePublic}
@@ -390,7 +393,7 @@ export default function EditProfilePage() {
                     />
                   </label>
                   <label className="flex items-center justify-between p-3 bg-gray-50 rounded">
-                    <span className="text-gray-700">Make location public</span>
+                    <span className="text-gray-700">{t('profileEdit.makeLocationPublic')}</span>
                     <input
                       type="checkbox"
                       checked={formData.privacy.locationPublic}
@@ -403,9 +406,9 @@ export default function EditProfilePage() {
 
               {/* Security Settings */}
               <div className="border-t pt-8">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Security</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('profileEdit.securitySection')}</h3>
                 <p className="text-sm text-gray-600 mb-4">
-                  Manage your account security settings
+                  {t('profileEdit.securityDescription')}
                 </p>
                 <Link
                   href="/auth/change-password"
@@ -414,7 +417,7 @@ export default function EditProfilePage() {
                   <svg className="w-5 h-5 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
                   </svg>
-                  Change Password
+                  {t('profileEdit.changePassword')}
                 </Link>
               </div>
 
@@ -425,14 +428,14 @@ export default function EditProfilePage() {
                   disabled={loading}
                   className="flex-1 bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 transition font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {loading ? 'Saving...' : 'Save Changes'}
+                  {loading ? t('profileEdit.saving') : t('profileEdit.save')}
                 </button>
                 <button
                   type="button"
                   onClick={() => router.push('/profile')}
                   className="flex-1 bg-gray-200 text-gray-700 py-3 px-4 rounded-md hover:bg-gray-300 transition font-medium"
                 >
-                  Cancel
+                  {t('profileEdit.cancel')}
                 </button>
               </div>
             </form>

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
+import { useTranslation } from '@/contexts/LanguageContext';
 import { doc, getDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import FavoriteButton from '@/components/FavoriteButton';
@@ -17,6 +18,7 @@ export default function ToolkitDetailPage() {
   const params = useParams();
   const router = useRouter();
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [toolkit, setToolkit] = useState(null);
   const [loading, setLoading] = useState(true);
   const [favoriteCount, setFavoriteCount] = useState(0);
@@ -100,21 +102,21 @@ export default function ToolkitDetailPage() {
   };
 
   const handleDelete = async () => {
-    if (!confirm('Are you sure you want to delete this toolkit?')) return;
+    if (!confirm(t('toolkitDetail.deleteConfirm'))) return;
 
     try {
       await deleteDoc(doc(db, 'toolkits', params.id));
       router.push('/toolkits');
     } catch (error) {
       console.error('Error deleting toolkit:', error);
-      alert('Failed to delete toolkit');
+      alert(t('toolkitDetail.failedToDelete'));
     }
   };
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 py-12 flex items-center justify-center">
-        <div className="text-gray-600">Loading toolkit...</div>
+        <div className="text-gray-600">{t('toolkitDetail.loadingToolkit')}</div>
       </div>
     );
   }
@@ -123,9 +125,9 @@ export default function ToolkitDetailPage() {
     return (
       <div className="min-h-screen bg-gray-50 py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Toolkit Not Found</h1>
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">{t('toolkitDetail.toolkitNotFound')}</h1>
           <Link href="/toolkits" className="text-blue-600 hover:text-blue-800">
-            ← Back to Toolkits
+            ← {t('toolkitDetail.backToToolkits')}
           </Link>
         </div>
       </div>
@@ -153,7 +155,7 @@ export default function ToolkitDetailPage() {
               d="M15 19l-7-7 7-7"
             />
           </svg>
-          Back to Toolkits
+          {t('toolkitDetail.backToToolkits')}
         </Link>
 
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
@@ -219,7 +221,7 @@ export default function ToolkitDetailPage() {
                 </div>
 
                 <div className="flex items-center text-white text-sm">
-                  <span>Added by {toolkit.author}</span>
+                  <span>{t('toolkitDetail.addedBy')} {toolkit.author}</span>
                 </div>
               </div>
 
@@ -230,13 +232,13 @@ export default function ToolkitDetailPage() {
                     href={`/toolkits/${toolkit.id}/edit`}
                     className="px-4 py-2 bg-white text-blue-600 rounded-md hover:bg-gray-100 transition text-center"
                   >
-                    Edit
+                    {t('toolkitDetail.edit')}
                   </Link>
                   <button
                     onClick={handleDelete}
                     className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition"
                   >
-                    Delete
+                    {t('toolkitDetail.delete')}
                   </button>
                 </div>
               )}
@@ -247,14 +249,14 @@ export default function ToolkitDetailPage() {
           <div className="p-8">
             {/* Description */}
             <div className="mb-8">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-3">Description</h2>
+              <h2 className="text-2xl font-semibold text-gray-900 mb-3">{t('toolkitDetail.description')}</h2>
               <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">{toolkit.description}</p>
             </div>
 
             {/* Platforms */}
             {toolkit.platforms && toolkit.platforms.length > 0 && (
               <div className="mb-8">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-3">Available Platforms</h2>
+                <h2 className="text-2xl font-semibold text-gray-900 mb-3">{t('toolkitDetail.availablePlatforms')}</h2>
                 <div className="flex flex-wrap gap-2">
                   {toolkit.platforms.map((platform, index) => (
                     <span
@@ -271,7 +273,7 @@ export default function ToolkitDetailPage() {
             {/* Tags */}
             {toolkit.tags && toolkit.tags.length > 0 && (
               <div className="mb-8">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-3">Tags</h2>
+                <h2 className="text-2xl font-semibold text-gray-900 mb-3">{t('toolkitDetail.tags')}</h2>
                 <div className="flex flex-wrap gap-2">
                   {toolkit.tags.map((tag, index) => (
                     <span
@@ -288,7 +290,7 @@ export default function ToolkitDetailPage() {
             {/* Popular Use Cases */}
             {toolkit.popularUseCases && (
               <div className="mb-8">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-3">Popular Use Cases</h2>
+                <h2 className="text-2xl font-semibold text-gray-900 mb-3">{t('toolkitDetail.popularUseCases')}</h2>
                 <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
                   {toolkit.popularUseCases}
                 </p>
@@ -298,7 +300,7 @@ export default function ToolkitDetailPage() {
             {/* System Requirements */}
             {toolkit.systemRequirements && (
               <div className="mb-8">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-3">System Requirements</h2>
+                <h2 className="text-2xl font-semibold text-gray-900 mb-3">{t('toolkitDetail.systemRequirements')}</h2>
                 <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
                   {toolkit.systemRequirements}
                 </p>
@@ -308,7 +310,7 @@ export default function ToolkitDetailPage() {
             {/* Website Link */}
             {toolkit.websiteUrl && (
               <div className="mb-8">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-3">Official Website</h2>
+                <h2 className="text-2xl font-semibold text-gray-900 mb-3">{t('toolkitDetail.officialWebsite')}</h2>
                 <a
                   href={toolkit.websiteUrl}
                   target="_blank"
@@ -333,13 +335,13 @@ export default function ToolkitDetailPage() {
         {/* Reviews Section */}
         <div className="mt-8 bg-white rounded-lg shadow-md p-8">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-semibold text-gray-900">Reviews</h2>
+            <h2 className="text-2xl font-semibold text-gray-900">{t('toolkitDetail.reviews')}</h2>
             {user && !userReview && !showReviewForm && (
               <button
                 onClick={() => setShowReviewForm(true)}
                 className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
               >
-                Write a Review
+                {t('toolkitDetail.writeReview')}
               </button>
             )}
           </div>
@@ -364,7 +366,7 @@ export default function ToolkitDetailPage() {
             <div className="mb-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-900 mb-1">Your Review</p>
+                  <p className="text-sm font-medium text-gray-900 mb-1">{t('toolkitDetail.yourReview')}</p>
                   <RatingDisplay rating={userReview.rating} size="sm" />
                   {userReview.review && (
                     <p className="text-sm text-gray-700 mt-2">{userReview.review}</p>
@@ -374,7 +376,7 @@ export default function ToolkitDetailPage() {
                   onClick={() => handleEditReview(userReview)}
                   className="text-sm text-blue-600 hover:text-blue-800"
                 >
-                  Edit
+                  {t('toolkitDetail.edit')}
                 </button>
               </div>
             </div>
