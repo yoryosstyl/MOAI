@@ -140,7 +140,20 @@
     "ratings": "Ratings & Reviews",
     "leaveReview": "Leave a Review",
     "noReviews": "No reviews yet",
-    "deleteConfirm": "Are you sure you want to delete this project?"
+    "deleteConfirm": "Are you sure you want to delete this project?",
+    "backToProjects": "Back to Projects",
+    "loadingProject": "Loading project...",
+    "projectNotFound": "Project not found",
+    "failedToLoadProject": "Failed to load project",
+    "typeOfSharing": "Type of Sharing",
+    "kindOfProject": "Kind of Project",
+    "size": "Size",
+    "links": "Links",
+    "website": "Website",
+    "googleDrive": "Google Drive",
+    "trelloMiro": "Trello/Miro",
+    "moreInfo": "More Info",
+    "createdBy": "Created By"
   },
   "projectCreate": {
     "title": "Create New Project",
