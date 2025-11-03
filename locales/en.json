@@ -1,0 +1,477 @@
+{
+  "nav": {
+    "home": "Home",
+    "projects": "Projects",
+    "toolkits": "Toolkits",
+    "news": "News",
+    "myProjects": "My Projects",
+    "messages": "Messages",
+    "profile": "Profile",
+    "contact": "Contact",
+    "login": "Log In",
+    "signup": "Sign Up",
+    "logout": "Log Out",
+    "language": "Language"
+  },
+  "languages": {
+    "en": "English",
+    "el": "Ελληνικά"
+  },
+  "landing": {
+    "hero": {
+      "title": "Connect, Collaborate, Create",
+      "subtitle": "The ultimate platform for artists to share projects, discover tools, and build creative communities",
+      "cta": "Get Started"
+    },
+    "features": {
+      "projects": {
+        "title": "Creative Projects",
+        "description": "Showcase your work, find collaborators, and get inspired by other artists",
+        "button": "View Projects"
+      },
+      "toolkits": {
+        "title": "Essential Toolkits",
+        "description": "Discover and share the best tools, software, and resources for your craft",
+        "button": "Browse Toolkits"
+      },
+      "community": {
+        "title": "Vibrant Community",
+        "description": "Connect with artists worldwide, share knowledge, and grow together",
+        "button": "Log In"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome Back",
+      "email": "Email",
+      "password": "Password",
+      "button": "Log In",
+      "google": "Continue with Google",
+      "forgotPassword": "Forgot your password?",
+      "noAccount": "Don't have an account?",
+      "signupLink": "Sign up"
+    },
+    "signup": {
+      "title": "Create Your Account",
+      "displayName": "Display Name",
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "button": "Sign Up",
+      "google": "Sign up with Google",
+      "hasAccount": "Already have an account?",
+      "loginLink": "Log in"
+    },
+    "resetPassword": {
+      "title": "Reset Password",
+      "description": "Enter your email address and we'll send you a link to reset your password.",
+      "email": "Email Address",
+      "button": "Send Reset Link",
+      "backToLogin": "Back to Log In",
+      "success": "Password reset email sent! Check your inbox.",
+      "errors": {
+        "userNotFound": "No account found with this email address.",
+        "invalidEmail": "Please enter a valid email address.",
+        "tooManyRequests": "Too many requests. Please try again later.",
+        "generic": "Failed to send reset email. Please try again."
+      }
+    },
+    "changePassword": {
+      "title": "Change Password",
+      "currentPassword": "Current Password",
+      "newPassword": "New Password",
+      "confirmPassword": "Confirm New Password",
+      "button": "Change Password",
+      "success": "Password changed successfully!",
+      "googleUser": "You signed in with Google, so you don't have a password to change. Your account is secured through Google.",
+      "errors": {
+        "wrongPassword": "Current password is incorrect.",
+        "weakPassword": "Password must be at least 6 characters.",
+        "noMatch": "New passwords don't match.",
+        "generic": "Failed to change password. Please try again."
+      }
+    }
+  },
+  "projects": {
+    "title": "Creative Projects",
+    "create": "Create Project",
+    "search": "Search projects...",
+    "filter": "Filter",
+    "category": "Category",
+    "status": "Status",
+    "allCategories": "All Categories",
+    "allStatuses": "All Statuses",
+    "categories": {
+      "music": "Music",
+      "film": "Film",
+      "visualArts": "Visual Arts",
+      "writing": "Writing",
+      "performance": "Performance",
+      "digitalArt": "Digital Art",
+      "photography": "Photography",
+      "other": "Other"
+    },
+    "statuses": {
+      "planning": "Planning",
+      "inProgress": "In Progress",
+      "completed": "Completed",
+      "onHold": "On Hold"
+    },
+    "noResults": "No projects found",
+    "favorites": "favorites",
+    "rating": "Rating",
+    "viewDetails": "View Details"
+  },
+  "projectDetail": {
+    "edit": "Edit",
+    "delete": "Delete",
+    "message": "Message Owner",
+    "favorite": "Favorite",
+    "unfavorite": "Unfavorite",
+    "about": "About This Project",
+    "owner": "Project Owner",
+    "lookingFor": "Looking For",
+    "skills": "Required Skills",
+    "budget": "Budget",
+    "timeline": "Timeline",
+    "location": "Location",
+    "remote": "Remote Collaboration",
+    "ratings": "Ratings & Reviews",
+    "leaveReview": "Leave a Review",
+    "noReviews": "No reviews yet",
+    "deleteConfirm": "Are you sure you want to delete this project?"
+  },
+  "projectCreate": {
+    "title": "Create New Project",
+    "editTitle": "Edit Project",
+    "projectInfo": "Project Information",
+    "name": "Project Name",
+    "description": "Description",
+    "category": "Category",
+    "status": "Project Status",
+    "collaboration": "Collaboration",
+    "lookingFor": "Looking For",
+    "requiredSkills": "Required Skills",
+    "budget": "Budget (optional)",
+    "timeline": "Timeline (optional)",
+    "location": "Location",
+    "locationPlaceholder": "Enter city or address",
+    "remoteWork": "Remote collaboration available",
+    "images": "Project Images",
+    "addImages": "Add Images",
+    "uploadingImages": "Uploading images...",
+    "externalLinks": "External Links",
+    "websiteUrl": "Website URL",
+    "instagramUrl": "Instagram URL",
+    "youtubeUrl": "YouTube URL",
+    "otherUrl": "Other URL",
+    "submit": "Create Project",
+    "update": "Update Project",
+    "cancel": "Cancel",
+    "creating": "Creating...",
+    "updating": "Updating..."
+  },
+  "toolkits": {
+    "title": "Essential Toolkits",
+    "submit": "Submit Toolkit",
+    "add": "Add Toolkit",
+    "adminReview": "Review Submissions",
+    "search": "Search toolkits...",
+    "filter": "Filter",
+    "category": "Category",
+    "type": "Type",
+    "skillLevel": "Skill Level",
+    "allCategories": "All Categories",
+    "allTypes": "All Types",
+    "allLevels": "All Skill Levels",
+    "submitted": "Toolkit submitted successfully! It will be reviewed by administrators.",
+    "approved": "Approved",
+    "pending": "Pending Approval",
+    "categories": {
+      "music": "Music Production",
+      "film": "Film & Video",
+      "visualArts": "Visual Arts",
+      "writing": "Writing",
+      "performance": "Performance",
+      "digitalArt": "Digital Art",
+      "photography": "Photography",
+      "other": "Other"
+    },
+    "types": {
+      "software": "Software",
+      "hardware": "Hardware",
+      "resource": "Resource",
+      "course": "Course/Tutorial",
+      "community": "Community"
+    },
+    "skillLevels": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced",
+      "all": "All Levels"
+    },
+    "noResults": "No toolkits found",
+    "favorites": "favorites",
+    "rating": "Rating",
+    "viewDetails": "View Details"
+  },
+  "toolkitDetail": {
+    "edit": "Edit",
+    "delete": "Delete",
+    "favorite": "Favorite",
+    "unfavorite": "Unfavorite",
+    "about": "About",
+    "submittedBy": "Submitted By",
+    "category": "Category",
+    "type": "Type",
+    "skillLevel": "Skill Level",
+    "platforms": "Platforms",
+    "pricing": "Pricing",
+    "ratings": "Ratings & Reviews",
+    "leaveReview": "Leave a Review",
+    "noReviews": "No reviews yet",
+    "externalLink": "Visit Website",
+    "deleteConfirm": "Are you sure you want to delete this toolkit?"
+  },
+  "toolkitCreate": {
+    "title": "Submit New Toolkit",
+    "editTitle": "Edit Toolkit",
+    "basicInfo": "Basic Information",
+    "name": "Toolkit Name",
+    "category": "Category",
+    "description": "Description",
+    "type": "Type",
+    "skillLevel": "Skill Level",
+    "platforms": "Platforms",
+    "pricing": "Pricing",
+    "externalLink": "External Link",
+    "image": "Toolkit Image",
+    "uploadImage": "Upload Image",
+    "uploadingImage": "Uploading...",
+    "submit": "Submit Toolkit",
+    "update": "Update Toolkit",
+    "cancel": "Cancel",
+    "submitting": "Submitting...",
+    "updating": "Updating..."
+  },
+  "toolkitAdmin": {
+    "title": "Toolkit Review",
+    "pending": "Pending Toolkits",
+    "noPending": "No pending toolkits to review",
+    "approve": "Approve",
+    "reject": "Reject",
+    "approving": "Approving...",
+    "rejecting": "Rejecting...",
+    "rejectModal": {
+      "title": "Reject Toolkit",
+      "label": "Rejection Reason",
+      "placeholder": "Please provide a reason for rejection...",
+      "cancel": "Cancel",
+      "confirm": "Reject Toolkit"
+    }
+  },
+  "news": {
+    "title": "Latest News",
+    "submit": "Submit News",
+    "add": "Add News",
+    "adminReview": "Review Submissions",
+    "search": "Search news...",
+    "submitted": "News submitted successfully! It will be reviewed by administrators.",
+    "approved": "Approved",
+    "pending": "Pending Approval",
+    "platforms": {
+      "general": "General",
+      "music": "Music",
+      "film": "Film",
+      "visualArts": "Visual Arts",
+      "writing": "Writing",
+      "performance": "Performance",
+      "digitalArt": "Digital Art",
+      "photography": "Photography"
+    },
+    "noResults": "No news articles found",
+    "readMore": "Read More"
+  },
+  "newsDetail": {
+    "edit": "Edit",
+    "delete": "Delete",
+    "backToNews": "Back to News",
+    "platforms": "Platforms",
+    "externalLink": "Read Original Article",
+    "deleteConfirm": "Are you sure you want to delete this news article?"
+  },
+  "newsCreate": {
+    "title": "Submit News",
+    "editTitle": "Edit News",
+    "addTitle": "Add News",
+    "basicInfo": "Basic Information",
+    "newsTitle": "Title",
+    "description": "Short Description",
+    "content": "Full Content",
+    "platforms": "Relevant Platforms",
+    "externalLink": "External Link (optional)",
+    "coverImage": "Cover Image",
+    "uploadImage": "Upload Image",
+    "uploadingImage": "Uploading...",
+    "submit": "Submit News",
+    "publish": "Publish News",
+    "update": "Update News",
+    "cancel": "Cancel",
+    "submitting": "Submitting...",
+    "publishing": "Publishing...",
+    "updating": "Updating..."
+  },
+  "newsAdmin": {
+    "title": "News Review",
+    "pending": "Pending News",
+    "noPending": "No pending news to review",
+    "approve": "Approve",
+    "reject": "Reject",
+    "approving": "Approving...",
+    "rejecting": "Rejecting...",
+    "rejectModal": {
+      "title": "Reject News",
+      "label": "Rejection Reason",
+      "placeholder": "Please provide a reason for rejection...",
+      "cancel": "Cancel",
+      "confirm": "Reject News"
+    }
+  },
+  "profile": {
+    "edit": "Edit Profile",
+    "favorites": "Favorites",
+    "projects": "Projects",
+    "about": "About",
+    "location": "Location",
+    "joinedOn": "Joined",
+    "website": "Website",
+    "instagram": "Instagram",
+    "noProjects": "No projects yet",
+    "noFavorites": "No favorites yet",
+    "notFound": "User not found"
+  },
+  "profileEdit": {
+    "title": "Edit Profile",
+    "personalInfo": "Personal Information",
+    "displayName": "Display Name",
+    "bio": "Bio",
+    "location": "Location",
+    "locationPlaceholder": "Enter your city",
+    "social": "Social Links",
+    "website": "Website",
+    "instagram": "Instagram",
+    "privacy": "Privacy Settings",
+    "showEmail": "Show email on profile",
+    "showLocation": "Show location on profile",
+    "profilePhoto": "Profile Photo",
+    "uploadPhoto": "Upload Photo",
+    "uploadingPhoto": "Uploading...",
+    "security": "Security",
+    "changePassword": "Change Password",
+    "actions": "Actions",
+    "save": "Save Changes",
+    "cancel": "Cancel",
+    "saving": "Saving..."
+  },
+  "myProjects": {
+    "title": "My Projects",
+    "create": "Create New Project",
+    "noProjects": "You haven't created any projects yet",
+    "getStarted": "Get started by creating your first project!",
+    "edit": "Edit",
+    "delete": "Delete",
+    "deleteConfirm": "Are you sure you want to delete this project?"
+  },
+  "messages": {
+    "title": "Messages",
+    "conversations": "Conversations",
+    "noConversations": "No conversations yet",
+    "selectConversation": "Select a conversation to view messages",
+    "typeMessage": "Type a message...",
+    "send": "Send",
+    "sendingMessage": "Sending...",
+    "messageAbout": "Message about:",
+    "startConversation": "Start a conversation"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "Have questions or want to get in touch? We'd love to hear from you!",
+    "form": {
+      "title": "Send us a message",
+      "name": "Name",
+      "namePlaceholder": "Your name",
+      "email": "Email",
+      "emailPlaceholder": "your@email.com",
+      "subject": "Subject",
+      "subjectPlaceholder": "What is this regarding?",
+      "message": "Message",
+      "messagePlaceholder": "Tell us how we can help...",
+      "send": "Send Message",
+      "sending": "Sending...",
+      "success": "✓ Message sent successfully! We'll get back to you soon.",
+      "error": "Failed to send message. Please try again."
+    },
+    "info": {
+      "title": "Get in Touch",
+      "email": "Email",
+      "community": "Community",
+      "communityText": "Join our platform to connect with artists",
+      "support": "Support",
+      "supportText": "We typically respond within 24-48 hours"
+    },
+    "quickLinks": {
+      "title": "Quick Links",
+      "browseProjects": "→ Browse Projects",
+      "discoverToolkits": "→ Discover Toolkits",
+      "latestNews": "→ Latest News"
+    }
+  },
+  "about": {
+    "title": "About MOAI",
+    "mission": "Our Mission",
+    "missionText": "MOAI is dedicated to connecting artists and creative professionals worldwide...",
+    "features": "Key Features",
+    "contact": "Contact Us"
+  },
+  "footer": {
+    "designBy": "Design by",
+    "and": "|"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "search": "Search",
+    "filter": "Filter",
+    "close": "Close",
+    "submit": "Submit",
+    "required": "Required",
+    "optional": "Optional",
+    "yes": "Yes",
+    "no": "No",
+    "or": "or",
+    "and": "and"
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "network": "Network error. Please check your connection.",
+    "notFound": "Not found",
+    "unauthorized": "You need to be logged in to do that.",
+    "forbidden": "You don't have permission to do that."
+  },
+  "validation": {
+    "required": "This field is required",
+    "email": "Please enter a valid email address",
+    "minLength": "Must be at least {min} characters",
+    "maxLength": "Must be at most {max} characters",
+    "passwordMatch": "Passwords don't match"
+  }
+}
