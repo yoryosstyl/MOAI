@@ -280,12 +280,19 @@
     }
   },
   "news": {
-    "title": "Latest News",
+    "title": "News",
+    "subtitle": "Stay updated with the latest announcements and news",
     "submit": "Submit News",
     "add": "Add News",
     "adminReview": "Review Submissions",
     "search": "Search news...",
     "submitted": "News submitted successfully! It will be reviewed by administrators.",
+    "submittedTitle": "News Submitted Successfully!",
+    "submittedMessage": "Your news article has been submitted for review. You'll receive a notification once it's been reviewed by our team.",
+    "showing": "Showing {count} of {total} news items",
+    "loadingNews": "Loading news...",
+    "noNewsYet": "No news has been published yet.",
+    "adjustSearch": "Try adjusting your search query.",
     "approved": "Approved",
     "pending": "Pending Approval",
     "platforms": {
