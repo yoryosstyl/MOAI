@@ -20,7 +20,7 @@ export default function AdminReviewPage() {
   const [processing, setProcessing] = useState(false);
 
   // Check if user is admin
-  const isAdmin = user?.email === 'yoryos.styl@gmail.com' || user?.email === 'stavros.roussos@gmail.com';
+  const isAdmin = user?.email === 'gstylianopoulos@gmail.com' || user?.email === 'factanonverba2002@gmail.com';
 
   // Fetch all pending toolkits
   useEffect(() => {

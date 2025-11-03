@@ -15,7 +15,7 @@ export default function CreateToolkitPage() {
   const { user } = useAuth();
 
   // Check if user is admin
-  const isAdmin = user?.email === 'yoryos.styl@gmail.com' || user?.email === 'stavros.roussos@gmail.com';
+  const isAdmin = user?.email === 'gstylianopoulos@gmail.com' || user?.email === 'factanonverba2002@gmail.com';
 
   const [formData, setFormData] = useState({
     name: '',

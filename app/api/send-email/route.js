@@ -27,11 +27,11 @@ export async function POST(request) {
 
     // Send two emails: one to admin and one confirmation to user
     const [adminEmail, userEmail] = await Promise.all([
-      // 1. Email to admin with form submission
+      // 1. Email to admins with form submission
       resend.emails.send({
         from: 'MOAI Contact Form <onboarding@resend.dev>',
-        to: ['gstylianopoulos@gmail.com'],
-        replyTo: email, // This allows admin to reply directly to the sender
+        to: ['gstylianopoulos@gmail.com', 'factanonverba2002@gmail.com'],
+        replyTo: email, // This allows admins to reply directly to the sender
         subject: `[MOAI Contact] ${subject}`,
         html: `
           <h2>New Contact Form Submission</h2>
