@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
+import { useTranslation } from '@/contexts/LanguageContext';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import ProjectImageUpload from '@/components/ProjectImageUpload';
 import LocationAutocomplete from '@/components/LocationAutocomplete';
@@ -12,6 +13,7 @@ import { db } from '@/lib/firebase';
 export default function CreateProjectPage() {
   const router = useRouter();
   const { user, userProfile } = useAuth();
+  const { t } = useTranslation();
 
   const [formData, setFormData] = useState({
     name: '',
@@ -44,42 +46,42 @@ export default function CreateProjectPage() {
   const [createdProjectId, setCreatedProjectId] = useState(null);
 
   const projectTypes = [
-    'Visual Arts',
-    'Performance',
-    'Music',
-    'Dance',
-    'Theater',
-    'Film & Video',
-    'Writing',
-    'Digital Arts',
-    'Installation',
-    'Community Project',
-    'Research',
-    'Other',
+    { value: 'Visual Arts', label: t('projectCreate.types.visualArts') },
+    { value: 'Performance', label: t('projectCreate.types.performance') },
+    { value: 'Music', label: t('projectCreate.types.music') },
+    { value: 'Dance', label: t('projectCreate.types.dance') },
+    { value: 'Theater', label: t('projectCreate.types.theater') },
+    { value: 'Film & Video', label: t('projectCreate.types.filmVideo') },
+    { value: 'Writing', label: t('projectCreate.types.writing') },
+    { value: 'Digital Arts', label: t('projectCreate.types.digitalArts') },
+    { value: 'Installation', label: t('projectCreate.types.installation') },
+    { value: 'Community Project', label: t('projectCreate.types.communityProject') },
+    { value: 'Research', label: t('projectCreate.types.research') },
+    { value: 'Other', label: t('projectCreate.types.other') },
   ];
 
   const projectShapes = [
-    'Workshop',
-    'Exhibition',
-    'Performance',
-    'Residency',
-    'Collaboration',
-    'Commission',
-    'Open Call',
-    'Festival',
-    'Other',
+    { value: 'Workshop', label: t('projectCreate.shapes.workshop') },
+    { value: 'Exhibition', label: t('projectCreate.shapes.exhibition') },
+    { value: 'Performance', label: t('projectCreate.shapes.performance') },
+    { value: 'Residency', label: t('projectCreate.shapes.residency') },
+    { value: 'Collaboration', label: t('projectCreate.shapes.collaboration') },
+    { value: 'Commission', label: t('projectCreate.shapes.commission') },
+    { value: 'Open Call', label: t('projectCreate.shapes.openCall') },
+    { value: 'Festival', label: t('projectCreate.shapes.festival') },
+    { value: 'Other', label: t('projectCreate.shapes.other') },
   ];
 
   const projectSizes = [
-    { value: 'small', label: 'Small (1-5 people)' },
-    { value: 'medium', label: 'Medium (5-15 people)' },
-    { value: 'large', label: 'Large (15+ people)' },
+    { value: 'small', label: t('projectCreate.sizes.small') },
+    { value: 'medium', label: t('projectCreate.sizes.medium') },
+    { value: 'large', label: t('projectCreate.sizes.large') },
   ];
 
   const sharingTypes = [
-    { value: 'open', label: 'Open - Anyone can join' },
-    { value: 'collaborative', label: 'Collaborative - By invitation' },
-    { value: 'showcase', label: 'Showcase - Display only' },
+    { value: 'open', label: t('projectCreate.sharingTypes.open') },
+    { value: 'collaborative', label: t('projectCreate.sharingTypes.collaborative') },
+    { value: 'showcase', label: t('projectCreate.sharingTypes.showcase') },
   ];
 
   const handleChange = (e) => {
@@ -142,19 +144,19 @@ export default function CreateProjectPage() {
 
     // Validation
     if (countWords(formData.name) > 10) {
-      setError('Project name must be maximum 10 words');
+      setError(t('projectCreate.errorNameMaxWords'));
       setLoading(false);
       return;
     }
 
     if (countWords(formData.description) > 50) {
-      setError('Description must be maximum 50 words');
+      setError(t('projectCreate.errorDescriptionMaxWords'));
       setLoading(false);
       return;
     }
 
     if (formData.tags.length === 0) {
-      setError('Please add at least one tag');
+      setError(t('projectCreate.errorAddTag'));
       setLoading(false);
       return;
     }
@@ -179,7 +181,7 @@ export default function CreateProjectPage() {
       setStep(2);
     } catch (err) {
       console.error('Error creating project:', err);
-      setError('Failed to create project. Please try again.');
+      setError(t('projectCreate.errorCreatingProject'));
       setLoading(false);
     }
   };
@@ -212,7 +214,7 @@ export default function CreateProjectPage() {
     return (
       <ProtectedRoute>
         <div className="min-h-screen bg-gray-50 py-12 flex items-center justify-center">
-          <div className="text-gray-600">Loading...</div>
+          <div className="text-gray-600">{t('projectCreate.loading')}</div>
         </div>
       </ProtectedRoute>
     );
@@ -226,12 +228,12 @@ export default function CreateProjectPage() {
             {/* Header */}
             <div className="mb-8">
               <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                {step === 1 ? 'Create New Project' : 'Add Project Images'}
+                {step === 1 ? t('projectCreate.title') : t('projectCreate.addImagesTitle')}
               </h1>
               <p className="text-gray-600">
                 {step === 1
-                  ? 'Share your artistic collaboration opportunity with the community'
-                  : 'Upload images to showcase your project (optional)'}
+                  ? t('projectCreate.subtitle')
+                  : t('projectCreate.imagesSubtitle')}
               </p>
 
               {/* Step Indicator */}
@@ -260,11 +262,11 @@ export default function CreateProjectPage() {
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900">Project Visibility</h3>
+                    <h3 className="text-lg font-semibold text-gray-900">{t('projectCreate.visibility')}</h3>
                     <p className="text-sm text-gray-600 mt-1">
                       {formData.isPublic
-                        ? 'Public - Everyone can see this project'
-                        : 'Private - Only you can see this project'}
+                        ? t('projectCreate.visibilityPublic')
+                        : t('projectCreate.visibilityPrivate')}
                     </p>
                   </div>
                   <button
@@ -286,7 +288,7 @@ export default function CreateProjectPage() {
               {/* Project Name */}
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-                  Project Name * <span className="text-xs text-gray-500">(max 10 words)</span>
+                  {t('projectCreate.name')} * <span className="text-xs text-gray-500">({t('projectCreate.maxWords', { count: 10 })})</span>
                 </label>
                 <input
                   id="name"
@@ -296,17 +298,17 @@ export default function CreateProjectPage() {
                   value={formData.name}
                   onChange={handleChange}
                   className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter your project name"
+                  placeholder={t('projectCreate.enterProjectName')}
                 />
                 <p className="text-xs text-gray-500 mt-1">
-                  {countWords(formData.name)}/10 words
+                  {t('projectCreate.wordsCount', { current: countWords(formData.name), max: 10 })}
                 </p>
               </div>
 
               {/* Description */}
               <div>
                 <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
-                  Description * <span className="text-xs text-gray-500">(max 50 words)</span>
+                  {t('projectCreate.description')} * <span className="text-xs text-gray-500">({t('projectCreate.maxWords', { count: 50 })})</span>
                 </label>
                 <textarea
                   id="description"
@@ -316,10 +318,10 @@ export default function CreateProjectPage() {
                   value={formData.description}
                   onChange={handleChange}
                   className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Describe your project and what kind of collaboration you're looking for..."
+                  placeholder={t('projectCreate.descriptionPlaceholder')}
                 />
                 <p className="text-xs text-gray-500 mt-1">
-                  {countWords(formData.description)}/50 words
+                  {t('projectCreate.wordsCount', { current: countWords(formData.description), max: 50 })}
                 </p>
               </div>
 
@@ -328,7 +330,7 @@ export default function CreateProjectPage() {
                 {/* Kind of Project */}
                 <div>
                   <label htmlFor="kindOfProject" className="block text-sm font-medium text-gray-700 mb-2">
-                    Type of Project *
+                    {t('projectCreate.typeOfProject')} *
                   </label>
                   <select
                     id="kindOfProject"
@@ -338,10 +340,10 @@ export default function CreateProjectPage() {
                     onChange={handleChange}
                     className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
-                    <option value="">Select type...</option>
+                    <option value="">{t('projectCreate.selectType')}</option>
                     {projectTypes.map((type) => (
-                      <option key={type} value={type}>
-                        {type}
+                      <option key={type.value} value={type.value}>
+                        {type.label}
                       </option>
                     ))}
                   </select>
@@ -350,7 +352,7 @@ export default function CreateProjectPage() {
                 {/* Shape */}
                 <div>
                   <label htmlFor="shape" className="block text-sm font-medium text-gray-700 mb-2">
-                    Project Shape *
+                    {t('projectCreate.projectShape')} *
                   </label>
                   <select
                     id="shape"
@@ -360,10 +362,10 @@ export default function CreateProjectPage() {
                     onChange={handleChange}
                     className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
-                    <option value="">Select shape...</option>
+                    <option value="">{t('projectCreate.selectShape')}</option>
                     {projectShapes.map((shape) => (
-                      <option key={shape} value={shape}>
-                        {shape}
+                      <option key={shape.value} value={shape.value}>
+                        {shape.label}
                       </option>
                     ))}
                   </select>
@@ -375,7 +377,7 @@ export default function CreateProjectPage() {
                 {/* Type of Sharing */}
                 <div>
                   <label htmlFor="typeOfSharing" className="block text-sm font-medium text-gray-700 mb-2">
-                    Type of Sharing *
+                    {t('projectCreate.typeOfSharing')} *
                   </label>
                   <select
                     id="typeOfSharing"
@@ -396,7 +398,7 @@ export default function CreateProjectPage() {
                 {/* Size */}
                 <div>
                   <label htmlFor="size" className="block text-sm font-medium text-gray-700 mb-2">
-                    Project Size *
+                    {t('projectCreate.projectSize')} *
                   </label>
                   <select
                     id="size"
@@ -418,7 +420,7 @@ export default function CreateProjectPage() {
               {/* Color */}
               <div>
                 <label htmlFor="color" className="block text-sm font-medium text-gray-700 mb-2">
-                  Project Color
+                  {t('projectCreate.projectColor')}
                 </label>
                 <div className="flex items-center gap-4">
                   <input
@@ -429,14 +431,14 @@ export default function CreateProjectPage() {
                     onChange={handleChange}
                     className="h-10 w-20 border border-gray-300 rounded cursor-pointer"
                   />
-                  <span className="text-sm text-gray-600">Choose a color that represents your project</span>
+                  <span className="text-sm text-gray-600">{t('projectCreate.colorHelper')}</span>
                 </div>
               </div>
 
               {/* Tags */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Tags * <span className="text-xs text-gray-500">(max 5)</span>
+                  {t('projectCreate.tags')} * <span className="text-xs text-gray-500">({t('projectCreate.maxTags', { count: 5 })})</span>
                 </label>
                 <div className="flex gap-2 mb-3">
                   <input
@@ -444,7 +446,7 @@ export default function CreateProjectPage() {
                     value={tagInput}
                     onChange={(e) => setTagInput(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddTag())}
-                    placeholder="Type a tag and press Enter"
+                    placeholder={t('projectCreate.tagPlaceholder')}
                     disabled={formData.tags.length >= 5}
                     className="flex-1 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
                   />
@@ -454,7 +456,7 @@ export default function CreateProjectPage() {
                     disabled={formData.tags.length >= 5 || !tagInput.trim()}
                     className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
                   >
-                    Add
+                    {t('projectCreate.addTag')}
                   </button>
                 </div>
                 <div className="flex flex-wrap gap-2">
@@ -475,7 +477,7 @@ export default function CreateProjectPage() {
                   ))}
                 </div>
                 {formData.tags.length === 0 && (
-                  <p className="text-xs text-gray-500 mt-2">Add at least one tag to help others find your project</p>
+                  <p className="text-xs text-gray-500 mt-2">{t('projectCreate.tagHelper')}</p>
                 )}
               </div>
 
@@ -490,57 +492,57 @@ export default function CreateProjectPage() {
 
               {/* External Links */}
               <div className="border-t pt-8">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">External Links</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('projectCreate.externalLinks')}</h3>
                 <div className="space-y-4">
                   <div>
                     <label htmlFor="googleDrive" className="block text-sm font-medium text-gray-700 mb-2">
-                      Google Drive Link
+                      {t('projectCreate.googleDriveLink')}
                     </label>
                     <input
                       id="googleDrive"
                       type="url"
                       value={formData.links.googleDrive}
                       onChange={(e) => handleLinkChange('googleDrive', e.target.value)}
-                      placeholder="https://drive.google.com/..."
+                      placeholder={t('projectCreate.googleDrivePlaceholder')}
                       className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
                   <div>
                     <label htmlFor="website" className="block text-sm font-medium text-gray-700 mb-2">
-                      Website
+                      {t('projectCreate.website')}
                     </label>
                     <input
                       id="website"
                       type="url"
                       value={formData.links.website}
                       onChange={(e) => handleLinkChange('website', e.target.value)}
-                      placeholder="https://yourproject.com"
+                      placeholder={t('projectCreate.websitePlaceholder')}
                       className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
                   <div>
                     <label htmlFor="trello" className="block text-sm font-medium text-gray-700 mb-2">
-                      Trello/Miro Board
+                      {t('projectCreate.trelloBoard')}
                     </label>
                     <input
                       id="trello"
                       type="url"
                       value={formData.links.trello}
                       onChange={(e) => handleLinkChange('trello', e.target.value)}
-                      placeholder="https://trello.com/... or https://miro.com/..."
+                      placeholder={t('projectCreate.trelloBoardPlaceholder')}
                       className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
                   <div>
                     <label htmlFor="moreInfo" className="block text-sm font-medium text-gray-700 mb-2">
-                      More Information
+                      {t('projectCreate.moreInfo')}
                     </label>
                     <input
                       id="moreInfo"
                       type="url"
                       value={formData.links.moreInfo}
                       onChange={(e) => handleLinkChange('moreInfo', e.target.value)}
-                      placeholder="https://..."
+                      placeholder={t('projectCreate.moreInfoPlaceholder')}
                       className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
@@ -549,11 +551,11 @@ export default function CreateProjectPage() {
 
               {/* Contact Person */}
               <div className="border-t pt-8">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Contact Person</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('projectCreate.contactPerson')}</h3>
                 <div className="space-y-4">
                   <div>
                     <label htmlFor="contactName" className="block text-sm font-medium text-gray-700 mb-2">
-                      Name *
+                      {t('projectCreate.contactName')} *
                     </label>
                     <input
                       id="contactName"
@@ -562,12 +564,12 @@ export default function CreateProjectPage() {
                       value={formData.contactPerson.name}
                       onChange={(e) => handleContactChange('name', e.target.value)}
                       className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="Contact person name"
+                      placeholder={t('projectCreate.contactNamePlaceholder')}
                     />
                   </div>
                   <div>
                     <label htmlFor="contactEmail" className="block text-sm font-medium text-gray-700 mb-2">
-                      Email *
+                      {t('projectCreate.contactEmail')} *
                     </label>
                     <input
                       id="contactEmail"
@@ -576,7 +578,7 @@ export default function CreateProjectPage() {
                       value={formData.contactPerson.email}
                       onChange={(e) => handleContactChange('email', e.target.value)}
                       className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="contact@email.com"
+                      placeholder={t('projectCreate.contactEmailPlaceholder')}
                     />
                   </div>
                 </div>
@@ -589,14 +591,14 @@ export default function CreateProjectPage() {
                   disabled={loading}
                   className="flex-1 bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 transition font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {loading ? 'Creating...' : 'Next: Add Images'}
+                  {loading ? t('projectCreate.creating') : t('projectCreate.nextAddImages')}
                 </button>
                 <button
                   type="button"
                   onClick={() => router.push('/projects')}
                   className="flex-1 bg-gray-200 text-gray-700 py-3 px-4 rounded-md hover:bg-gray-300 transition font-medium"
                 >
-                  Cancel
+                  {t('projectCreate.cancel')}
                 </button>
               </div>
             </form>
@@ -618,7 +620,7 @@ export default function CreateProjectPage() {
                     onClick={handleFinish}
                     className="flex-1 bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 transition font-medium"
                   >
-                    {projectImages.length > 0 ? 'Finish & View Project' : 'Skip & View Project'}
+                    {projectImages.length > 0 ? t('projectCreate.finishViewProject') : t('projectCreate.skipViewProject')}
                   </button>
                   {projectImages.length === 0 && (
                     <button
@@ -626,7 +628,7 @@ export default function CreateProjectPage() {
                       onClick={handleSkipImages}
                       className="flex-1 bg-gray-200 text-gray-700 py-3 px-4 rounded-md hover:bg-gray-300 transition font-medium"
                     >
-                      Skip Images
+                      {t('projectCreate.skipImages')}
                     </button>
                   )}
                 </div>
