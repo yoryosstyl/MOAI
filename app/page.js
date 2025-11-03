@@ -1,6 +1,11 @@
+'use client';
+
 import Link from 'next/link';
+import { useTranslation } from '@/contexts/LanguageContext';
 
 export default function Home() {
+  const { t } = useTranslation();
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
@@ -8,10 +13,10 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center">
             <h1 className="text-5xl font-bold text-gray-900 mb-4">
-              Welcome to MOAI
+              {t('landing.hero.title')}
             </h1>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              A collaborative platform for artists to share projects, discover creative toolkits, and connect with fellow creators.
+              {t('landing.hero.subtitle')}
             </p>
           </div>
         </div>
@@ -23,39 +28,39 @@ export default function Home() {
           {/* Projects Card */}
           <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition">
             <h2 className="text-2xl font-semibold text-gray-900 mb-3">
-              Browse Projects
+              {t('landing.features.projects.title')}
             </h2>
             <p className="text-gray-600 mb-4">
-              Explore creative projects shared by artists from around the world.
+              {t('landing.features.projects.description')}
             </p>
             <Link href="/projects" className="inline-block bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
-              View Projects
+              {t('landing.features.projects.button')}
             </Link>
           </div>
 
           {/* Toolkits Card */}
           <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition">
             <h2 className="text-2xl font-semibold text-gray-900 mb-3">
-              Discover Toolkits
+              {t('landing.features.toolkits.title')}
             </h2>
             <p className="text-gray-600 mb-4">
-              Find curated toolkits and resources for your creative process.
+              {t('landing.features.toolkits.description')}
             </p>
             <Link href="/toolkits" className="inline-block bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
-              Browse Toolkits
+              {t('landing.features.toolkits.button')}
             </Link>
           </div>
 
           {/* Community Card */}
           <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition">
             <h2 className="text-2xl font-semibold text-gray-900 mb-3">
-              Join Community
+              {t('landing.features.community.title')}
             </h2>
             <p className="text-gray-600 mb-4">
-              Connect with artists and collaborate on exciting projects.
+              {t('landing.features.community.description')}
             </p>
             <Link href="/login" className="inline-block bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
-              Log In
+              {t('landing.features.community.button')}
             </Link>
           </div>
         </div>
