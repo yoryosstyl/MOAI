@@ -64,17 +64,20 @@
       "loginLink": "Log in"
     },
     "resetPassword": {
-      "title": "Reset Password",
+      "title": "Reset your password",
       "description": "Enter your email address and we'll send you a link to reset your password.",
-      "email": "Email Address",
-      "button": "Send Reset Link",
-      "backToLogin": "Back to Log In",
-      "success": "Password reset email sent! Check your inbox.",
+      "email": "Email address",
+      "button": "Send reset link",
+      "sending": "Sending...",
+      "backToLogin": "Back to login",
+      "noAccount": "Don't have an account? Sign up",
+      "successTitle": "Password reset email sent!",
+      "successMessage": "Check your inbox and follow the link to reset your password.",
       "errors": {
         "userNotFound": "No account found with this email address.",
         "invalidEmail": "Please enter a valid email address.",
         "tooManyRequests": "Too many requests. Please try again later.",
-        "generic": "Failed to send reset email. Please try again."
+        "generic": "Failed to send password reset email. Please try again."
       }
     },
     "changePassword": {
@@ -140,7 +143,20 @@
     "ratings": "Ratings & Reviews",
     "leaveReview": "Leave a Review",
     "noReviews": "No reviews yet",
-    "deleteConfirm": "Are you sure you want to delete this project?"
+    "deleteConfirm": "Are you sure you want to delete this project?",
+    "backToProjects": "Back to Projects",
+    "loadingProject": "Loading project...",
+    "projectNotFound": "Project not found",
+    "failedToLoad": "Failed to load project",
+    "typeOfSharing": "Type of Sharing",
+    "kindOfProject": "Kind of Project",
+    "size": "Size",
+    "links": "Links",
+    "website": "Website",
+    "googleDrive": "Google Drive",
+    "trelloMiro": "Trello/Miro",
+    "moreInfo": "More Info",
+    "createdBy": "Created By"
   },
   "projectCreate": {
     "title": "Create New Project",
@@ -173,7 +189,8 @@
     "updating": "Updating..."
   },
   "toolkits": {
-    "title": "Essential Toolkits",
+    "title": "Toolkits Database",
+    "subtitle": "Explore professional tools and software for creative work",
     "submit": "Submit Toolkit",
     "add": "Add Toolkit",
     "adminReview": "Review Submissions",
@@ -184,8 +201,15 @@
     "skillLevel": "Skill Level",
     "allCategories": "All Categories",
     "allTypes": "All Types",
-    "allLevels": "All Skill Levels",
+    "allLevels": "All Levels",
     "submitted": "Toolkit submitted successfully! It will be reviewed by administrators.",
+    "submittedTitle": "Toolkit Submitted Successfully!",
+    "submittedMessage": "Your toolkit has been submitted for review. You'll receive a notification once it's been reviewed by our team.",
+    "showing": "Showing {count} of {total} toolkits",
+    "loadingToolkits": "Loading toolkits...",
+    "noToolkitsYet": "No toolkits have been added yet.",
+    "adjustFilters": "Try adjusting your search filters.",
+    "moreTagsLabel": "+{count} more",
     "approved": "Approved",
     "pending": "Pending Approval",
     "categories": {
@@ -232,7 +256,21 @@
     "leaveReview": "Leave a Review",
     "noReviews": "No reviews yet",
     "externalLink": "Visit Website",
-    "deleteConfirm": "Are you sure you want to delete this toolkit?"
+    "deleteConfirm": "Are you sure you want to delete this toolkit?",
+    "backToToolkits": "Back to Toolkits",
+    "loadingToolkit": "Loading toolkit...",
+    "toolkitNotFound": "Toolkit Not Found",
+    "failedToDelete": "Failed to delete toolkit",
+    "addedBy": "Added by",
+    "description": "Description",
+    "availablePlatforms": "Available Platforms",
+    "tags": "Tags",
+    "popularUseCases": "Popular Use Cases",
+    "systemRequirements": "System Requirements",
+    "officialWebsite": "Official Website",
+    "reviews": "Reviews",
+    "writeReview": "Write a Review",
+    "yourReview": "Your Review"
   },
   "toolkitCreate": {
     "title": "Submit New Toolkit",
@@ -272,12 +310,19 @@
     }
   },
   "news": {
-    "title": "Latest News",
+    "title": "News",
+    "subtitle": "Stay updated with the latest announcements and news",
     "submit": "Submit News",
     "add": "Add News",
     "adminReview": "Review Submissions",
     "search": "Search news...",
     "submitted": "News submitted successfully! It will be reviewed by administrators.",
+    "submittedTitle": "News Submitted Successfully!",
+    "submittedMessage": "Your news article has been submitted for review. You'll receive a notification once it's been reviewed by our team.",
+    "showing": "Showing {count} of {total} news items",
+    "loadingNews": "Loading news...",
+    "noNewsYet": "No news has been published yet.",
+    "adjustSearch": "Try adjusting your search query.",
     "approved": "Approved",
     "pending": "Pending Approval",
     "platforms": {
