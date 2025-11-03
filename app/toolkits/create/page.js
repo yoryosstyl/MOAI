@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
+import { useTranslation } from '@/contexts/LanguageContext';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
@@ -13,6 +14,7 @@ import { notifyAdminsNewToolkit } from '@/utils/notifications';
 export default function CreateToolkitPage() {
   const router = useRouter();
   const { user } = useAuth();
+  const { t } = useTranslation();
 
   // Check if user is admin
   const isAdmin = user?.email === 'gstylianopoulos@gmail.com' || user?.email === 'factanonverba2002@gmail.com';
@@ -89,7 +91,7 @@ export default function CreateToolkitPage() {
       reader.readAsDataURL(compressedFile);
     } catch (error) {
       console.error('Error processing image:', error);
-      setError('Failed to process image');
+      setError(t('toolkitCreate.imageError'));
     }
   };
 
@@ -158,7 +160,7 @@ export default function CreateToolkitPage() {
       }
     } catch (err) {
       console.error('Error creating toolkit:', err);
-      setError('Failed to create toolkit. Please try again.');
+      setError(t('toolkitCreate.createError'));
       setSaving(false);
     }
   };
@@ -169,12 +171,12 @@ export default function CreateToolkitPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-8">
             <h1 className="text-4xl font-bold text-gray-900 mb-2">
-              {isAdmin ? 'Add New Toolkit' : 'Submit a Toolkit'}
+              {isAdmin ? t('toolkitCreate.addTitle') : t('toolkitCreate.title')}
             </h1>
             <p className="text-gray-600">
               {isAdmin
-                ? 'Add a new tool or software to the platform database'
-                : 'Suggest a tool or software to be added to the database'}
+                ? t('toolkitCreate.subtitleAdmin')
+                : t('toolkitCreate.subtitleUser')}
             </p>
           </div>
 
@@ -196,9 +198,9 @@ export default function CreateToolkitPage() {
                   />
                 </svg>
                 <div>
-                  <h3 className="text-sm font-semibold text-blue-900 mb-1">Under Review</h3>
+                  <h3 className="text-sm font-semibold text-blue-900 mb-1">{t('toolkitCreate.reviewTitle')}</h3>
                   <p className="text-sm text-blue-800">
-                    Your submission will be reviewed by our team before being published. You'll receive a notification once it's been reviewed.
+                    {t('toolkitCreate.reviewMessage')}
                   </p>
                 </div>
               </div>
@@ -462,15 +464,15 @@ export default function CreateToolkitPage() {
                   className="flex-1 bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 transition font-medium disabled:opacity-50"
                 >
                   {saving
-                    ? (isAdmin ? 'Creating...' : 'Submitting...')
-                    : (isAdmin ? 'Create Toolkit' : 'Submit for Review')}
+                    ? (isAdmin ? t('toolkitCreate.creating') : t('toolkitCreate.submitting'))
+                    : (isAdmin ? t('toolkitCreate.create') : t('toolkitCreate.submitForReview'))}
                 </button>
                 <button
                   type="button"
                   onClick={() => router.push('/toolkits')}
                   className="flex-1 bg-gray-200 text-gray-700 py-3 px-4 rounded-md hover:bg-gray-300 transition font-medium"
                 >
-                  Cancel
+                  {t('toolkitCreate.cancel')}
                 </button>
               </div>
             </form>
