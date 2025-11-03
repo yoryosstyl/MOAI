@@ -253,7 +253,21 @@
     "leaveReview": "Αφήστε Κριτική",
     "noReviews": "Δεν υπάρχουν κριτικές ακόμα",
     "externalLink": "Επισκεφτείτε την Ιστοσελίδα",
-    "deleteConfirm": "Είστε σίγουροι ότι θέλετε να διαγράψετε αυτό το εργαλείο;"
+    "deleteConfirm": "Είστε σίγουροι ότι θέλετε να διαγράψετε αυτό το εργαλείο;",
+    "backToToolkits": "Επιστροφή στα Εργαλεία",
+    "loadingToolkit": "Φόρτωση εργαλείου...",
+    "toolkitNotFound": "Το Εργαλείο Δεν Βρέθηκε",
+    "failedToDelete": "Αποτυχία διαγραφής εργαλείου",
+    "addedBy": "Προστέθηκε από",
+    "description": "Περιγραφή",
+    "availablePlatforms": "Διαθέσιμες Πλατφόρμες",
+    "tags": "Ετικέτες",
+    "popularUseCases": "Δημοφιλείς Χρήσεις",
+    "systemRequirements": "Απαιτήσεις Συστήματος",
+    "officialWebsite": "Επίσημη Ιστοσελίδα",
+    "reviews": "Κριτικές",
+    "writeReview": "Γράψτε μια Κριτική",
+    "yourReview": "Η Κριτική Σας"
   },
   "toolkitCreate": {
     "title": "Υποβολή Νέου Εργαλείου",
