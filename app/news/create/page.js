@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
+import { useTranslation } from '@/contexts/LanguageContext';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
@@ -13,6 +14,7 @@ import { notifyAdminsNewNews } from '@/utils/notifications';
 export default function CreateNewsPage() {
   const router = useRouter();
   const { user } = useAuth();
+  const { t } = useTranslation();
 
   // Check if user is admin
   const isAdmin = user?.email === 'gstylianopoulos@gmail.com' || user?.email === 'factanonverba2002@gmail.com';
@@ -68,7 +70,7 @@ export default function CreateNewsPage() {
       reader.readAsDataURL(compressedFile);
     } catch (error) {
       console.error('Error processing image:', error);
-      setError('Failed to process image');
+      setError(t('newsCreate.errorProcessingImage'));
     }
   };
 
@@ -120,7 +122,7 @@ export default function CreateNewsPage() {
       }
     } catch (err) {
       console.error('Error creating news:', err);
-      setError('Failed to create news. Please try again.');
+      setError(t('newsCreate.errorCreatingNews'));
       setSaving(false);
     }
   };
@@ -131,12 +133,12 @@ export default function CreateNewsPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-8">
             <h1 className="text-4xl font-bold text-gray-900 mb-2">
-              {isAdmin ? 'Add News' : 'Submit News'}
+              {isAdmin ? t('newsCreate.addTitle') : t('newsCreate.title')}
             </h1>
             <p className="text-gray-600">
               {isAdmin
-                ? 'Add a new news article to the platform'
-                : 'Submit a news article for review'}
+                ? t('newsCreate.subtitleAdmin')
+                : t('newsCreate.subtitleUser')}
             </p>
           </div>
 
@@ -158,9 +160,9 @@ export default function CreateNewsPage() {
                   />
                 </svg>
                 <div>
-                  <h3 className="text-sm font-semibold text-blue-900 mb-1">Under Review</h3>
+                  <h3 className="text-sm font-semibold text-blue-900 mb-1">{t('newsCreate.reviewTitle')}</h3>
                   <p className="text-sm text-blue-800">
-                    Your submission will be reviewed by our team before being published. You'll receive a notification once it's been reviewed.
+                    {t('newsCreate.reviewMessage')}
                   </p>
                 </div>
               </div>
@@ -177,12 +179,12 @@ export default function CreateNewsPage() {
             <form onSubmit={handleSubmit} className="space-y-8">
               {/* Basic Information */}
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Basic Information</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('newsCreate.basicInfo')}</h3>
 
                 {/* Title */}
                 <div className="mb-4">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Title *
+                    {t('newsCreate.titleRequired')}
                   </label>
                   <input
                     type="text"
@@ -191,14 +193,14 @@ export default function CreateNewsPage() {
                     value={formData.title}
                     onChange={handleChange}
                     className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Enter the news title..."
+                    placeholder={t('newsCreate.titlePlaceholder')}
                   />
                 </div>
 
                 {/* Description */}
                 <div className="mb-4">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Short Description *
+                    {t('newsCreate.descriptionRequired')}
                   </label>
                   <textarea
                     name="description"
@@ -207,14 +209,14 @@ export default function CreateNewsPage() {
                     onChange={handleChange}
                     rows={3}
                     className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="A brief summary of the news (shown in the listing)..."
+                    placeholder={t('newsCreate.descriptionPlaceholder')}
                   />
                 </div>
 
                 {/* Content */}
                 <div className="mb-4">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Full Content *
+                    {t('newsCreate.contentRequired')}
                   </label>
                   <textarea
                     name="content"
@@ -223,7 +225,7 @@ export default function CreateNewsPage() {
                     onChange={handleChange}
                     rows={10}
                     className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Write the full news article content..."
+                    placeholder={t('newsCreate.contentPlaceholder')}
                   />
                 </div>
               </div>
@@ -231,10 +233,10 @@ export default function CreateNewsPage() {
               {/* Platforms (Optional) */}
               <div className="border-t pt-8">
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  Relevant Platforms (Optional)
+                  {t('newsCreate.platformsOptional')}
                 </h3>
                 <p className="text-sm text-gray-600 mb-4">
-                  Select platforms if this news is specific to certain platforms. Leave empty if it applies to all or none.
+                  {t('newsCreate.platformsDescription')}
                 </p>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {platforms.map((platform) => (
@@ -256,7 +258,7 @@ export default function CreateNewsPage() {
 
               {/* Image */}
               <div className="border-t pt-8">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Featured Image (Optional)</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('newsCreate.featuredImage')}</h3>
                 <div className="space-y-4">
                   {imagePreview && (
                     <div className="w-full h-64 border-2 border-gray-300 rounded-lg overflow-hidden">
@@ -271,7 +273,7 @@ export default function CreateNewsPage() {
                       className="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
                     />
                     <p className="text-xs text-gray-500 mt-2">
-                      Optional. PNG or JPG, recommended size 1920x1080px or similar aspect ratio.
+                      {t('newsCreate.imageInstructions')}
                     </p>
                   </div>
                 </div>
@@ -279,10 +281,10 @@ export default function CreateNewsPage() {
 
               {/* External Link */}
               <div className="border-t pt-8">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Additional Information</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('newsCreate.additionalInfo')}</h3>
                 <div className="mb-4">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    External Link (Optional)
+                    {t('newsCreate.externalLinkOptional')}
                   </label>
                   <input
                     type="url"
@@ -290,7 +292,7 @@ export default function CreateNewsPage() {
                     value={formData.externalLink}
                     onChange={handleChange}
                     className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="https://... (link to source or related content)"
+                    placeholder={t('newsCreate.externalLinkPlaceholder')}
                   />
                 </div>
               </div>
@@ -303,15 +305,15 @@ export default function CreateNewsPage() {
                   className="flex-1 bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 transition font-medium disabled:opacity-50"
                 >
                   {saving
-                    ? (isAdmin ? 'Publishing...' : 'Submitting...')
-                    : (isAdmin ? 'Publish News' : 'Submit for Review')}
+                    ? (isAdmin ? t('newsCreate.publishing') : t('newsCreate.submitting'))
+                    : (isAdmin ? t('newsCreate.publish') : t('newsCreate.submit'))}
                 </button>
                 <button
                   type="button"
                   onClick={() => router.push('/news')}
                   className="flex-1 bg-gray-200 text-gray-700 py-3 px-4 rounded-md hover:bg-gray-300 transition font-medium"
                 >
-                  Cancel
+                  {t('newsCreate.cancel')}
                 </button>
               </div>
             </form>
