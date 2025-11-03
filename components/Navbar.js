@@ -92,10 +92,10 @@ export default function Navbar() {
             )}
 
             {/* Language Switcher */}
-            <div className="relative">
+            <div className="relative z-[99]">
               <button
                 onClick={() => setLangDropdownOpen(!langDropdownOpen)}
-                className="text-gray-700 hover:text-blue-600 transition flex items-center space-x-1"
+                className="text-gray-700 hover:text-blue-600 transition flex items-center space-x-1 z-[99]"
               >
                 <span>{language === 'en' ? 'English' : 'Ελληνικά'}</span>
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -104,13 +104,13 @@ export default function Navbar() {
               </button>
 
               {langDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-32 bg-white rounded-md shadow-lg py-1 z-50">
+                <div className="absolute right-0 mt-2 w-32 bg-white rounded-md shadow-lg py-1 z-[99]">
                   <button
                     onClick={() => {
                       changeLanguage('en');
                       setLangDropdownOpen(false);
                     }}
-                    className={`block w-full text-left px-4 py-2 text-sm ${
+                    className={`block w-full text-left px-4 py-2 text-sm z-[99] ${
                       language === 'en' ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-100'
                     }`}
                   >
@@ -121,7 +121,7 @@ export default function Navbar() {
                       changeLanguage('el');
                       setLangDropdownOpen(false);
                     }}
-                    className={`block w-full text-left px-4 py-2 text-sm ${
+                    className={`block w-full text-left px-4 py-2 text-sm z-[99] ${
                       language === 'el' ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-100'
                     }`}
                   >
