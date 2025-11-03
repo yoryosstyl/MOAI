@@ -4,10 +4,12 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
+import { useTranslation } from '@/contexts/LanguageContext';
 
 export default function LoginPage() {
   const router = useRouter();
   const { login, signInWithGoogle } = useAuth();
+  const { t } = useTranslation();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -48,8 +50,7 @@ export default function LoginPage() {
       <div className="max-w-md w-full">
         {/* Header */}
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-900">Welcome Back</h2>
-          <p className="mt-2 text-gray-600">Sign in to your MOAI account</p>
+          <h2 className="text-3xl font-bold text-gray-900">{t('auth.login.title')}</h2>
         </div>
 
         {/* Login Form */}
@@ -65,7 +66,7 @@ export default function LoginPage() {
             {/* Email */}
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                Email Address
+                {t('auth.login.email')}
               </label>
               <input
                 id="email"
@@ -77,14 +78,13 @@ export default function LoginPage() {
                   setError('');
                 }}
                 className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="you@example.com"
               />
             </div>
 
             {/* Password */}
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-                Password
+                {t('auth.login.password')}
               </label>
               <input
                 id="password"
@@ -96,14 +96,13 @@ export default function LoginPage() {
                   setError('');
                 }}
                 className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="••••••••"
               />
             </div>
 
             {/* Forgot Password */}
             <div className="text-right">
               <Link href="/auth/reset-password" className="text-sm text-blue-600 hover:text-blue-800">
-                Forgot password?
+                {t('auth.login.forgotPassword')}
               </Link>
             </div>
 
@@ -113,7 +112,7 @@ export default function LoginPage() {
               disabled={loading}
               className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition font-medium disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? 'Signing In...' : 'Sign In'}
+              {t('auth.login.button')}
             </button>
           </form>
 
@@ -123,7 +122,7 @@ export default function LoginPage() {
               <div className="w-full border-t border-gray-300"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white text-gray-500">Or continue with</span>
+              <span className="px-2 bg-white text-gray-500">{t('common.or')}</span>
             </div>
           </div>
 
@@ -151,14 +150,14 @@ export default function LoginPage() {
                 d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
               />
             </svg>
-            Sign in with Google
+            {t('auth.login.google')}
           </button>
 
           {/* Sign Up Link */}
           <p className="mt-6 text-center text-sm text-gray-600">
-            Don't have an account?{' '}
+            {t('auth.login.noAccount')}{' '}
             <Link href="/signup" className="text-blue-600 hover:text-blue-800 font-medium">
-              Sign up
+              {t('auth.login.signupLink')}
             </Link>
           </p>
         </div>
