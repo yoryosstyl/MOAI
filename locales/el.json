@@ -140,7 +140,20 @@
     "ratings": "Αξιολογήσεις & Κριτικές",
     "leaveReview": "Αφήστε Κριτική",
     "noReviews": "Δεν υπάρχουν κριτικές ακόμα",
-    "deleteConfirm": "Είστε σίγουροι ότι θέλετε να διαγράψετε αυτό το έργο;"
+    "deleteConfirm": "Είστε σίγουροι ότι θέλετε να διαγράψετε αυτό το έργο;",
+    "backToProjects": "Επιστροφή στα Έργα",
+    "loadingProject": "Φόρτωση έργου...",
+    "projectNotFound": "Το έργο δεν βρέθηκε",
+    "failedToLoad": "Αποτυχία φόρτωσης έργου",
+    "typeOfSharing": "Τύπος Κοινοποίησης",
+    "kindOfProject": "Είδος Έργου",
+    "size": "Μέγεθος",
+    "links": "Σύνδεσμοι",
+    "website": "Ιστοσελίδα",
+    "googleDrive": "Google Drive",
+    "trelloMiro": "Trello/Miro",
+    "moreInfo": "Περισσότερες Πληροφορίες",
+    "createdBy": "Δημιουργήθηκε Από"
   },
   "projectCreate": {
     "title": "Δημιουργία Νέου Έργου",

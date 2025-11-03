@@ -5,10 +5,12 @@ import { useParams, useRouter } from 'next/navigation';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import Link from 'next/link';
+import { useTranslation } from '@/contexts/LanguageContext';
 
 export default function ProjectDetailPage() {
   const params = useParams();
   const router = useRouter();
+  const { t } = useTranslation();
   const [project, setProject] = useState(null);
   const [owner, setOwner] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -21,7 +23,7 @@ export default function ProjectDetailPage() {
         const projectDoc = await getDoc(doc(db, 'projects', params.id));
 
         if (!projectDoc.exists()) {
-          setError('Project not found');
+          setError(t('projectDetail.projectNotFound'));
           setLoading(false);
           return;
         }
@@ -40,7 +42,7 @@ export default function ProjectDetailPage() {
         setLoading(false);
       } catch (err) {
         console.error('Error fetching project:', err);
-        setError('Failed to load project');
+        setError(t('projectDetail.failedToLoad'));
         setLoading(false);
       }
     };
@@ -63,7 +65,7 @@ export default function ProjectDetailPage() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading project...</p>
+          <p className="mt-4 text-gray-600">{t('projectDetail.loadingProject')}</p>
         </div>
       </div>
     );
@@ -73,9 +75,9 @@ export default function ProjectDetailPage() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-red-600 text-lg">{error || 'Project not found'}</p>
+          <p className="text-red-600 text-lg">{error || t('projectDetail.projectNotFound')}</p>
           <Link href="/projects" className="mt-4 inline-block text-blue-600 hover:text-blue-800">
-            ← Back to Projects
+            ← {t('projectDetail.backToProjects')}
           </Link>
         </div>
       </div>
@@ -93,7 +95,7 @@ export default function ProjectDetailPage() {
           <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
-          Back to Projects
+          {t('projectDetail.backToProjects')}
         </Link>
 
         {/* Main project content */}
@@ -133,25 +135,25 @@ export default function ProjectDetailPage() {
             <div className="grid md:grid-cols-2 gap-6 mb-8">
               {project.typeOfSharing && (
                 <div>
-                  <h3 className="text-sm font-semibold text-gray-500 uppercase mb-1">Type of Sharing</h3>
+                  <h3 className="text-sm font-semibold text-gray-500 uppercase mb-1">{t('projectDetail.typeOfSharing')}</h3>
                   <p className="text-gray-900">{project.typeOfSharing}</p>
                 </div>
               )}
               {project.kindOfProject && (
                 <div>
-                  <h3 className="text-sm font-semibold text-gray-500 uppercase mb-1">Kind of Project</h3>
+                  <h3 className="text-sm font-semibold text-gray-500 uppercase mb-1">{t('projectDetail.kindOfProject')}</h3>
                   <p className="text-gray-900">{project.kindOfProject}</p>
                 </div>
               )}
               {project.size && (
                 <div>
-                  <h3 className="text-sm font-semibold text-gray-500 uppercase mb-1">Size</h3>
+                  <h3 className="text-sm font-semibold text-gray-500 uppercase mb-1">{t('projectDetail.size')}</h3>
                   <p className="text-gray-900">{project.size}</p>
                 </div>
               )}
               {project.location && (
                 <div>
-                  <h3 className="text-sm font-semibold text-gray-500 uppercase mb-1">Location</h3>
+                  <h3 className="text-sm font-semibold text-gray-500 uppercase mb-1">{t('projectDetail.location')}</h3>
                   <p className="text-gray-900">{project.location}</p>
                 </div>
               )}
@@ -160,7 +162,7 @@ export default function ProjectDetailPage() {
             {/* External links */}
             {project.links && (
               <div className="mb-8">
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">Links</h3>
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">{t('projectDetail.links')}</h3>
                 <div className="space-y-2">
                   {project.links.website && (
                     <a
@@ -169,7 +171,7 @@ export default function ProjectDetailPage() {
                       rel="noopener noreferrer"
                       className="block text-blue-600 hover:text-blue-800"
                     >
-                      🌐 Website
+                      🌐 {t('projectDetail.website')}
                     </a>
                   )}
                   {project.links.googleDrive && (
@@ -179,7 +181,7 @@ export default function ProjectDetailPage() {
                       rel="noopener noreferrer"
                       className="block text-blue-600 hover:text-blue-800"
                     >
-                      📁 Google Drive
+                      📁 {t('projectDetail.googleDrive')}
                     </a>
                   )}
                   {project.links.trello && (
@@ -189,7 +191,7 @@ export default function ProjectDetailPage() {
                       rel="noopener noreferrer"
                       className="block text-blue-600 hover:text-blue-800"
                     >
-                      📋 Trello/Miro
+                      📋 {t('projectDetail.trelloMiro')}
                     </a>
                   )}
                   {project.links.moreInfo && (
@@ -199,7 +201,7 @@ export default function ProjectDetailPage() {
                       rel="noopener noreferrer"
                       className="block text-blue-600 hover:text-blue-800"
                     >
-                      ℹ️ More Info
+                      ℹ️ {t('projectDetail.moreInfo')}
                     </a>
                   )}
                 </div>
@@ -209,7 +211,7 @@ export default function ProjectDetailPage() {
             {/* Author/Owner info - clickable profile image at bottom left */}
             {owner && (
               <div className="border-t pt-6 mt-8">
-                <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">Created By</h3>
+                <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">{t('projectDetail.createdBy')}</h3>
                 <button
                   onClick={handleProfileClick}
                   className="flex items-center space-x-3 hover:bg-gray-50 p-2 rounded-lg transition-colors group"
