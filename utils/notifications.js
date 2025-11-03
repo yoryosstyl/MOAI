@@ -29,7 +29,7 @@ export async function createNotification({ userId, type, title, message, link = 
  * Get admin user IDs by looking up their emails in the users collection
  */
 async function getAdminUserIds() {
-  const adminEmails = ['yoryos.styl@gmail.com', 'stavros.roussos@gmail.com'];
+  const adminEmails = ['gstylianopoulos@gmail.com', 'factanonverba2002@gmail.com'];
   const adminIds = [];
 
   try {

@@ -15,7 +15,7 @@ export default function NewsDetailPage() {
   const [loading, setLoading] = useState(true);
 
   // Check if user is admin
-  const isAdmin = user?.email === 'yoryos.styl@gmail.com' || user?.email === 'stavros.roussos@gmail.com';
+  const isAdmin = user?.email === 'gstylianopoulos@gmail.com' || user?.email === 'factanonverba2002@gmail.com';
 
   useEffect(() => {
     const fetchNews = async () => {
