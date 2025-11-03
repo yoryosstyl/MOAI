@@ -5,9 +5,11 @@ import { useRouter } from 'next/navigation';
 import { collection, getDocs, doc, getDoc, query, orderBy } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import Link from 'next/link';
+import { useTranslation } from '@/contexts/LanguageContext';
 
 export default function ProjectsPage() {
   const router = useRouter();
+  const { t } = useTranslation();
   const [projects, setProjects] = useState([]);
   const [projectOwners, setProjectOwners] = useState({});
   const [loading, setLoading] = useState(true);
@@ -81,9 +83,9 @@ export default function ProjectsPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Projects</h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">{t('projects.title')}</h1>
           <p className="text-lg text-gray-600">
-            Browse and discover creative projects from artists around the world
+            {t('landing.features.projects.description')}
           </p>
         </div>
 
@@ -92,21 +94,21 @@ export default function ProjectsPage() {
           <div className="grid md:grid-cols-4 gap-4">
             <input
               type="text"
-              placeholder="Search by title..."
+              placeholder={t('projects.search')}
               value={searchTitle}
               onChange={(e) => setSearchTitle(e.target.value)}
               className="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <input
               type="text"
-              placeholder="Search by tags..."
+              placeholder={t('projects.search')}
               value={searchTags}
               onChange={(e) => setSearchTags(e.target.value)}
               className="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <input
               type="text"
-              placeholder="Search by location..."
+              placeholder={t('projects.search')}
               value={searchLocation}
               onChange={(e) => setSearchLocation(e.target.value)}
               className="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -119,7 +121,7 @@ export default function ProjectsPage() {
               }}
               className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition"
             >
-              Clear
+              {t('common.filter')}
             </button>
           </div>
         </div>
@@ -128,7 +130,7 @@ export default function ProjectsPage() {
         {loading && (
           <div className="text-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-            <p className="mt-4 text-gray-600">Loading projects...</p>
+            <p className="mt-4 text-gray-600">{t('common.loading')}</p>
           </div>
         )}
 
@@ -136,7 +138,7 @@ export default function ProjectsPage() {
         {!loading && filteredProjects.length === 0 && (
           <div className="text-center py-12">
             <p className="text-gray-600 text-lg">
-              {projects.length === 0 ? 'No projects yet. Be the first to create one!' : 'No projects match your search.'}
+              {t('projects.noResults')}
             </p>
           </div>
         )}
