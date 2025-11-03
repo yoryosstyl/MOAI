@@ -210,6 +210,7 @@ For questions or issues, please open an issue on GitHub.
 
 MIT License - feel free to use this project for your own purposes.
 
+# Platforms
 
 Platforms used: https://resend.com/emails
 https://vercel.com/yoryos-styls-projects/moai/
