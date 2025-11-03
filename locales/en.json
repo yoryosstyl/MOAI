@@ -344,7 +344,16 @@
     "backToNews": "Back to News",
     "platforms": "Platforms",
     "externalLink": "Read Original Article",
-    "deleteConfirm": "Are you sure you want to delete this news article?"
+    "deleteConfirm": "Are you sure you want to delete this news article?",
+    "loadingNews": "Loading news...",
+    "newsNotFound": "News Not Found",
+    "failedToDelete": "Failed to delete news",
+    "relevantPlatforms": "Relevant Platforms",
+    "readMore": "Read More",
+    "submittedBy": "Submitted by",
+    "on": "on",
+    "lastUpdated": "Last updated",
+    "unknown": "Unknown"
   },
   "newsCreate": {
     "title": "Submit News",
@@ -442,12 +451,25 @@
   },
   "myProjects": {
     "title": "My Projects",
+    "subtitle": "Manage and track your collaboration opportunities",
     "create": "Create New Project",
+    "newProject": "New Project",
     "noProjects": "You haven't created any projects yet",
     "getStarted": "Get started by creating your first project!",
     "edit": "Edit",
     "delete": "Delete",
-    "deleteConfirm": "Are you sure you want to delete this project?"
+    "view": "View",
+    "deleteConfirm": "Are you sure you want to delete this project?",
+    "deleteError": "Failed to delete project",
+    "totalProjects": "Total Projects",
+    "withImages": "With Images",
+    "totalTags": "Total Tags",
+    "loading": "Loading your projects...",
+    "emptyTitle": "No projects yet",
+    "emptyDescription": "Start by creating your first collaboration project",
+    "createFirst": "Create Your First Project",
+    "projectFallback": "Project",
+    "images": "images"
   },
   "messages": {
     "title": "Messages",

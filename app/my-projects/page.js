@@ -3,12 +3,14 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
+import { useTranslation } from '@/contexts/LanguageContext';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { collection, query, where, orderBy, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
 export default function MyProjectsPage() {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -42,14 +44,14 @@ export default function MyProjectsPage() {
   }, [user]);
 
   const handleDelete = async (projectId) => {
-    if (!confirm('Are you sure you want to delete this project?')) return;
+    if (!confirm(t('myProjects.deleteConfirm'))) return;
 
     try {
       await deleteDoc(doc(db, 'projects', projectId));
       setProjects(projects.filter((p) => p.id !== projectId));
     } catch (error) {
       console.error('Error deleting project:', error);
-      alert('Failed to delete project');
+      alert(t('myProjects.deleteError'));
     }
   };
 
@@ -61,9 +63,9 @@ export default function MyProjectsPage() {
           <div className="mb-8">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-4xl font-bold text-gray-900 mb-2">My Projects</h1>
+                <h1 className="text-4xl font-bold text-gray-900 mb-2">{t('myProjects.title')}</h1>
                 <p className="text-lg text-gray-600">
-                  Manage and track your collaboration opportunities
+                  {t('myProjects.subtitle')}
                 </p>
               </div>
               <Link
@@ -78,7 +80,7 @@ export default function MyProjectsPage() {
                     d="M12 4v16m8-8H4"
                   />
                 </svg>
-                New Project
+                {t('myProjects.newProject')}
               </Link>
             </div>
           </div>
@@ -103,7 +105,7 @@ export default function MyProjectsPage() {
                   </svg>
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Total Projects</p>
+                  <p className="text-sm font-medium text-gray-600">{t('myProjects.totalProjects')}</p>
                   <p className="text-2xl font-bold text-gray-900">{projects.length}</p>
                 </div>
               </div>
@@ -127,7 +129,7 @@ export default function MyProjectsPage() {
                   </svg>
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">With Images</p>
+                  <p className="text-sm font-medium text-gray-600">{t('myProjects.withImages')}</p>
                   <p className="text-2xl font-bold text-gray-900">
                     {projects.filter((p) => p.images?.length > 0).length}
                   </p>
@@ -153,7 +155,7 @@ export default function MyProjectsPage() {
                   </svg>
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Total Tags</p>
+                  <p className="text-sm font-medium text-gray-600">{t('myProjects.totalTags')}</p>
                   <p className="text-2xl font-bold text-gray-900">
                     {projects.reduce((acc, p) => acc + (p.tags?.length || 0), 0)}
                   </p>
@@ -165,7 +167,7 @@ export default function MyProjectsPage() {
           {/* Loading */}
           {loading && (
             <div className="text-center py-12">
-              <p className="text-gray-600">Loading your projects...</p>
+              <p className="text-gray-600">{t('myProjects.loading')}</p>
             </div>
           )}
 
@@ -185,13 +187,13 @@ export default function MyProjectsPage() {
                   d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                 />
               </svg>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No projects yet</h3>
-              <p className="text-gray-600 mb-6">Start by creating your first collaboration project</p>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">{t('myProjects.emptyTitle')}</h3>
+              <p className="text-gray-600 mb-6">{t('myProjects.emptyDescription')}</p>
               <Link
                 href="/projects/create"
                 className="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition font-medium"
               >
-                Create Your First Project
+                {t('myProjects.createFirst')}
               </Link>
             </div>
           )}
@@ -228,7 +230,7 @@ export default function MyProjectsPage() {
 
                         {/* Meta */}
                         <div className="flex items-center gap-4 mt-4 text-sm text-gray-500">
-                          <span>{project.kindOfProject || 'Project'}</span>
+                          <span>{project.kindOfProject || t('myProjects.projectFallback')}</span>
                           {project.location && (
                             <>
                               <span>•</span>
@@ -238,7 +240,7 @@ export default function MyProjectsPage() {
                           {project.images?.length > 0 && (
                             <>
                               <span>•</span>
-                              <span>{project.images.length} images</span>
+                              <span>{project.images.length} {t('myProjects.images')}</span>
                             </>
                           )}
                         </div>
@@ -250,19 +252,19 @@ export default function MyProjectsPage() {
                           href={`/projects/${project.id}`}
                           className="px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-md transition"
                         >
-                          View
+                          {t('myProjects.view')}
                         </Link>
                         <Link
                           href={`/projects/${project.id}/edit`}
                           className="px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 rounded-md transition"
                         >
-                          Edit
+                          {t('myProjects.edit')}
                         </Link>
                         <button
                           onClick={() => handleDelete(project.id)}
                           className="px-4 py-2 text-red-600 hover:bg-red-50 rounded-md transition"
                         >
-                          Delete
+                          {t('myProjects.delete')}
                         </button>
                       </div>
                     </div>
