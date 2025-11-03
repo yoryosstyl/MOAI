@@ -70,7 +70,7 @@ export default function CreateNewsPage() {
       reader.readAsDataURL(compressedFile);
     } catch (error) {
       console.error('Error processing image:', error);
-      setError(t('newsCreate.imageError'));
+      setError(t('newsCreate.errorProcessingImage'));
     }
   };
 
@@ -122,7 +122,7 @@ export default function CreateNewsPage() {
       }
     } catch (err) {
       console.error('Error creating news:', err);
-      setError(t('newsCreate.createError'));
+      setError(t('newsCreate.errorCreatingNews'));
       setSaving(false);
     }
   };
@@ -262,7 +262,7 @@ export default function CreateNewsPage() {
                 <div className="space-y-4">
                   {imagePreview && (
                     <div className="w-full h-64 border-2 border-gray-300 rounded-lg overflow-hidden">
-                      <img src={imagePreview} alt={t('newsCreate.imagePreview')} className="w-full h-full object-cover" />
+                      <img src={imagePreview} alt="Image preview" className="w-full h-full object-cover" />
                     </div>
                   )}
                   <div>
@@ -306,7 +306,7 @@ export default function CreateNewsPage() {
                 >
                   {saving
                     ? (isAdmin ? t('newsCreate.publishing') : t('newsCreate.submitting'))
-                    : (isAdmin ? t('newsCreate.publish') : t('newsCreate.submitForReview'))}
+                    : (isAdmin ? t('newsCreate.publish') : t('newsCreate.submit'))}
                 </button>
                 <button
                   type="button"
