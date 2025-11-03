@@ -23,7 +23,7 @@ export default function ContactPage() {
     e.preventDefault();
 
     // Create mailto link with form data
-    const mailtoLink = `mailto:factanonverba2002@gmail.com?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(
+    const mailtoLink = `mailto:gstylianopoulos@gmail.com?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(
       `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
     )}`;
 
@@ -147,8 +147,8 @@ export default function ContactPage() {
                   </svg>
                   <div>
                     <h3 className="font-medium text-gray-900">Email</h3>
-                    <a href="mailto:factanonverba2002@gmail.com" className="text-blue-600 hover:text-blue-800">
-                      factanonverba2002@gmail.com
+                    <a href="mailto:gstylianopoulos@gmail.com" className="text-blue-600 hover:text-blue-800">
+                      gstylianopoulos@gmail.com
                     </a>
                   </div>
                 </div>
