@@ -173,7 +173,8 @@
     "updating": "Updating..."
   },
   "toolkits": {
-    "title": "Essential Toolkits",
+    "title": "Toolkits Database",
+    "subtitle": "Explore professional tools and software for creative work",
     "submit": "Submit Toolkit",
     "add": "Add Toolkit",
     "adminReview": "Review Submissions",
@@ -184,8 +185,15 @@
     "skillLevel": "Skill Level",
     "allCategories": "All Categories",
     "allTypes": "All Types",
-    "allLevels": "All Skill Levels",
+    "allLevels": "All Levels",
     "submitted": "Toolkit submitted successfully! It will be reviewed by administrators.",
+    "submittedTitle": "Toolkit Submitted Successfully!",
+    "submittedMessage": "Your toolkit has been submitted for review. You'll receive a notification once it's been reviewed by our team.",
+    "showing": "Showing {count} of {total} toolkits",
+    "loadingToolkits": "Loading toolkits...",
+    "noToolkitsYet": "No toolkits have been added yet.",
+    "adjustFilters": "Try adjusting your search filters.",
+    "moreTagsLabel": "+{count} more",
     "approved": "Approved",
     "pending": "Pending Approval",
     "categories": {
