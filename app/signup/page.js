@@ -4,10 +4,12 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
+import { useTranslation } from '@/contexts/LanguageContext';
 
 export default function SignupPage() {
   const router = useRouter();
   const { signup, signInWithGoogle } = useAuth();
+  const { t } = useTranslation();
 
   const [formData, setFormData] = useState({
     displayName: '',
@@ -31,12 +33,12 @@ export default function SignupPage() {
 
     // Validation
     if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
+      setError(t('validation.passwordMatch'));
       return;
     }
 
     if (formData.password.length < 6) {
-      setError('Password must be at least 6 characters');
+      setError(t('validation.minLength').replace('{min}', '6'));
       return;
     }
 
@@ -72,8 +74,7 @@ export default function SignupPage() {
       <div className="max-w-md w-full">
         {/* Header */}
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-900">Create Account</h2>
-          <p className="mt-2 text-gray-600">Join the MOAI community</p>
+          <h2 className="text-3xl font-bold text-gray-900">{t('auth.signup.title')}</h2>
         </div>
 
         {/* Signup Form */}
@@ -89,7 +90,7 @@ export default function SignupPage() {
             {/* Display Name */}
             <div>
               <label htmlFor="displayName" className="block text-sm font-medium text-gray-700 mb-2">
-                Display Name
+                {t('auth.signup.displayName')}
               </label>
               <input
                 id="displayName"
@@ -99,14 +100,13 @@ export default function SignupPage() {
                 value={formData.displayName}
                 onChange={handleChange}
                 className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Your name"
               />
             </div>
 
             {/* Email */}
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                Email Address
+                {t('auth.signup.email')}
               </label>
               <input
                 id="email"
@@ -116,14 +116,13 @@ export default function SignupPage() {
                 value={formData.email}
                 onChange={handleChange}
                 className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="you@example.com"
               />
             </div>
 
             {/* Password */}
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-                Password
+                {t('auth.signup.password')}
               </label>
               <input
                 id="password"
@@ -133,14 +132,13 @@ export default function SignupPage() {
                 value={formData.password}
                 onChange={handleChange}
                 className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="••••••••"
               />
             </div>
 
             {/* Confirm Password */}
             <div>
               <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
-                Confirm Password
+                {t('auth.signup.confirmPassword')}
               </label>
               <input
                 id="confirmPassword"
@@ -150,7 +148,6 @@ export default function SignupPage() {
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="••••••••"
               />
             </div>
 
@@ -160,7 +157,7 @@ export default function SignupPage() {
               disabled={loading}
               className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition font-medium disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? 'Creating Account...' : 'Create Account'}
+              {t('auth.signup.button')}
             </button>
           </form>
 
@@ -198,14 +195,14 @@ export default function SignupPage() {
                 d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
               />
             </svg>
-            Sign up with Google
+            {t('auth.signup.google')}
           </button>
 
           {/* Login Link */}
           <p className="mt-6 text-center text-sm text-gray-600">
-            Already have an account?{' '}
+            {t('auth.signup.hasAccount')}{' '}
             <Link href="/login" className="text-blue-600 hover:text-blue-800 font-medium">
-              Sign in
+              {t('auth.signup.loginLink')}
             </Link>
           </p>
         </div>
