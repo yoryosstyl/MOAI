@@ -51,7 +51,7 @@ export default function MyProjectsPage() {
       setProjects(projects.filter((p) => p.id !== projectId));
     } catch (error) {
       console.error('Error deleting project:', error);
-      alert(t('myProjects.deleteError'));
+      alert('Failed to delete project');
     }
   };
 
@@ -105,7 +105,7 @@ export default function MyProjectsPage() {
                   </svg>
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">{t('myProjects.totalProjects')}</p>
+                  <p className="text-sm font-medium text-gray-600">{t('myProjects.stats.totalProjects')}</p>
                   <p className="text-2xl font-bold text-gray-900">{projects.length}</p>
                 </div>
               </div>
@@ -129,7 +129,7 @@ export default function MyProjectsPage() {
                   </svg>
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">{t('myProjects.withImages')}</p>
+                  <p className="text-sm font-medium text-gray-600">{t('myProjects.stats.withImages')}</p>
                   <p className="text-2xl font-bold text-gray-900">
                     {projects.filter((p) => p.images?.length > 0).length}
                   </p>
@@ -155,7 +155,7 @@ export default function MyProjectsPage() {
                   </svg>
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">{t('myProjects.totalTags')}</p>
+                  <p className="text-sm font-medium text-gray-600">{t('myProjects.stats.totalTags')}</p>
                   <p className="text-2xl font-bold text-gray-900">
                     {projects.reduce((acc, p) => acc + (p.tags?.length || 0), 0)}
                   </p>
@@ -187,13 +187,13 @@ export default function MyProjectsPage() {
                   d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                 />
               </svg>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">{t('myProjects.emptyTitle')}</h3>
-              <p className="text-gray-600 mb-6">{t('myProjects.emptyDescription')}</p>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">{t('myProjects.noProjectsYet')}</h3>
+              <p className="text-gray-600 mb-6">{t('myProjects.createFirst')}</p>
               <Link
                 href="/projects/create"
                 className="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition font-medium"
               >
-                {t('myProjects.createFirst')}
+                {t('myProjects.createFirstProject')}
               </Link>
             </div>
           )}
@@ -230,7 +230,7 @@ export default function MyProjectsPage() {
 
                         {/* Meta */}
                         <div className="flex items-center gap-4 mt-4 text-sm text-gray-500">
-                          <span>{project.kindOfProject || t('myProjects.projectFallback')}</span>
+                          <span>{project.kindOfProject || t('myProjects.projectType')}</span>
                           {project.location && (
                             <>
                               <span>•</span>
@@ -240,7 +240,7 @@ export default function MyProjectsPage() {
                           {project.images?.length > 0 && (
                             <>
                               <span>•</span>
-                              <span>{project.images.length} {t('myProjects.images')}</span>
+                              <span>{t('myProjects.images', { count: project.images.length })}</span>
                             </>
                           )}
                         </div>

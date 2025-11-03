@@ -39,32 +39,50 @@ export default function CreateToolkitPage() {
   const [error, setError] = useState('');
 
   const categories = [
-    '3D & Animation',
-    'Photo Editing',
-    'Video Editing',
-    'Music Production',
-    'Graphic Design',
-    'Game Development',
-    'Web Development',
-    'Writing & Publishing',
-    'Other',
+    { value: '3D & Animation', label: t('toolkitCreate.categories.3dAnimation') },
+    { value: 'Photo Editing', label: t('toolkitCreate.categories.photoEditing') },
+    { value: 'Video Editing', label: t('toolkitCreate.categories.videoEditing') },
+    { value: 'Music Production', label: t('toolkitCreate.categories.musicProduction') },
+    { value: 'Graphic Design', label: t('toolkitCreate.categories.graphicDesign') },
+    { value: 'Game Development', label: t('toolkitCreate.categories.gameDevelopment') },
+    { value: 'Web Development', label: t('toolkitCreate.categories.webDevelopment') },
+    { value: 'Writing & Publishing', label: t('toolkitCreate.categories.writingPublishing') },
+    { value: 'Other', label: t('toolkitCreate.categories.other') },
   ];
 
-  const types = ['Free', 'Paid', 'Freemium', 'Open Source'];
-  const skillLevels = ['Beginner-friendly', 'Intermediate', 'Professional/Advanced'];
-  const platforms = ['Windows', 'Mac', 'Linux', 'Web', 'Android', 'iOS'];
+  const types = [
+    { value: 'Free', label: t('toolkitCreate.types.free') },
+    { value: 'Paid', label: t('toolkitCreate.types.paid') },
+    { value: 'Freemium', label: t('toolkitCreate.types.freemium') },
+    { value: 'Open Source', label: t('toolkitCreate.types.openSource') },
+  ];
+
+  const skillLevels = [
+    { value: 'Beginner-friendly', label: t('toolkitCreate.skillLevels.beginnerFriendly') },
+    { value: 'Intermediate', label: t('toolkitCreate.skillLevels.intermediate') },
+    { value: 'Professional/Advanced', label: t('toolkitCreate.skillLevels.professionalAdvanced') },
+  ];
+
+  const platforms = [
+    { value: 'Windows', label: t('toolkitCreate.platforms.windows') },
+    { value: 'Mac', label: t('toolkitCreate.platforms.mac') },
+    { value: 'Linux', label: t('toolkitCreate.platforms.linux') },
+    { value: 'Web', label: t('toolkitCreate.platforms.web') },
+    { value: 'Android', label: t('toolkitCreate.platforms.android') },
+    { value: 'iOS', label: t('toolkitCreate.platforms.ios') },
+  ];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handlePlatformToggle = (platform) => {
+  const handlePlatformToggle = (platformValue) => {
     setFormData((prev) => ({
       ...prev,
-      platforms: prev.platforms.includes(platform)
-        ? prev.platforms.filter((p) => p !== platform)
-        : [...prev.platforms, platform],
+      platforms: prev.platforms.includes(platformValue)
+        ? prev.platforms.filter((p) => p !== platformValue)
+        : [...prev.platforms, platformValue],
     }));
   };
 
@@ -91,7 +109,7 @@ export default function CreateToolkitPage() {
       reader.readAsDataURL(compressedFile);
     } catch (error) {
       console.error('Error processing image:', error);
-      setError(t('toolkitCreate.imageError'));
+      setError(t('toolkitCreate.errorProcessingImage'));
     }
   };
 
@@ -160,7 +178,7 @@ export default function CreateToolkitPage() {
       }
     } catch (err) {
       console.error('Error creating toolkit:', err);
-      setError(t('toolkitCreate.createError'));
+      setError(t('toolkitCreate.errorCreatingToolkit'));
       setSaving(false);
     }
   };
@@ -175,8 +193,8 @@ export default function CreateToolkitPage() {
             </h1>
             <p className="text-gray-600">
               {isAdmin
-                ? t('toolkitCreate.subtitleAdmin')
-                : t('toolkitCreate.subtitleUser')}
+                ? t('toolkitCreate.addSubtitle')
+                : t('toolkitCreate.subtitle')}
             </p>
           </div>
 
@@ -198,9 +216,9 @@ export default function CreateToolkitPage() {
                   />
                 </svg>
                 <div>
-                  <h3 className="text-sm font-semibold text-blue-900 mb-1">{t('toolkitCreate.reviewTitle')}</h3>
+                  <h3 className="text-sm font-semibold text-blue-900 mb-1">{t('toolkitCreate.underReview')}</h3>
                   <p className="text-sm text-blue-800">
-                    {t('toolkitCreate.reviewMessage')}
+                    {t('toolkitCreate.underReviewText')}
                   </p>
                 </div>
               </div>
@@ -217,12 +235,12 @@ export default function CreateToolkitPage() {
             <form onSubmit={handleSubmit} className="space-y-8">
               {/* Basic Information */}
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Basic Information</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('toolkitCreate.basicInfo')}</h3>
 
                 {/* Name */}
                 <div className="mb-4">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Tool Name *
+                    {t('toolkitCreate.toolName')} *
                   </label>
                   <input
                     type="text"
@@ -231,7 +249,7 @@ export default function CreateToolkitPage() {
                     value={formData.name}
                     onChange={handleChange}
                     className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="e.g., Blender, Adobe Photoshop"
+                    placeholder={t('toolkitCreate.toolNamePlaceholder')}
                   />
                 </div>
 
@@ -239,7 +257,7 @@ export default function CreateToolkitPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Category *
+                      {t('toolkitCreate.category')} *
                     </label>
                     <select
                       name="category"
@@ -248,17 +266,17 @@ export default function CreateToolkitPage() {
                       onChange={handleChange}
                       className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
-                      <option value="">Select category...</option>
+                      <option value="">{t('toolkitCreate.selectCategory')}</option>
                       {categories.map((cat) => (
-                        <option key={cat} value={cat}>
-                          {cat}
+                        <option key={cat.value} value={cat.value}>
+                          {cat.label}
                         </option>
                       ))}
                     </select>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Type *</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">{t('toolkitCreate.type')} *</label>
                     <select
                       name="type"
                       required
@@ -266,10 +284,10 @@ export default function CreateToolkitPage() {
                       onChange={handleChange}
                       className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
-                      <option value="">Select type...</option>
+                      <option value="">{t('toolkitCreate.selectType')}</option>
                       {types.map((type) => (
-                        <option key={type} value={type}>
-                          {type}
+                        <option key={type.value} value={type.value}>
+                          {type.label}
                         </option>
                       ))}
                     </select>
@@ -279,7 +297,7 @@ export default function CreateToolkitPage() {
                 {/* Description */}
                 <div className="mb-4">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Description *
+                    {t('toolkitCreate.description')} *
                   </label>
                   <textarea
                     name="description"
@@ -288,14 +306,14 @@ export default function CreateToolkitPage() {
                     onChange={handleChange}
                     rows={4}
                     className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Describe what the tool does and its main features..."
+                    placeholder={t('toolkitCreate.descriptionPlaceholder')}
                   />
                 </div>
 
                 {/* Skill Level */}
                 <div className="mb-4">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Skill Level *
+                    {t('toolkitCreate.skillLevel')} *
                   </label>
                   <select
                     name="skillLevel"
@@ -304,10 +322,10 @@ export default function CreateToolkitPage() {
                     onChange={handleChange}
                     className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
-                    <option value="">Select skill level...</option>
+                    <option value="">{t('toolkitCreate.selectSkillLevel')}</option>
                     {skillLevels.map((level) => (
-                      <option key={level} value={level}>
-                        {level}
+                      <option key={level.value} value={level.value}>
+                        {level.label}
                       </option>
                     ))}
                   </select>
@@ -317,24 +335,24 @@ export default function CreateToolkitPage() {
               {/* Platforms */}
               <div className="border-t pt-8">
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  Platforms (Optional)
+                  {t('toolkitCreate.platformsOptional')}
                 </h3>
                 <p className="text-sm text-gray-600 mb-4">
-                  Select platforms if applicable. Leave empty if it applies to all or none.
+                  {t('toolkitCreate.platformsHelper')}
                 </p>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {platforms.map((platform) => (
                     <button
-                      key={platform}
+                      key={platform.value}
                       type="button"
-                      onClick={() => handlePlatformToggle(platform)}
+                      onClick={() => handlePlatformToggle(platform.value)}
                       className={`px-4 py-2 rounded-md border-2 transition ${
-                        formData.platforms.includes(platform)
+                        formData.platforms.includes(platform.value)
                           ? 'border-blue-600 bg-blue-50 text-blue-700'
                           : 'border-gray-300 hover:border-gray-400'
                       }`}
                     >
-                      {platform}
+                      {platform.label}
                     </button>
                   ))}
                 </div>
@@ -342,7 +360,7 @@ export default function CreateToolkitPage() {
 
               {/* Logo */}
               <div className="border-t pt-8">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Logo/Icon</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('toolkitCreate.logoIcon')}</h3>
                 <div className="flex items-start gap-6">
                   {logoPreview && (
                     <div className="w-32 h-32 border-2 border-gray-300 rounded-lg overflow-hidden">
@@ -357,7 +375,7 @@ export default function CreateToolkitPage() {
                       className="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
                     />
                     <p className="text-xs text-gray-500 mt-2">
-                      Optional. PNG or JPG, max 512x512px. If not provided, we'll use the first letter of the name.
+                      {t('toolkitCreate.logoHelper')}
                     </p>
                   </div>
                 </div>
@@ -365,14 +383,14 @@ export default function CreateToolkitPage() {
 
               {/* Tags */}
               <div className="border-t pt-8">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Tags</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('toolkitCreate.tags')}</h3>
                 <div className="flex gap-2 mb-3">
                   <input
                     type="text"
                     value={tagInput}
                     onChange={(e) => setTagInput(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddTag())}
-                    placeholder="Add a tag..."
+                    placeholder={t('toolkitCreate.tagPlaceholder')}
                     className="flex-1 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                   <button
@@ -381,7 +399,7 @@ export default function CreateToolkitPage() {
                     disabled={!tagInput.trim() || formData.tags.length >= 10}
                     className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition disabled:opacity-50"
                   >
-                    Add
+                    {t('toolkitCreate.addTag')}
                   </button>
                 </div>
                 <div className="flex flex-wrap gap-2">
@@ -402,18 +420,18 @@ export default function CreateToolkitPage() {
                   ))}
                 </div>
                 <p className="text-xs text-gray-500 mt-2">
-                  {formData.tags.length}/10 tags. Press Enter or click Add.
+                  {t('toolkitCreate.tagsCount', { current: formData.tags.length })}
                 </p>
               </div>
 
               {/* Additional Information */}
               <div className="border-t pt-8">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Additional Information</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('toolkitCreate.additionalInfo')}</h3>
 
                 {/* Website URL */}
                 <div className="mb-4">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Official Website
+                    {t('toolkitCreate.officialWebsite')}
                   </label>
                   <input
                     type="url"
@@ -421,14 +439,14 @@ export default function CreateToolkitPage() {
                     value={formData.websiteUrl}
                     onChange={handleChange}
                     className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="https://..."
+                    placeholder={t('toolkitCreate.websitePlaceholder')}
                   />
                 </div>
 
                 {/* Popular Use Cases */}
                 <div className="mb-4">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Popular Use Cases
+                    {t('toolkitCreate.popularUseCases')}
                   </label>
                   <textarea
                     name="popularUseCases"
@@ -436,14 +454,14 @@ export default function CreateToolkitPage() {
                     onChange={handleChange}
                     rows={3}
                     className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Brief examples of what it's commonly used for..."
+                    placeholder={t('toolkitCreate.popularUseCasesPlaceholder')}
                   />
                 </div>
 
                 {/* System Requirements */}
                 <div className="mb-4">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    System Requirements
+                    {t('toolkitCreate.systemRequirements')}
                   </label>
                   <textarea
                     name="systemRequirements"
@@ -451,7 +469,7 @@ export default function CreateToolkitPage() {
                     onChange={handleChange}
                     rows={3}
                     className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Minimum specs needed (e.g., RAM, GPU, OS version)..."
+                    placeholder={t('toolkitCreate.systemRequirementsPlaceholder')}
                   />
                 </div>
               </div>
@@ -465,7 +483,7 @@ export default function CreateToolkitPage() {
                 >
                   {saving
                     ? (isAdmin ? t('toolkitCreate.creating') : t('toolkitCreate.submitting'))
-                    : (isAdmin ? t('toolkitCreate.create') : t('toolkitCreate.submitForReview'))}
+                    : (isAdmin ? t('toolkitCreate.createToolkit') : t('toolkitCreate.submitForReview'))}
                 </button>
                 <button
                   type="button"
