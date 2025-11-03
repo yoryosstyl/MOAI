@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
+import { useTranslation } from '@/contexts/LanguageContext';
 import { collection, query, where, orderBy, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import FavoriteButton from '@/components/FavoriteButton';
@@ -15,6 +16,7 @@ export default function ToolkitsPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [toolkits, setToolkits] = useState([]);
   const [filteredToolkits, setFilteredToolkits] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -142,9 +144,9 @@ export default function ToolkitsPage() {
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-4xl font-bold text-gray-900 mb-2">Toolkits Database</h1>
+              <h1 className="text-4xl font-bold text-gray-900 mb-2">{t('toolkits.title')}</h1>
               <p className="text-lg text-gray-600">
-                Explore professional tools and software for creative work
+                {t('toolkits.subtitle')}
               </p>
             </div>
             <div className="flex gap-3">
@@ -161,7 +163,7 @@ export default function ToolkitsPage() {
                       d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                     />
                   </svg>
-                  Review Submissions
+                  {t('toolkits.adminReview')}
                 </Link>
               )}
               {user && (
@@ -177,7 +179,7 @@ export default function ToolkitsPage() {
                       d="M12 4v16m8-8H4"
                     />
                   </svg>
-                  {isAdmin ? 'Add Toolkit' : 'Submit Toolkit'}
+                  {isAdmin ? t('toolkits.add') : t('toolkits.submit')}
                 </Link>
               )}
             </div>
@@ -202,9 +204,9 @@ export default function ToolkitsPage() {
                 />
               </svg>
               <div>
-                <h3 className="text-sm font-semibold text-green-900 mb-1">Toolkit Submitted Successfully!</h3>
+                <h3 className="text-sm font-semibold text-green-900 mb-1">{t('toolkits.successTitle')}</h3>
                 <p className="text-sm text-green-800">
-                  Your toolkit has been submitted for review. You'll receive a notification once it's been reviewed by our team.
+                  {t('toolkits.successMessage')}
                 </p>
               </div>
               <button
@@ -223,10 +225,10 @@ export default function ToolkitsPage() {
         <div className="bg-white rounded-lg shadow-md p-6 mb-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Search</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">{t('toolkits.searchLabel')}</label>
               <input
                 type="text"
-                placeholder="Search toolkits..."
+                placeholder={t('toolkits.search')}
                 value={searchFilters.search}
                 onChange={(e) => handleFilterChange('search', e.target.value)}
                 className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -234,13 +236,13 @@ export default function ToolkitsPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">{t('toolkits.categoryLabel')}</label>
               <select
                 value={searchFilters.category}
                 onChange={(e) => handleFilterChange('category', e.target.value)}
                 className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
-                <option value="">All Categories</option>
+                <option value="">{t('toolkits.allCategories')}</option>
                 {categories.map((cat) => (
                   <option key={cat} value={cat}>
                     {cat}
@@ -250,13 +252,13 @@ export default function ToolkitsPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Type</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">{t('toolkits.typeLabel')}</label>
               <select
                 value={searchFilters.type}
                 onChange={(e) => handleFilterChange('type', e.target.value)}
                 className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
-                <option value="">All Types</option>
+                <option value="">{t('toolkits.allTypes')}</option>
                 {types.map((type) => (
                   <option key={type} value={type}>
                     {type}
@@ -266,13 +268,13 @@ export default function ToolkitsPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Skill Level</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">{t('toolkits.skillLevelLabel')}</label>
               <select
                 value={searchFilters.skillLevel}
                 onChange={(e) => handleFilterChange('skillLevel', e.target.value)}
                 className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
-                <option value="">All Levels</option>
+                <option value="">{t('toolkits.allLevels')}</option>
                 {skillLevels.map((level) => (
                   <option key={level} value={level}>
                     {level}
@@ -285,7 +287,7 @@ export default function ToolkitsPage() {
           {/* Active Filters Count */}
           {(searchFilters.search || searchFilters.category || searchFilters.type || searchFilters.skillLevel) && (
             <div className="mt-4 text-sm text-gray-600">
-              Showing {filteredToolkits.length} of {toolkits.length} toolkits
+              {t('toolkits.showing')} {filteredToolkits.length} {t('toolkits.of')} {toolkits.length} {t('toolkits.toolkitsCount')}
             </div>
           )}
         </div>
@@ -293,7 +295,7 @@ export default function ToolkitsPage() {
         {/* Loading */}
         {loading && (
           <div className="text-center py-12">
-            <p className="text-gray-600">Loading toolkits...</p>
+            <p className="text-gray-600">{t('toolkits.loading')}</p>
           </div>
         )}
 
@@ -313,11 +315,11 @@ export default function ToolkitsPage() {
                 d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
               />
             </svg>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No toolkits found</h3>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">{t('toolkits.noToolkitsFound')}</h3>
             <p className="text-gray-600 mb-6">
               {toolkits.length === 0
-                ? 'No toolkits have been added yet.'
-                : 'Try adjusting your search filters.'}
+                ? t('toolkits.noToolkitsYet')
+                : t('toolkits.adjustFilters')}
             </p>
           </div>
         )}
@@ -387,7 +389,7 @@ export default function ToolkitsPage() {
                       ))}
                       {toolkit.tags.length > 3 && (
                         <span className="px-2 py-1 text-gray-500 text-xs">
-                          +{toolkit.tags.length - 3} more
+                          +{toolkit.tags.length - 3} {t('toolkits.more')}
                         </span>
                       )}
                     </div>

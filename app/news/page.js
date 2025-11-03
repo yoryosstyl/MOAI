@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
+import { useTranslation } from '@/contexts/LanguageContext';
 import { collection, query, where, orderBy, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
@@ -11,6 +12,7 @@ export default function NewsPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [news, setNews] = useState([]);
   const [filteredNews, setFilteredNews] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -92,9 +94,9 @@ export default function NewsPage() {
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-4xl font-bold text-gray-900 mb-2">News</h1>
+              <h1 className="text-4xl font-bold text-gray-900 mb-2">{t('news.title')}</h1>
               <p className="text-lg text-gray-600">
-                Stay updated with the latest announcements and news
+                {t('news.subtitle')}
               </p>
             </div>
             <div className="flex gap-3">
@@ -111,7 +113,7 @@ export default function NewsPage() {
                       d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                     />
                   </svg>
-                  Review Submissions
+                  {t('news.adminReview')}
                 </Link>
               )}
               {user && (
@@ -127,7 +129,7 @@ export default function NewsPage() {
                       d="M12 4v16m8-8H4"
                     />
                   </svg>
-                  {isAdmin ? 'Add News' : 'Submit News'}
+                  {isAdmin ? t('news.add') : t('news.submit')}
                 </Link>
               )}
             </div>
@@ -152,9 +154,9 @@ export default function NewsPage() {
                 />
               </svg>
               <div>
-                <h3 className="text-sm font-semibold text-green-900 mb-1">News Submitted Successfully!</h3>
+                <h3 className="text-sm font-semibold text-green-900 mb-1">{t('news.successTitle')}</h3>
                 <p className="text-sm text-green-800">
-                  Your news article has been submitted for review. You'll receive a notification once it's been reviewed by our team.
+                  {t('news.successMessage')}
                 </p>
               </div>
               <button
@@ -175,7 +177,7 @@ export default function NewsPage() {
             <div className="flex-1">
               <input
                 type="text"
-                placeholder="Search news..."
+                placeholder={t('news.search')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -186,7 +188,7 @@ export default function NewsPage() {
           {/* Results count */}
           {searchQuery && (
             <div className="mt-4 text-sm text-gray-600">
-              Showing {filteredNews.length} of {news.length} news items
+              {t('news.showing')} {filteredNews.length} {t('news.of')} {news.length} {t('news.newsItems')}
             </div>
           )}
         </div>
@@ -194,7 +196,7 @@ export default function NewsPage() {
         {/* Loading */}
         {loading && (
           <div className="text-center py-12">
-            <p className="text-gray-600">Loading news...</p>
+            <p className="text-gray-600">{t('news.loading')}</p>
           </div>
         )}
 
@@ -214,11 +216,11 @@ export default function NewsPage() {
                 d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"
               />
             </svg>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No news found</h3>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">{t('news.noNewsFound')}</h3>
             <p className="text-gray-600 mb-6">
               {news.length === 0
-                ? 'No news has been published yet.'
-                : 'Try adjusting your search query.'}
+                ? t('news.noNewsYet')
+                : t('news.adjustSearch')}
             </p>
           </div>
         )}
