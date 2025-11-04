@@ -597,6 +597,14 @@
     "errorProcessingImage": "Failed to process image",
     "errorCreatingNews": "Failed to create news. Please try again."
   },
+  "newsEdit": {
+    "title": "Edit News",
+    "subtitle": "Update your news article",
+    "failedToLoad": "Failed to load news",
+    "failedToUpdate": "Failed to update news. Please try again.",
+    "saving": "Saving...",
+    "saveChanges": "Save Changes"
+  },
   "newsAdmin": {
     "title": "News Review",
     "pending": "Pending News",
@@ -812,6 +820,24 @@
   "footer": {
     "designBy": "Design by",
     "and": "|"
+  },
+  "reviewForm": {
+    "writeReview": "Write a Review",
+    "editReview": "Edit Your Review",
+    "rating": "Rating",
+    "reviewOptional": "Review (optional)",
+    "reviewPlaceholder": "Share your experience with this toolkit...",
+    "submitReview": "Submit Review",
+    "updateReview": "Update Review",
+    "deleteReview": "Delete Review",
+    "cancel": "Cancel",
+    "submitting": "Submitting...",
+    "deleting": "Deleting...",
+    "pleaseSignIn": "Please sign in to leave a review",
+    "pleaseSelectRating": "Please select a rating",
+    "failedToSubmit": "Failed to submit review",
+    "failedToDelete": "Failed to delete review",
+    "confirmDelete": "Delete your review?"
   },
   "common": {
     "loading": "Loading...",
