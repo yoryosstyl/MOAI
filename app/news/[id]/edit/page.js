@@ -116,23 +116,28 @@ export default function EditNewsPage() {
     setError('');
 
     try {
-      let imageUrl = news.imageUrl || '';
+      // Prepare update data
+      const updateData = {
+        title: formData.title,
+        description: formData.description,
+        content: formData.content,
+        platforms: formData.platforms,
+        externalLink: formData.externalLink,
+        updatedAt: serverTimestamp(),
+      };
 
       // Upload new image if provided
       if (imageFile) {
         const timestamp = Date.now();
         const storageRef = ref(storage, `news/images/${timestamp}_${imageFile.name}`);
         await uploadBytes(storageRef, imageFile);
-        imageUrl = await getDownloadURL(storageRef);
+        const imageUrl = await getDownloadURL(storageRef);
+        updateData.imageUrl = imageUrl;
       }
 
       // Update news document
       const newsRef = doc(db, 'news', params.id);
-      await updateDoc(newsRef, {
-        ...formData,
-        imageUrl,
-        updatedAt: serverTimestamp(),
-      });
+      await updateDoc(newsRef, updateData);
 
       router.push(`/news/${params.id}`);
     } catch (err) {
