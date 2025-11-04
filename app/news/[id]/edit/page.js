@@ -63,9 +63,10 @@ export default function EditNewsPage() {
     }
   }, [params.id, t]);
 
-  // Redirect if not admin
+  // Redirect if not admin (wait for user to load first)
   useEffect(() => {
-    if (!isAdmin && user) {
+    if (user && !isAdmin) {
+      console.log('Non-admin user detected, redirecting:', user.email);
       router.push(`/news/${params.id}`);
     }
   }, [isAdmin, user, params.id, router]);
@@ -137,12 +138,19 @@ export default function EditNewsPage() {
 
       // Update news document
       const newsRef = doc(db, 'news', params.id);
+      console.log('Updating news with data:', updateData);
+      console.log('News ID:', params.id);
+      console.log('User:', user?.email);
+      console.log('Is Admin:', isAdmin);
+
       await updateDoc(newsRef, updateData);
 
       router.push(`/news/${params.id}`);
     } catch (err) {
       console.error('Error updating news:', err);
-      setError(t('newsEdit.failedToUpdate'));
+      console.error('Error code:', err.code);
+      console.error('Error message:', err.message);
+      setError(t('newsEdit.failedToUpdate') + ` (${err.code || err.message})`);
       setSaving(false);
     }
   };
