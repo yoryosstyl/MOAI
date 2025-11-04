@@ -135,25 +135,25 @@ export default function ProjectDetailPage() {
             <div className="grid md:grid-cols-2 gap-6 mb-8">
               {project.typeOfSharing && (
                 <div>
-                  <h3 className="text-sm font-semibold text-gray-500 uppercase mb-1">{t('projectDetail.typeOfSharing')}</h3>
+                  <h3 className="text-sm font-semibold text-gray-500 mb-1">{t('projectDetail.typeOfSharingUpper')}</h3>
                   <p className="text-gray-900">{project.typeOfSharing}</p>
                 </div>
               )}
               {project.kindOfProject && (
                 <div>
-                  <h3 className="text-sm font-semibold text-gray-500 uppercase mb-1">{t('projectDetail.kindOfProject')}</h3>
+                  <h3 className="text-sm font-semibold text-gray-500 mb-1">{t('projectDetail.kindOfProjectUpper')}</h3>
                   <p className="text-gray-900">{project.kindOfProject}</p>
                 </div>
               )}
               {project.size && (
                 <div>
-                  <h3 className="text-sm font-semibold text-gray-500 uppercase mb-1">{t('projectDetail.size')}</h3>
+                  <h3 className="text-sm font-semibold text-gray-500 mb-1">{t('projectDetail.sizeUpper')}</h3>
                   <p className="text-gray-900">{project.size}</p>
                 </div>
               )}
               {project.location && (
                 <div>
-                  <h3 className="text-sm font-semibold text-gray-500 uppercase mb-1">{t('projectDetail.location')}</h3>
+                  <h3 className="text-sm font-semibold text-gray-500 mb-1">{t('projectDetail.locationUpper')}</h3>
                   <p className="text-gray-900">{project.location}</p>
                 </div>
               )}
@@ -211,7 +211,7 @@ export default function ProjectDetailPage() {
             {/* Author/Owner info - clickable profile image at bottom left */}
             {owner && (
               <div className="border-t pt-6 mt-8">
-                <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">{t('projectDetail.createdBy')}</h3>
+                <h3 className="text-sm font-semibold text-gray-500 mb-3">{t('projectDetail.createdByUpper')}</h3>
                 <button
                   onClick={handleProfileClick}
                   className="flex items-center space-x-3 hover:bg-gray-50 p-2 rounded-lg transition-colors group"
