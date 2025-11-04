@@ -179,8 +179,8 @@ export default function NewsDetailPage() {
             {/* Platforms */}
             {news.platforms && news.platforms.length > 0 && (
               <div className="mb-8 pb-8 border-b">
-                <h2 className="text-sm font-semibold text-gray-700 uppercase mb-3">
-                  {t('newsDetail.relevantPlatforms')}
+                <h2 className="text-sm font-semibold text-gray-700 mb-3">
+                  {t('newsDetail.relevantPlatformsUpper')}
                 </h2>
                 <div className="flex flex-wrap gap-2">
                   {news.platforms.map((platform, index) => (
