@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
+import { useTranslation } from '@/contexts/LanguageContext';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import ProjectImageUpload from '@/components/ProjectImageUpload';
 import LocationAutocomplete from '@/components/LocationAutocomplete';
@@ -14,6 +15,7 @@ export default function EditProjectPage() {
   const params = useParams();
   const router = useRouter();
   const { user } = useAuth();
+  const { t } = useTranslation();
 
   const [project, setProject] = useState(null);
   const [formData, setFormData] = useState(null);
@@ -35,15 +37,15 @@ export default function EditProjectPage() {
   ];
 
   const projectSizes = [
-    { value: 'small', label: 'Small (1-5 people)' },
-    { value: 'medium', label: 'Medium (5-15 people)' },
-    { value: 'large', label: 'Large (15+ people)' },
+    { value: 'small', label: t('projectEdit.small') },
+    { value: 'medium', label: t('projectEdit.medium') },
+    { value: 'large', label: t('projectEdit.large') },
   ];
 
   const sharingTypes = [
-    { value: 'open', label: 'Open - Anyone can join' },
-    { value: 'collaborative', label: 'Collaborative - By invitation' },
-    { value: 'showcase', label: 'Showcase - Display only' },
+    { value: 'open', label: t('projectEdit.open') },
+    { value: 'collaborative', label: t('projectEdit.collaborative') },
+    { value: 'showcase', label: t('projectEdit.showcase') },
   ];
 
   // Fetch project data
@@ -71,12 +73,12 @@ export default function EditProjectPage() {
           });
           setProjectImages(projectData.images || []);
         } else {
-          setError('Project not found');
+          setError(t('projectEdit.projectNotFound'));
         }
         setLoading(false);
       } catch (err) {
         console.error('Error fetching project:', err);
-        setError('Failed to load project');
+        setError(t('projectEdit.failedToUpdate'));
         setLoading(false);
       }
     };
@@ -150,7 +152,7 @@ export default function EditProjectPage() {
       router.push('/my-projects');
     } catch (err) {
       console.error('Error updating project:', err);
-      setError('Failed to update project');
+      setError(t('projectEdit.failedToUpdate'));
       setSaving(false);
     }
   };
@@ -159,7 +161,7 @@ export default function EditProjectPage() {
     return (
       <ProtectedRoute>
         <div className="min-h-screen bg-gray-50 py-12 flex items-center justify-center">
-          <div className="text-gray-600">Loading project...</div>
+          <div className="text-gray-600">{t('projectEdit.loadingProject')}</div>
         </div>
       </ProtectedRoute>
     );
@@ -170,9 +172,9 @@ export default function EditProjectPage() {
       <ProtectedRoute>
         <div className="min-h-screen bg-gray-50 py-12">
           <div className="max-w-4xl mx-auto px-4 text-center">
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">Project Not Found</h1>
+            <h1 className="text-2xl font-bold text-gray-900 mb-4">{t('projectEdit.projectNotFound')}</h1>
             <Link href="/projects" className="text-blue-600 hover:text-blue-800">
-              ← Back to Projects
+              ← {t('projectEdit.backToProjects')}
             </Link>
           </div>
         </div>
@@ -191,13 +193,13 @@ export default function EditProjectPage() {
             <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
-            Back to Project
+            {t('projectEdit.backToProject')}
           </Link>
 
           <div className="bg-white rounded-lg shadow-md p-8">
             <div className="mb-8">
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">Edit Project</h1>
-              <p className="text-gray-600">Update all your project information</p>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">{t('projectEdit.title')}</h1>
+              <p className="text-gray-600">{t('projectEdit.subtitle')}</p>
             </div>
 
             {error && (
@@ -211,11 +213,11 @@ export default function EditProjectPage() {
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900">Project Visibility</h3>
+                    <h3 className="text-lg font-semibold text-gray-900">{t('projectEdit.visibility')}</h3>
                     <p className="text-sm text-gray-600 mt-1">
                       {formData.isPublic
-                        ? 'Public - Everyone can see this project'
-                        : 'Private - Only you can see this project'}
+                        ? t('projectEdit.visibilityPublic')
+                        : t('projectEdit.visibilityPrivate')}
                     </p>
                   </div>
                   <button
@@ -237,7 +239,7 @@ export default function EditProjectPage() {
               {/* Project Name */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Project Name *
+                  {t('projectEdit.projectName')} *
                 </label>
                 <input
                   name="name"
@@ -252,7 +254,7 @@ export default function EditProjectPage() {
               {/* Description */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Description *
+                  {t('projectEdit.description')} *
                 </label>
                 <textarea
                   name="description"
@@ -268,7 +270,7 @@ export default function EditProjectPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Type of Project *
+                    {t('projectEdit.typeOfProject')} *
                   </label>
                   <select
                     name="kindOfProject"
@@ -277,7 +279,7 @@ export default function EditProjectPage() {
                     onChange={handleChange}
                     className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
-                    <option value="">Select type...</option>
+                    <option value="">{t('projectEdit.selectType')}</option>
                     {projectTypes.map((type) => (
                       <option key={type} value={type}>{type}</option>
                     ))}
@@ -286,7 +288,7 @@ export default function EditProjectPage() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Project Shape *
+                    {t('projectEdit.projectShape')} *
                   </label>
                   <select
                     name="shape"
@@ -295,7 +297,7 @@ export default function EditProjectPage() {
                     onChange={handleChange}
                     className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
-                    <option value="">Select shape...</option>
+                    <option value="">{t('projectEdit.selectShape')}</option>
                     {projectShapes.map((shape) => (
                       <option key={shape} value={shape}>{shape}</option>
                     ))}
@@ -307,7 +309,7 @@ export default function EditProjectPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Type of Sharing *
+                    {t('projectEdit.typeOfSharing')} *
                   </label>
                   <select
                     name="typeOfSharing"
@@ -324,7 +326,7 @@ export default function EditProjectPage() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Project Size *
+                    {t('projectEdit.projectSize')} *
                   </label>
                   <select
                     name="size"
@@ -343,7 +345,7 @@ export default function EditProjectPage() {
               {/* Color */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Project Color
+                  {t('projectEdit.projectColor')}
                 </label>
                 <div className="flex items-center gap-4">
                   <input
@@ -353,14 +355,14 @@ export default function EditProjectPage() {
                     onChange={handleChange}
                     className="h-10 w-20 border border-gray-300 rounded cursor-pointer"
                   />
-                  <span className="text-sm text-gray-600">Choose a color that represents your project</span>
+                  <span className="text-sm text-gray-600">{t('projectEdit.colorHelper')}</span>
                 </div>
               </div>
 
               {/* Tags */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Tags * (max 5)
+                  {t('projectEdit.tagsMax')}
                 </label>
                 <div className="flex gap-2 mb-3">
                   <input
@@ -368,7 +370,7 @@ export default function EditProjectPage() {
                     value={tagInput}
                     onChange={(e) => setTagInput(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddTag())}
-                    placeholder="Type a tag and press Enter"
+                    placeholder={t('projectEdit.tagPlaceholder')}
                     disabled={formData.tags.length >= 5}
                     className="flex-1 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
                   />
@@ -378,7 +380,7 @@ export default function EditProjectPage() {
                     disabled={formData.tags.length >= 5 || !tagInput.trim()}
                     className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
                   >
-                    Add
+                    {t('projectEdit.addTag')}
                   </button>
                 </div>
                 <div className="flex flex-wrap gap-2">
@@ -411,7 +413,7 @@ export default function EditProjectPage() {
 
               {/* Images */}
               <div className="border-t pt-8">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Project Images</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('projectEdit.projectImages')}</h3>
                 <ProjectImageUpload
                   projectId={params.id}
                   currentImages={projectImages}
@@ -421,10 +423,10 @@ export default function EditProjectPage() {
 
               {/* External Links */}
               <div className="border-t pt-8">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">External Links</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('projectEdit.externalLinks')}</h3>
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm text-gray-700 mb-1">Google Drive Link</label>
+                    <label className="block text-sm text-gray-700 mb-1">{t('projectEdit.googleDrive')}</label>
                     <input
                       type="url"
                       value={formData.links.googleDrive}
@@ -434,7 +436,7 @@ export default function EditProjectPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm text-gray-700 mb-1">Website</label>
+                    <label className="block text-sm text-gray-700 mb-1">{t('projectEdit.website')}</label>
                     <input
                       type="url"
                       value={formData.links.website}
@@ -444,7 +446,7 @@ export default function EditProjectPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm text-gray-700 mb-1">Trello/Miro Board</label>
+                    <label className="block text-sm text-gray-700 mb-1">{t('projectEdit.trelloMiro')}</label>
                     <input
                       type="url"
                       value={formData.links.trello}
@@ -454,7 +456,7 @@ export default function EditProjectPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm text-gray-700 mb-1">More Information</label>
+                    <label className="block text-sm text-gray-700 mb-1">{t('projectEdit.moreInfo')}</label>
                     <input
                       type="url"
                       value={formData.links.moreInfo}
@@ -468,10 +470,10 @@ export default function EditProjectPage() {
 
               {/* Contact Person */}
               <div className="border-t pt-8">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Contact Person</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('projectEdit.contactPerson')}</h3>
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm text-gray-700 mb-1">Name *</label>
+                    <label className="block text-sm text-gray-700 mb-1">{t('projectEdit.contactName')} *</label>
                     <input
                       type="text"
                       required
@@ -481,7 +483,7 @@ export default function EditProjectPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm text-gray-700 mb-1">Email *</label>
+                    <label className="block text-sm text-gray-700 mb-1">{t('projectEdit.contactEmail')} *</label>
                     <input
                       type="email"
                       required
@@ -500,13 +502,13 @@ export default function EditProjectPage() {
                   disabled={saving}
                   className="flex-1 bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 transition font-medium disabled:opacity-50"
                 >
-                  {saving ? 'Saving...' : 'Save All Changes'}
+                  {saving ? t('projectEdit.saving') : t('projectEdit.saveAllChanges')}
                 </button>
                 <Link
                   href="/my-projects"
                   className="flex-1 bg-gray-200 text-gray-700 py-3 px-4 rounded-md hover:bg-gray-300 transition font-medium text-center"
                 >
-                  Cancel
+                  {t('projectEdit.cancel')}
                 </Link>
               </div>
             </form>
