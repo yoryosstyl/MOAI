@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { collection, getDocs, doc, getDoc, query, orderBy } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import Link from 'next/link';
 import { useTranslation } from '@/contexts/LanguageContext';
+import Link from 'next/link';
 
 export default function ProjectsPage() {
   const router = useRouter();
@@ -85,7 +85,7 @@ export default function ProjectsPage() {
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">{t('projects.title')}</h1>
           <p className="text-lg text-gray-600">
-            {t('landing.features.projects.description')}
+            {t('projects.subtitle')}
           </p>
         </div>
 
@@ -94,21 +94,21 @@ export default function ProjectsPage() {
           <div className="grid md:grid-cols-4 gap-4">
             <input
               type="text"
-              placeholder={t('projects.search')}
+              placeholder={t('projects.searchByTitle')}
               value={searchTitle}
               onChange={(e) => setSearchTitle(e.target.value)}
               className="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <input
               type="text"
-              placeholder={t('projects.search')}
+              placeholder={t('projects.searchByTags')}
               value={searchTags}
               onChange={(e) => setSearchTags(e.target.value)}
               className="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <input
               type="text"
-              placeholder={t('projects.search')}
+              placeholder={t('projects.searchByLocation')}
               value={searchLocation}
               onChange={(e) => setSearchLocation(e.target.value)}
               className="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -121,7 +121,7 @@ export default function ProjectsPage() {
               }}
               className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition"
             >
-              {t('common.filter')}
+              {t('projects.clearFilters')}
             </button>
           </div>
         </div>
@@ -130,7 +130,7 @@ export default function ProjectsPage() {
         {loading && (
           <div className="text-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-            <p className="mt-4 text-gray-600">{t('common.loading')}</p>
+            <p className="mt-4 text-gray-600">{t('projects.loading')}</p>
           </div>
         )}
 
@@ -138,7 +138,7 @@ export default function ProjectsPage() {
         {!loading && filteredProjects.length === 0 && (
           <div className="text-center py-12">
             <p className="text-gray-600 text-lg">
-              {t('projects.noResults')}
+              {projects.length === 0 ? t('projects.noProjectsYet') : t('projects.noMatchingProjects')}
             </p>
           </div>
         )}
@@ -165,7 +165,7 @@ export default function ProjectsPage() {
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
-                        <span className="text-gray-400">No Image</span>
+                        <span className="text-gray-400">{t('projects.noImage')}</span>
                       </div>
                     )}
 
@@ -194,10 +194,10 @@ export default function ProjectsPage() {
                   {/* Project Info */}
                   <div className="p-6">
                     <h3 className="text-xl font-semibold text-gray-900 mb-2 line-clamp-1">
-                      {project.name || 'Untitled Project'}
+                      {project.name || t('projects.untitledProject')}
                     </h3>
                     <p className="text-gray-600 mb-4 line-clamp-2">
-                      {project.description || 'No description available'}
+                      {project.description || t('projects.noDescription')}
                     </p>
 
                     {/* Tags */}
@@ -213,7 +213,7 @@ export default function ProjectsPage() {
                         ))}
                         {project.tags.length > 3 && (
                           <span className="text-xs text-gray-500">
-                            +{project.tags.length - 3} more
+                            +{project.tags.length - 3} {t('projects.more')}
                           </span>
                         )}
                       </div>
@@ -221,11 +221,11 @@ export default function ProjectsPage() {
 
                     <div className="flex items-center justify-between">
                       <span className="text-blue-600 hover:text-blue-800 font-medium">
-                        View Details →
+                        {t('projects.viewDetailsArrow')}
                       </span>
                       {owner && (
                         <span className="text-sm text-gray-500">
-                          by {owner.displayName}
+                          {t('projects.by')} {owner.displayName}
                         </span>
                       )}
                     </div>

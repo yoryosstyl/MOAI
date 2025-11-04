@@ -94,9 +94,9 @@ export default function NewsPage() {
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-4xl font-bold text-gray-900 mb-2">{t("news.title")}</h1>
+              <h1 className="text-4xl font-bold text-gray-900 mb-2">{t('news.title')}</h1>
               <p className="text-lg text-gray-600">
-                {t("news.subtitle")}
+                {t('news.subtitle')}
               </p>
             </div>
             <div className="flex gap-3">
@@ -113,7 +113,7 @@ export default function NewsPage() {
                       d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                     />
                   </svg>
-                  {t("news.adminReview")}
+                  {t('news.adminReview')}
                 </Link>
               )}
               {user && (
@@ -129,7 +129,7 @@ export default function NewsPage() {
                       d="M12 4v16m8-8H4"
                     />
                   </svg>
-                  {isAdmin ? t("news.add") : t("news.submit")}
+                  {isAdmin ? t('news.add') : t('news.submit')}
                 </Link>
               )}
             </div>
@@ -154,9 +154,9 @@ export default function NewsPage() {
                 />
               </svg>
               <div>
-                <h3 className="text-sm font-semibold text-green-900 mb-1">{t("news.submittedTitle")}</h3>
+                <h3 className="text-sm font-semibold text-green-900 mb-1">{t('news.successTitle')}</h3>
                 <p className="text-sm text-green-800">
-                  {t("news.submittedMessage")}
+                  {t('news.successMessage')}
                 </p>
               </div>
               <button
@@ -177,7 +177,7 @@ export default function NewsPage() {
             <div className="flex-1">
               <input
                 type="text"
-                placeholder={t("news.search")}
+                placeholder={t('news.search')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -188,7 +188,7 @@ export default function NewsPage() {
           {/* Results count */}
           {searchQuery && (
             <div className="mt-4 text-sm text-gray-600">
-              {t("news.showing").replace("{count}", filteredNews.length).replace("{total}", news.length)}
+              {t('news.showing')} {filteredNews.length} {t('news.of')} {news.length} {t('news.newsItems')}
             </div>
           )}
         </div>
@@ -196,7 +196,7 @@ export default function NewsPage() {
         {/* Loading */}
         {loading && (
           <div className="text-center py-12">
-            <p className="text-gray-600">{t("news.loadingNews")}</p>
+            <p className="text-gray-600">{t('news.loading')}</p>
           </div>
         )}
 
@@ -216,11 +216,11 @@ export default function NewsPage() {
                 d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"
               />
             </svg>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">{t("news.noResults")}</h3>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">{t('news.noNewsFound')}</h3>
             <p className="text-gray-600 mb-6">
               {news.length === 0
-                ? t("news.noNewsYet")
-                : t("news.adjustSearch")}
+                ? t('news.noNewsYet')
+                : t('news.adjustSearch')}
             </p>
           </div>
         )}

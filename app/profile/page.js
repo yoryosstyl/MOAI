@@ -76,7 +76,7 @@ export default function ProfilePage() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">{t('profile.loadingProfile')}</p>
+          <p className="mt-4 text-gray-600">{t('profile.loading')}</p>
         </div>
       </div>
     );
@@ -121,7 +121,7 @@ export default function ProfilePage() {
               {/* Profile Info */}
               <div className="flex-1 text-center md:text-left">
                 <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                  {displayProfile?.displayName || 'Artist'}
+                  {displayProfile?.displayName || t('profile.artist')}
                 </h1>
                 <p className="text-gray-600 mb-4 max-w-2xl">
                   {displayProfile?.bio || (isOwnProfile ? t('profile.noBioOwn') : t('profile.noBioOther'))}
@@ -131,7 +131,7 @@ export default function ProfilePage() {
                     href="/profile/edit"
                     className="inline-block bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition font-medium"
                   >
-                    {t('profile.edit')}
+                    {t('profile.editProfile')}
                   </Link>
                 )}
               </div>
@@ -143,12 +143,12 @@ export default function ProfilePage() {
             (userProfile?.competencies && userProfile.competencies.length > 0)) && (
             <div className="bg-white rounded-lg shadow-md p-8 mb-8">
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-semibold text-gray-900">{t("profile.interestsSkills")}</h2>
+                <h2 className="text-2xl font-semibold text-gray-900">{t('profile.interestsAndSkills')}</h2>
                 <Link
                   href="/profile/edit"
                   className="text-blue-600 hover:text-blue-800 text-sm font-medium"
                 >
-                  Edit
+                  {t('profile.edit')}
                 </Link>
               </div>
 
@@ -156,7 +156,7 @@ export default function ProfilePage() {
                 {/* Interests */}
                 {userProfile.interests && userProfile.interests.length > 0 && (
                   <div>
-                    <label className="text-sm font-medium text-gray-500 mb-2 block">Interests</label>
+                    <label className="text-sm font-medium text-gray-500 mb-2 block">{t('profile.interests')}</label>
                     <div className="flex flex-wrap gap-2">
                       {userProfile.interests.map((interest, index) => (
                         <span
@@ -173,7 +173,7 @@ export default function ProfilePage() {
                 {/* Competencies */}
                 {userProfile.competencies && userProfile.competencies.length > 0 && (
                   <div>
-                    <label className="text-sm font-medium text-gray-500 mb-2 block">Competencies / Skills</label>
+                    <label className="text-sm font-medium text-gray-500 mb-2 block">{t('profile.competencies')}</label>
                     <div className="flex flex-wrap gap-2">
                       {userProfile.competencies.map((competency, index) => (
                         <span
@@ -193,13 +193,13 @@ export default function ProfilePage() {
           {/* Contact Information */}
           <div className="bg-white rounded-lg shadow-md p-8 mb-8">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-semibold text-gray-900">{t("profile.contactInfo")}</h2>
+              <h2 className="text-2xl font-semibold text-gray-900">{t('profile.contactInformation')}</h2>
               {isOwnProfile && (
                 <Link
                   href="/profile/edit"
                   className="text-blue-600 hover:text-blue-800 text-sm font-medium"
                 >
-                  Edit
+                  {t('profile.edit')}
                 </Link>
               )}
             </div>
@@ -212,8 +212,8 @@ export default function ProfilePage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
                   <div className="flex-1">
-                    <label className="text-sm font-medium text-gray-500">Email</label>
-                    <p className="text-gray-900">{displayProfile?.email || 'Not provided'}</p>
+                    <label className="text-sm font-medium text-gray-500">{t('profile.email')}</label>
+                    <p className="text-gray-900">{displayProfile?.email || t('profile.notProvided')}</p>
                   </div>
                 </div>
               )}
@@ -225,7 +225,7 @@ export default function ProfilePage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                   </svg>
                   <div className="flex-1">
-                    <label className="text-sm font-medium text-gray-500">Telephone</label>
+                    <label className="text-sm font-medium text-gray-500">{t('profile.telephone')}</label>
                     <p className="text-gray-900">
                       {formatPhoneNumber(
                         displayProfile.telephone.countryCode,
@@ -244,7 +244,7 @@ export default function ProfilePage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
                   <div className="flex-1">
-                    <label className="text-sm font-medium text-gray-500">Location</label>
+                    <label className="text-sm font-medium text-gray-500">{t('profile.location')}</label>
                     <div className="flex items-center gap-2">
                       <p className="text-gray-900">{displayProfile.location.address}</p>
                       {displayProfile.location.isVerified && (
@@ -260,7 +260,7 @@ export default function ProfilePage() {
               {/* Show message if viewing someone else's profile and no contact info is public */}
               {!isOwnProfile && !showEmail && !showPhone && !showLocation && (
                 <p className="text-gray-500 italic text-center py-4">
-                  This user has not made their contact information public
+                  {t('profile.noContactInfo')}
                 </p>
               )}
             </div>
@@ -270,13 +270,13 @@ export default function ProfilePage() {
           {hasSocialMedia && (
             <div className="bg-white rounded-lg shadow-md p-8 mb-8">
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-semibold text-gray-900">{t("profile.socialMedia")}</h2>
+                <h2 className="text-2xl font-semibold text-gray-900">{t('profile.socialMedia')}</h2>
                 {isOwnProfile && (
                   <Link
                     href="/profile/edit"
                     className="text-blue-600 hover:text-blue-800 text-sm font-medium"
                   >
-                    Edit
+                    {t('profile.edit')}
                   </Link>
                 )}
               </div>
@@ -346,43 +346,43 @@ export default function ProfilePage() {
           {isOwnProfile && (
             <div className="bg-white rounded-lg shadow-md p-8">
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-semibold text-gray-900">{t("profile.privacySettings")}</h2>
+                <h2 className="text-2xl font-semibold text-gray-900">{t('profile.privacySettings')}</h2>
                 <Link
                   href="/profile/edit"
                   className="text-blue-600 hover:text-blue-800 text-sm font-medium"
                 >
-                  Edit Privacy
+                  {t('profile.editPrivacy')}
                 </Link>
               </div>
               <div className="space-y-3">
                 <div className="flex items-center justify-between p-3 bg-gray-50 rounded">
-                  <span className="text-gray-700">Email visibility</span>
+                  <span className="text-gray-700">{t('profile.emailVisibility')}</span>
                   <span className={`px-3 py-1 rounded-full text-sm font-medium ${
                     displayProfile?.privacy?.emailPublic
                       ? 'bg-green-100 text-green-800'
                       : 'bg-gray-200 text-gray-700'
                   }`}>
-                    {displayProfile?.privacy?.emailPublic ? 'Public' : 'Private'}
+                    {displayProfile?.privacy?.emailPublic ? t('profile.public') : t('profile.private')}
                   </span>
                 </div>
                 <div className="flex items-center justify-between p-3 bg-gray-50 rounded">
-                  <span className="text-gray-700">Telephone visibility</span>
+                  <span className="text-gray-700">{t('profile.telephoneVisibility')}</span>
                   <span className={`px-3 py-1 rounded-full text-sm font-medium ${
                     displayProfile?.privacy?.telephonePublic
                       ? 'bg-green-100 text-green-800'
                       : 'bg-gray-200 text-gray-700'
                   }`}>
-                    {displayProfile?.privacy?.telephonePublic ? 'Public' : 'Private'}
+                    {displayProfile?.privacy?.telephonePublic ? t('profile.public') : t('profile.private')}
                   </span>
                 </div>
                 <div className="flex items-center justify-between p-3 bg-gray-50 rounded">
-                  <span className="text-gray-700">Location visibility</span>
+                  <span className="text-gray-700">{t('profile.locationVisibility')}</span>
                   <span className={`px-3 py-1 rounded-full text-sm font-medium ${
                     displayProfile?.privacy?.locationPublic
                       ? 'bg-green-100 text-green-800'
                       : 'bg-gray-200 text-gray-700'
                   }`}>
-                    {displayProfile?.privacy?.locationPublic ? 'Public' : 'Private'}
+                    {displayProfile?.privacy?.locationPublic ? t('profile.public') : t('profile.private')}
                   </span>
                 </div>
               </div>

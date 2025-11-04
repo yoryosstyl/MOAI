@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import Link from 'next/link';
 import { useTranslation } from '@/contexts/LanguageContext';
+import Link from 'next/link';
 
 export default function ProjectDetailPage() {
   const params = useParams();
@@ -42,7 +42,7 @@ export default function ProjectDetailPage() {
         setLoading(false);
       } catch (err) {
         console.error('Error fetching project:', err);
-        setError(t('projectDetail.failedToLoad'));
+        setError(t('projectDetail.failedToLoadProject'));
         setLoading(false);
       }
     };

@@ -44,7 +44,7 @@ export default function NewsDetailPage() {
       router.push('/news');
     } catch (error) {
       console.error('Error deleting news:', error);
-      alert(t('newsDetail.failedToDelete'));
+      alert(t('newsDetail.deleteFailed'));
     }
   };
 
@@ -61,7 +61,7 @@ export default function NewsDetailPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 py-12 flex items-center justify-center">
-        <div className="text-gray-600">{t('newsDetail.loadingNews')}</div>
+        <div className="text-gray-600">{t('newsDetail.loading')}</div>
       </div>
     );
   }
@@ -70,7 +70,7 @@ export default function NewsDetailPage() {
     return (
       <div className="min-h-screen bg-gray-50 py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">{t('newsDetail.newsNotFound')}</h1>
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">{t('newsDetail.notFound')}</h1>
           <Link href="/news" className="text-blue-600 hover:text-blue-800">
             ← {t('newsDetail.backToNews')}
           </Link>

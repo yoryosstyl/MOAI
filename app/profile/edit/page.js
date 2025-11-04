@@ -182,7 +182,7 @@ export default function EditProfilePage() {
       }, 1500);
     } catch (err) {
       console.error('Error updating profile:', err);
-      setError(t('profileEdit.errorGeneric'));
+      setError(t('profileEdit.error'));
       setLoading(false);
     }
   };
@@ -212,7 +212,7 @@ export default function EditProfilePage() {
             {/* Success Message */}
             {success && (
               <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-md">
-                <p className="text-green-600">{t('profileEdit.successMessage')}</p>
+                <p className="text-green-600">{t('profileEdit.success')}</p>
               </div>
             )}
 
@@ -227,7 +227,7 @@ export default function EditProfilePage() {
             <form onSubmit={handleSubmit} className="space-y-8">
               {/* Avatar Upload */}
               <div className="border-b pb-8">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('profileEdit.profilePicture')}</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('profileEdit.profilePhoto')}</h3>
                 <AvatarUpload
                   currentAvatarUrl={formData.avatarUrl}
                   userId={user.uid}
@@ -239,7 +239,7 @@ export default function EditProfilePage() {
               {/* Display Name */}
               <div>
                 <label htmlFor="displayName" className="block text-sm font-medium text-gray-700 mb-2">
-                  {t('profileEdit.displayNameRequired')}
+                  {t('profileEdit.displayName')} *
                 </label>
                 <input
                   id="displayName"
@@ -294,7 +294,7 @@ export default function EditProfilePage() {
                       const value = e.target.value.replace(/\D/g, '');
                       handlePhoneChange('number', value);
                     }}
-                    placeholder={t('profileEdit.telephonePlaceholder')}
+                    placeholder="1234567890"
                     className="flex-1 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
@@ -323,7 +323,7 @@ export default function EditProfilePage() {
 
               {/* Social Media Links */}
               <div className="border-t pt-8">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('profileEdit.socialMedia')}</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('profileEdit.social')}</h3>
                 <div className="space-y-4">
                   <div>
                     <label htmlFor="linkedin" className="block text-sm font-medium text-gray-700 mb-2">
@@ -369,13 +369,13 @@ export default function EditProfilePage() {
 
               {/* Privacy Settings */}
               <div className="border-t pt-8">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('profileEdit.privacySettings')}</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('profileEdit.privacy')}</h3>
                 <p className="text-sm text-gray-600 mb-4">
-                  {t('profileEdit.privacyDescription')}
+                  {t('profileEdit.privacySubtitle')}
                 </p>
                 <div className="space-y-3">
                   <label className="flex items-center justify-between p-3 bg-gray-50 rounded">
-                    <span className="text-gray-700">{t('profileEdit.makeEmailPublic')}</span>
+                    <span className="text-gray-700">{t('profileEdit.emailPublic')}</span>
                     <input
                       type="checkbox"
                       checked={formData.privacy.emailPublic}
@@ -384,7 +384,7 @@ export default function EditProfilePage() {
                     />
                   </label>
                   <label className="flex items-center justify-between p-3 bg-gray-50 rounded">
-                    <span className="text-gray-700">{t('profileEdit.makeTelephonePublic')}</span>
+                    <span className="text-gray-700">{t('profileEdit.telephonePublic')}</span>
                     <input
                       type="checkbox"
                       checked={formData.privacy.telephonePublic}
@@ -393,7 +393,7 @@ export default function EditProfilePage() {
                     />
                   </label>
                   <label className="flex items-center justify-between p-3 bg-gray-50 rounded">
-                    <span className="text-gray-700">{t('profileEdit.makeLocationPublic')}</span>
+                    <span className="text-gray-700">{t('profileEdit.locationPublic')}</span>
                     <input
                       type="checkbox"
                       checked={formData.privacy.locationPublic}
@@ -406,9 +406,9 @@ export default function EditProfilePage() {
 
               {/* Security Settings */}
               <div className="border-t pt-8">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('profileEdit.securitySection')}</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('profileEdit.security')}</h3>
                 <p className="text-sm text-gray-600 mb-4">
-                  {t('profileEdit.securityDescription')}
+                  {t('profileEdit.securitySubtitle')}
                 </p>
                 <Link
                   href="/auth/change-password"

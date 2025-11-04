@@ -109,14 +109,14 @@ export default function ToolkitDetailPage() {
       router.push('/toolkits');
     } catch (error) {
       console.error('Error deleting toolkit:', error);
-      alert(t('toolkitDetail.failedToDelete'));
+      alert(t('toolkitDetail.deleteFailed'));
     }
   };
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 py-12 flex items-center justify-center">
-        <div className="text-gray-600">{t('toolkitDetail.loadingToolkit')}</div>
+        <div className="text-gray-600">{t('toolkitDetail.loading')}</div>
       </div>
     );
   }
@@ -125,7 +125,7 @@ export default function ToolkitDetailPage() {
     return (
       <div className="min-h-screen bg-gray-50 py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">{t('toolkitDetail.toolkitNotFound')}</h1>
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">{t('toolkitDetail.notFound')}</h1>
           <Link href="/toolkits" className="text-blue-600 hover:text-blue-800">
             ← {t('toolkitDetail.backToToolkits')}
           </Link>
