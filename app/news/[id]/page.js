@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
+import { useTranslation } from '@/contexts/LanguageContext';
 import { doc, getDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
@@ -11,6 +12,7 @@ export default function NewsDetailPage() {
   const params = useParams();
   const router = useRouter();
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [news, setNews] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -35,14 +37,14 @@ export default function NewsDetailPage() {
   }, [params.id]);
 
   const handleDelete = async () => {
-    if (!confirm('Are you sure you want to delete this news article?')) return;
+    if (!confirm(t('newsDetail.deleteConfirm'))) return;
 
     try {
       await deleteDoc(doc(db, 'news', params.id));
       router.push('/news');
     } catch (error) {
       console.error('Error deleting news:', error);
-      alert('Failed to delete news');
+      alert(t('newsDetail.deleteFailed'));
     }
   };
 
@@ -59,7 +61,7 @@ export default function NewsDetailPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 py-12 flex items-center justify-center">
-        <div className="text-gray-600">Loading news...</div>
+        <div className="text-gray-600">{t('newsDetail.loading')}</div>
       </div>
     );
   }
@@ -68,9 +70,9 @@ export default function NewsDetailPage() {
     return (
       <div className="min-h-screen bg-gray-50 py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">News Not Found</h1>
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">{t('newsDetail.notFound')}</h1>
           <Link href="/news" className="text-blue-600 hover:text-blue-800">
-            ← Back to News
+            ← {t('newsDetail.backToNews')}
           </Link>
         </div>
       </div>
@@ -98,7 +100,7 @@ export default function NewsDetailPage() {
               d="M15 19l-7-7 7-7"
             />
           </svg>
-          Back to News
+          {t('newsDetail.backToNews')}
         </Link>
 
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
@@ -158,13 +160,13 @@ export default function NewsDetailPage() {
                       href={`/news/${news.id}/edit`}
                       className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition text-sm"
                     >
-                      Edit
+                      {t('newsDetail.edit')}
                     </Link>
                     <button
                       onClick={handleDelete}
                       className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition text-sm"
                     >
-                      Delete
+                      {t('newsDetail.delete')}
                     </button>
                   </div>
                 )}
@@ -178,7 +180,7 @@ export default function NewsDetailPage() {
             {news.platforms && news.platforms.length > 0 && (
               <div className="mb-8 pb-8 border-b">
                 <h2 className="text-sm font-semibold text-gray-700 uppercase mb-3">
-                  Relevant Platforms
+                  {t('newsDetail.relevantPlatforms')}
                 </h2>
                 <div className="flex flex-wrap gap-2">
                   {news.platforms.map((platform, index) => (
@@ -203,7 +205,7 @@ export default function NewsDetailPage() {
             {/* External Link */}
             {news.externalLink && (
               <div className="pt-8 border-t">
-                <h2 className="text-lg font-semibold text-gray-900 mb-3">Read More</h2>
+                <h2 className="text-lg font-semibold text-gray-900 mb-3">{t('newsDetail.readMore')}</h2>
                 <a
                   href={news.externalLink}
                   target="_blank"
@@ -227,14 +229,14 @@ export default function NewsDetailPage() {
             <div className="pt-8 border-t mt-8">
               <div className="text-sm text-gray-500">
                 <p>
-                  Submitted by {news.submitterName || 'Unknown'}
+                  {t('newsDetail.submittedBy')} {news.submitterName || t('newsDetail.unknown')}
                   {news.createdAt && (
-                    <span> on {formatDate(news.createdAt)}</span>
+                    <span> {t('newsDetail.on')} {formatDate(news.createdAt)}</span>
                   )}
                 </p>
                 {news.updatedAt && news.updatedAt !== news.createdAt && (
                   <p className="mt-1">
-                    Last updated {formatDate(news.updatedAt)}
+                    {t('newsDetail.lastUpdated')} {formatDate(news.updatedAt)}
                   </p>
                 )}
               </div>
