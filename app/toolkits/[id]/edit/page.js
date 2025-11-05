@@ -22,7 +22,7 @@ export default function EditToolkitPage() {
   const isReviewMode = searchParams.get('review') === 'true';
 
   // Check if user is admin
-  const isAdmin = user?.email === 'yoryos.styl@gmail.com' || user?.email === 'stavros.roussos@gmail.com';
+  const isAdmin = user?.email === 'gstylianopoulos@gmail.com' || user?.email === 'factanonverba2002@gmail.com';
 
   const [formData, setFormData] = useState({
     name: '',
@@ -245,8 +245,8 @@ export default function EditToolkitPage() {
     );
   }
 
-  // Redirect if not admin
-  if (!isAdmin) {
+  // Redirect if not admin and not the owner
+  if (!isAdmin && toolkitData && toolkitData.submittedBy !== user?.uid) {
     return (
       <ProtectedRoute>
         <div className="min-h-screen bg-gray-50 py-12">
