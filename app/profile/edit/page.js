@@ -9,7 +9,8 @@ import ProtectedRoute from '@/components/ProtectedRoute';
 import AvatarUpload from '@/components/AvatarUpload';
 import LocationAutocomplete from '@/components/LocationAutocomplete';
 import { doc, updateDoc, serverTimestamp } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { updateProfile } from 'firebase/auth';
+import { db, auth } from '@/lib/firebase';
 import { countryCodes, validatePhoneNumber } from '@/utils/phoneUtils';
 
 export default function EditProfilePage() {
@@ -171,6 +172,12 @@ export default function EditProfilePage() {
         avatarUrl: formData.avatarUrl,
         privacy: formData.privacy,
         updatedAt: serverTimestamp(),
+      });
+
+      // Update Firebase Auth user profile (so navbar updates immediately)
+      await updateProfile(auth.currentUser, {
+        displayName: formData.displayName,
+        photoURL: formData.avatarUrl,
       });
 
       // Refresh profile data in context
