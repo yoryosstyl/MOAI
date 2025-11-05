@@ -8,7 +8,7 @@ import { useTranslation } from '@/contexts/LanguageContext';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import AvatarUpload from '@/components/AvatarUpload';
 import LocationAutocomplete from '@/components/LocationAutocomplete';
-import { doc, updateDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, updateDoc, serverTimestamp, collection, query, where, getDocs, writeBatch } from 'firebase/firestore';
 import { updateProfile } from 'firebase/auth';
 import { db, auth } from '@/lib/firebase';
 import { countryCodes, validatePhoneNumber } from '@/utils/phoneUtils';
@@ -179,6 +179,38 @@ export default function EditProfilePage() {
         displayName: formData.displayName,
         photoURL: formData.avatarUrl,
       });
+
+      // Update user's name in all their projects, news, and toolkits
+      const batch = writeBatch(db);
+
+      // Update projects (ownerName field)
+      const projectsQuery = query(collection(db, 'projects'), where('ownerId', '==', user.uid));
+      const projectsSnapshot = await getDocs(projectsQuery);
+      projectsSnapshot.forEach((docSnapshot) => {
+        batch.update(docSnapshot.ref, { ownerName: formData.displayName });
+      });
+
+      // Update news (submitterName field)
+      const newsQuery = query(collection(db, 'news'), where('submittedBy', '==', user.uid));
+      const newsSnapshot = await getDocs(newsQuery);
+      newsSnapshot.forEach((docSnapshot) => {
+        batch.update(docSnapshot.ref, { submitterName: formData.displayName });
+      });
+
+      // Update toolkits (submitterName and author fields)
+      const toolkitsQuery = query(collection(db, 'toolkits'), where('submittedBy', '==', user.uid));
+      const toolkitsSnapshot = await getDocs(toolkitsQuery);
+      toolkitsSnapshot.forEach((docSnapshot) => {
+        const updateData = { submitterName: formData.displayName };
+        // Only update author if it's not 'MOAI' (admin submissions keep 'MOAI' as author)
+        if (docSnapshot.data().author !== 'MOAI') {
+          updateData.author = formData.displayName;
+        }
+        batch.update(docSnapshot.ref, updateData);
+      });
+
+      // Commit all updates in a single batch
+      await batch.commit();
 
       // Refresh profile data in context
       await refreshUserProfile();
