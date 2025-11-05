@@ -68,6 +68,11 @@ export default function EditToolkitPage() {
         const toolkitDoc = await getDoc(doc(db, 'toolkits', params.id));
         if (toolkitDoc.exists()) {
           const data = toolkitDoc.data();
+          console.log('Loaded toolkit data:', data);
+          console.log('Platforms:', data.platforms);
+          console.log('Current user UID:', user?.uid);
+          console.log('Submitted by:', data.submittedBy);
+          console.log('Is Admin:', user?.email === 'gstylianopoulos@gmail.com' || user?.email === 'factanonverba2002@gmail.com');
           setToolkitData(data); // Store full data for notifications
           setFormData({
             name: data.name || '',
@@ -94,7 +99,7 @@ export default function EditToolkitPage() {
     };
 
     fetchToolkit();
-  }, [params.id]);
+  }, [params.id, user]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
