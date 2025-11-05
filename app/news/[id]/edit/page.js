@@ -42,6 +42,8 @@ export default function EditNewsPage() {
           console.log('News submittedBy:', newsData.submittedBy);
           console.log('Current user UID:', user?.uid);
           console.log('Current user email:', user?.email);
+          console.log('Full user object:', user);
+          console.log('User providerData:', user?.providerData);
           setNews(newsData);
           setFormData({
             title: newsData.title || '',
