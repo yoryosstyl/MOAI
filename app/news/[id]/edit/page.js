@@ -38,6 +38,10 @@ export default function EditNewsPage() {
 
         if (newsDoc.exists()) {
           const newsData = { id: newsDoc.id, ...newsDoc.data() };
+          console.log('Fetched news data:', newsData);
+          console.log('News submittedBy:', newsData.submittedBy);
+          console.log('Current user UID:', user?.uid);
+          console.log('Current user email:', user?.email);
           setNews(newsData);
           setFormData({
             title: newsData.title || '',
