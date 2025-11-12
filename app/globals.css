@@ -90,13 +90,56 @@ body > * {
   color: #6b7280 !important;
 }
 
-/* Dark mode borders */
+/* Dark mode borders - lighter for better visibility */
 .dark .border-gray-200 {
-  border-color: #374151 !important;
+  border-color: #6b7280 !important;
 }
 
 .dark .border-gray-300 {
+  border-color: #9ca3af !important;
+}
+
+.dark .border-gray-100 {
   border-color: #4b5563 !important;
+}
+
+.dark .border {
+  border-color: #6b7280 !important;
+}
+
+/* Dark mode shadows - add subtle glow effect for cards */
+.dark .shadow-md {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(156, 163, 175, 0.1) !important;
+}
+
+.dark .shadow-lg {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(156, 163, 175, 0.1) !important;
+}
+
+.dark .shadow {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(156, 163, 175, 0.1) !important;
+}
+
+/* Dark mode rounded cards and containers */
+.dark .rounded-lg,
+.dark .rounded-md {
+  border: 1px solid #6b7280;
+}
+
+.dark .border-t {
+  border-top-color: #6b7280 !important;
+}
+
+.dark .border-b {
+  border-bottom-color: #6b7280 !important;
+}
+
+.dark .border-l {
+  border-left-color: #6b7280 !important;
+}
+
+.dark .border-r {
+  border-right-color: #6b7280 !important;
 }
 
 /* Dark mode backgrounds */
