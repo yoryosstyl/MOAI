@@ -7,11 +7,21 @@
   --background-rgb: 255, 255, 255;
 }
 
+.dark {
+  --foreground-rgb: 255, 255, 255;
+  --background-rgb: 17, 24, 39;
+}
+
 body {
   color: rgb(var(--foreground-rgb));
   background: #f9fafb;
   position: relative;
   min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dark body {
+  background: #111827;
 }
 
 /* Subtle background image with transparency */
@@ -32,6 +42,10 @@ body::before {
   pointer-events: none;
 }
 
+.dark body::before {
+  opacity: 0.03;
+}
+
 /* Make sure all page content is above the background */
 body > * {
   position: relative;
@@ -43,8 +57,101 @@ body > * {
   background-color: rgba(249, 250, 251, 0.85) !important;
 }
 
+.dark .bg-gray-50 {
+  background-color: rgba(31, 41, 55, 0.85) !important;
+}
+
 .bg-white {
   background-color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.dark .bg-white {
+  background-color: rgba(31, 41, 55, 0.85) !important;
+}
+
+/* Dark mode text colors */
+.dark .text-gray-900 {
+  color: #f9fafb !important;
+}
+
+.dark .text-gray-800 {
+  color: #e5e7eb !important;
+}
+
+.dark .text-gray-700 {
+  color: #d1d5db !important;
+}
+
+.dark .text-gray-600 {
+  color: #9ca3af !important;
+}
+
+.dark .text-gray-500 {
+  color: #6b7280 !important;
+}
+
+/* Dark mode borders */
+.dark .border-gray-200 {
+  border-color: #374151 !important;
+}
+
+.dark .border-gray-300 {
+  border-color: #4b5563 !important;
+}
+
+/* Dark mode backgrounds */
+.dark .bg-gray-100 {
+  background-color: #1f2937 !important;
+}
+
+.dark .bg-gray-200 {
+  background-color: #374151 !important;
+}
+
+.dark .bg-blue-50 {
+  background-color: rgba(30, 58, 138, 0.3) !important;
+}
+
+.dark .bg-green-50 {
+  background-color: rgba(21, 128, 61, 0.3) !important;
+}
+
+.dark .bg-red-50 {
+  background-color: rgba(153, 27, 27, 0.3) !important;
+}
+
+/* Dark mode hover states */
+.dark .hover\:bg-gray-50:hover {
+  background-color: #374151 !important;
+}
+
+.dark .hover\:bg-gray-100:hover {
+  background-color: #4b5563 !important;
+}
+
+.dark .hover\:bg-gray-300:hover {
+  background-color: #6b7280 !important;
+}
+
+/* Dark mode inputs and forms */
+.dark input,
+.dark textarea,
+.dark select {
+  background-color: #1f2937 !important;
+  border-color: #4b5563 !important;
+  color: #f9fafb !important;
+}
+
+.dark input:focus,
+.dark textarea:focus,
+.dark select:focus {
+  border-color: #3b82f6 !important;
+  background-color: #111827 !important;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #6b7280 !important;
 }
 
 @layer utilities {
