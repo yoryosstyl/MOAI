@@ -216,7 +216,7 @@ export default function ProfilePage() {
                   </svg>
                   <div className="flex-1">
                     <label className="text-sm font-medium text-gray-500">{t('profile.email')}</label>
-                    <p className="text-gray-900 mt-1">{displayProfile?.email || t('profile.notProvided')}</p>
+                    <p className="text-gray-900">{displayProfile?.email || t('profile.notProvided')}</p>
                   </div>
                 </div>
               )}
@@ -272,7 +272,7 @@ export default function ProfilePage() {
                       href={displayProfile.website}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-blue-600 hover:text-blue-800 hover:underline break-all"
+                      className="text-blue-600 hover:text-blue-800 hover:underline break-all mt-1 block"
                     >
                       {displayProfile.website}
                     </a>
