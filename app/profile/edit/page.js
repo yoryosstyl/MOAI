@@ -21,6 +21,7 @@ export default function EditProfilePage() {
   const [formData, setFormData] = useState({
     displayName: '',
     bio: '',
+    website: '',
     telephone: {
       countryCode: '+30',
       number: '',
@@ -39,6 +40,7 @@ export default function EditProfilePage() {
       emailPublic: false,
       telephonePublic: false,
       locationPublic: false,
+      websitePublic: false,
     },
   });
 
@@ -52,6 +54,7 @@ export default function EditProfilePage() {
       setFormData({
         displayName: userProfile.displayName || '',
         bio: userProfile.bio || '',
+        website: userProfile.website || '',
         telephone: {
           countryCode: userProfile.telephone?.countryCode || '+30',
           number: userProfile.telephone?.number || '',
@@ -70,6 +73,7 @@ export default function EditProfilePage() {
           emailPublic: userProfile.privacy?.emailPublic || false,
           telephonePublic: userProfile.privacy?.telephonePublic || false,
           locationPublic: userProfile.privacy?.locationPublic || false,
+          websitePublic: userProfile.privacy?.websitePublic || false,
         },
       });
     }
@@ -166,6 +170,7 @@ export default function EditProfilePage() {
       await updateDoc(userRef, {
         displayName: formData.displayName,
         bio: formData.bio,
+        website: formData.website,
         telephone: formData.telephone,
         location: formData.location,
         socialMedia: formData.socialMedia,
@@ -308,6 +313,22 @@ export default function EditProfilePage() {
                 />
               </div>
 
+              {/* Website */}
+              <div>
+                <label htmlFor="website" className="block text-sm font-medium text-gray-700 mb-2">
+                  {t('profileEdit.website')}
+                </label>
+                <input
+                  id="website"
+                  name="website"
+                  type="url"
+                  value={formData.website}
+                  onChange={handleChange}
+                  className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder={t('profileEdit.websitePlaceholder')}
+                />
+              </div>
+
               {/* Phone Number with Country Code */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -437,6 +458,15 @@ export default function EditProfilePage() {
                       type="checkbox"
                       checked={formData.privacy.locationPublic}
                       onChange={() => handlePrivacyChange('locationPublic')}
+                      className="h-5 w-5 text-blue-600 rounded focus:ring-blue-500"
+                    />
+                  </label>
+                  <label className="flex items-center justify-between p-3 bg-gray-50 rounded">
+                    <span className="text-gray-700">{t('profileEdit.websitePublic')}</span>
+                    <input
+                      type="checkbox"
+                      checked={formData.privacy.websitePublic}
+                      onChange={() => handlePrivacyChange('websitePublic')}
                       className="h-5 w-5 text-blue-600 rounded focus:ring-blue-500"
                     />
                   </label>

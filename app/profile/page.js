@@ -60,6 +60,7 @@ export default function ProfilePage() {
 
   const hasPhone = displayProfile?.telephone?.number;
   const hasLocation = displayProfile?.location?.address;
+  const hasWebsite = displayProfile?.website;
   const hasSocialMedia = displayProfile?.socialMedia?.linkedin ||
                          displayProfile?.socialMedia?.instagram ||
                          displayProfile?.socialMedia?.facebook;
@@ -70,6 +71,8 @@ export default function ProfilePage() {
   const showPhone = isOwnProfile || displayProfile?.privacy?.telephonePublic;
   // Show location only if it's own profile or if location is public
   const showLocation = isOwnProfile || displayProfile?.privacy?.locationPublic;
+  // Show website only if it's own profile or if website is public
+  const showWebsite = isOwnProfile || displayProfile?.privacy?.websitePublic;
 
   if (loading) {
     const loadingContent = (
@@ -257,8 +260,28 @@ export default function ProfilePage() {
                 </div>
               )}
 
+              {/* Website */}
+              {showWebsite && hasWebsite && (
+                <div className="flex items-start space-x-3">
+                  <svg className="w-5 h-5 text-gray-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                  </svg>
+                  <div className="flex-1">
+                    <label className="text-sm font-medium text-gray-500">{t('profile.website')}</label>
+                    <a
+                      href={displayProfile.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:text-blue-800 hover:underline break-all"
+                    >
+                      {displayProfile.website}
+                    </a>
+                  </div>
+                </div>
+              )}
+
               {/* Show message if viewing someone else's profile and no contact info is public */}
-              {!isOwnProfile && !showEmail && !showPhone && !showLocation && (
+              {!isOwnProfile && !showEmail && !showPhone && !showLocation && !showWebsite && (
                 <p className="text-gray-500 italic text-center py-4">
                   {t('profile.noContactInfo')}
                 </p>
