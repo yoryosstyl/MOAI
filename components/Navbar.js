@@ -28,7 +28,10 @@ export default function Navbar() {
           {/* Logo */}
           <div className="flex items-center space-x-3">
             <Link href="/" className="flex items-center space-x-3">
-              <span className="text-2xl font-bold text-blue-600">digital MOAI</span>
+              <span className="flex items-baseline space-x-1">
+                <span className="text-lg font-bold text-blue-600">digital</span>
+                <span className="text-2xl font-bold text-blue-600">MOAI</span>
+              </span>
               <span className="text-gray-400">|</span>
             </Link>
             <a
