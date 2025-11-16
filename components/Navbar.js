@@ -28,15 +28,22 @@ export default function Navbar() {
           {/* Logo */}
           <div className="flex items-center space-x-3">
             <Link href="/" className="flex items-center space-x-3">
-              <span className="text-2xl font-bold text-blue-600">MOAI</span>
+              <span className="text-2xl font-bold text-blue-600">digital MOAI</span>
               <span className="text-gray-400">|</span>
+            </Link>
+            <a
+              href="https://www.factanonverba.gr"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center"
+            >
               <img
                 src="/facta-non-verba-logo.png"
                 alt="Facta Non Verba"
-                className="h-10 w-auto"
+                className="h-10 w-auto cursor-pointer"
                 onError={(e) => { e.target.style.display = 'none'; }}
               />
-            </Link>
+            </a>
           </div>
 
           {/* Desktop Navigation */}
