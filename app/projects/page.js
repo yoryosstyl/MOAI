@@ -16,6 +16,7 @@ export default function ProjectsPage() {
   const [searchTitle, setSearchTitle] = useState('');
   const [searchTags, setSearchTags] = useState('');
   const [searchLocation, setSearchLocation] = useState('');
+  const [searchAuthor, setSearchAuthor] = useState('');
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -75,7 +76,10 @@ export default function ProjectsPage() {
     const matchesLocation = !searchLocation ||
       project.location?.toLowerCase().includes(searchLocation.toLowerCase());
 
-    return matchesTitle && matchesTags && matchesLocation;
+    const matchesAuthor = !searchAuthor ||
+      project.ownerName?.toLowerCase().includes(searchAuthor.toLowerCase());
+
+    return matchesTitle && matchesTags && matchesLocation && matchesAuthor;
   });
 
   return (
@@ -91,7 +95,7 @@ export default function ProjectsPage() {
 
         {/* Search and Filter */}
         <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-          <div className="grid md:grid-cols-4 gap-4">
+          <div className="grid md:grid-cols-5 gap-4">
             <input
               type="text"
               placeholder={t('projects.searchByTitle')}
@@ -113,11 +117,19 @@ export default function ProjectsPage() {
               onChange={(e) => setSearchLocation(e.target.value)}
               className="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+            <input
+              type="text"
+              placeholder={t('projects.searchByAuthor')}
+              value={searchAuthor}
+              onChange={(e) => setSearchAuthor(e.target.value)}
+              className="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
             <button
               onClick={() => {
                 setSearchTitle('');
                 setSearchTags('');
                 setSearchLocation('');
+                setSearchAuthor('');
               }}
               className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition"
             >

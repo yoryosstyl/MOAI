@@ -18,6 +18,7 @@ export default function CreateProjectPage() {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
+    category: 'performative',
     typeOfSharing: 'collaborative',
     shape: '',
     color: '#3B82F6',
@@ -323,6 +324,37 @@ export default function CreateProjectPage() {
                 <p className="text-xs text-gray-500 mt-1">
                   {t('projectCreate.wordsCount', { current: countWords(formData.description), max: 50 })}
                 </p>
+              </div>
+
+              {/* Category of Project */}
+              <div className="bg-gray-50 border border-gray-300 rounded-lg p-6">
+                <label className="block text-sm font-medium text-gray-700 mb-4">
+                  {t('projectCreate.categoryOfProject')} *
+                </label>
+                <div className="flex items-center justify-center gap-4">
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, category: 'educational' })}
+                    className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all ${
+                      formData.category === 'educational'
+                        ? 'bg-blue-600 text-white shadow-lg'
+                        : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-100'
+                    }`}
+                  >
+                    {t('projectCreate.educational')}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, category: 'performative' })}
+                    className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all ${
+                      formData.category === 'performative'
+                        ? 'bg-blue-600 text-white shadow-lg'
+                        : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-100'
+                    }`}
+                  >
+                    {t('projectCreate.performative')}
+                  </button>
+                </div>
               </div>
 
               {/* Project Type and Shape - Side by Side */}

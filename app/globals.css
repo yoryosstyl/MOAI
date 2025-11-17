@@ -43,7 +43,7 @@ body::before {
 }
 
 .dark body::before {
-  opacity: 0.08;
+  opacity: 0.15;
   filter: invert(1);
 }
 

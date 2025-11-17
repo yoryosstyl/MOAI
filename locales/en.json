@@ -2,7 +2,7 @@
   "nav": {
     "home": "Home",
     "projects": "Projects",
-    "toolkits": "Toolkits",
+    "toolkits": "AI Toolkits",
     "news": "News",
     "myProjects": "My Projects",
     "messages": "Messages",
@@ -20,7 +20,7 @@
   "landing": {
     "hero": {
       "title": "Connect, Collaborate, Create",
-      "subtitle": "The ultimate platform for artists to share projects, discover tools, and build creative communities",
+      "subtitle": "Digital MOAI (Μycelium Organism Artifiacial Intelligence) is a living platform for digital artistic creation and learning.\nIt brings together artists, educators, researchers, and citizens who wish to explore new forms of expression through the body, technology, and collective intelligence.\n\nBy creating an account, you will:\n\ngain access to workshops, webinars, and learning material,\n\nreceive updates on new digital performances and events,\n\nenter the MOAI Academy and its growing resources,\n\nfollow ongoing research and insights from the MOAI Lab.\n\nThe philosophy of MOAI is grounded in a mycelial approach: networks that grow organically, relationships strengthened through collaboration, and communities that shape new spaces for art, reflection, and shared creation.\n\nBy joining, you become part of this network.\nWelcome to MOAI.",
       "cta": "Get Started"
     },
     "features": {
@@ -101,6 +101,7 @@
     "searchByTitle": "Search by title...",
     "searchByTags": "Search by tags...",
     "searchByLocation": "Search by location...",
+    "searchByAuthor": "Search by author...",
     "clearFilters": "Clear",
     "filter": "Filter",
     "category": "Category",
@@ -212,6 +213,9 @@
     "visibilityPrivate": "Private - Only you can see this project",
     "maxWords": "max {count} words",
     "wordsCount": "{current}/{max} words",
+    "categoryOfProject": "Category of Project",
+    "educational": "Educational",
+    "performative": "Performative",
     "typeOfProject": "Type of Project",
     "projectShape": "Project Shape",
     "typeOfSharing": "Type of Sharing",
@@ -670,6 +674,9 @@
     "visibilityPrivate": "Private - Only you can see this project",
     "projectName": "Project Name",
     "description": "Description",
+    "categoryOfProject": "Category of Project",
+    "educational": "Educational",
+    "performative": "Performative",
     "typeOfProject": "Type of Project",
     "projectShape": "Project Shape",
     "typeOfSharing": "Type of Sharing",
