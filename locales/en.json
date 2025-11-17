@@ -95,7 +95,7 @@
   },
   "projects": {
     "title": "Projects",
-    "subtitle": "Browse and discover creative projects from artists around the world",
+    "subtitle": "Browse and discover creative projects and educational courses from art professionals around the world",
     "create": "Create Project",
     "search": "Search projects...",
     "searchByTitle": "Search by title...",
@@ -103,6 +103,9 @@
     "searchByLocation": "Search by location...",
     "searchByAuthor": "Search by author...",
     "clearFilters": "Clear",
+    "allProjects": "All Projects",
+    "educationalOnly": "Educational Only",
+    "performativeOnly": "Performative Only",
     "filter": "Filter",
     "category": "Category",
     "status": "Status",

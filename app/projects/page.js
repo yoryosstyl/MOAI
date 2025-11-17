@@ -17,6 +17,7 @@ export default function ProjectsPage() {
   const [searchTags, setSearchTags] = useState('');
   const [searchLocation, setSearchLocation] = useState('');
   const [searchAuthor, setSearchAuthor] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('all'); // 'all', 'educational', 'performative'
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -79,7 +80,11 @@ export default function ProjectsPage() {
     const matchesAuthor = !searchAuthor ||
       project.ownerName?.toLowerCase().includes(searchAuthor.toLowerCase());
 
-    return matchesTitle && matchesTags && matchesLocation && matchesAuthor;
+    const matchesCategory = categoryFilter === 'all' ||
+      (categoryFilter === 'educational' && project.category === 'educational') ||
+      (categoryFilter === 'performative' && project.category === 'performative');
+
+    return matchesTitle && matchesTags && matchesLocation && matchesAuthor && matchesCategory;
   });
 
   return (
@@ -94,7 +99,7 @@ export default function ProjectsPage() {
         </div>
 
         {/* Search and Filter */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+        <div className="bg-white rounded-lg shadow-md p-6 mb-4">
           <div className="grid md:grid-cols-5 gap-4">
             <input
               type="text"
@@ -130,10 +135,47 @@ export default function ProjectsPage() {
                 setSearchTags('');
                 setSearchLocation('');
                 setSearchAuthor('');
+                setCategoryFilter('all');
               }}
               className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition"
             >
               {t('projects.clearFilters')}
+            </button>
+          </div>
+        </div>
+
+        {/* Category Filter */}
+        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+          <div className="flex items-center justify-center gap-4">
+            <button
+              onClick={() => setCategoryFilter('all')}
+              className={`px-6 py-2 rounded-lg font-medium transition-all ${
+                categoryFilter === 'all'
+                  ? 'bg-blue-600 text-white shadow-lg'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              {t('projects.allProjects')}
+            </button>
+            <button
+              onClick={() => setCategoryFilter('educational')}
+              className={`px-6 py-2 rounded-lg font-medium transition-all ${
+                categoryFilter === 'educational'
+                  ? 'bg-green-600 text-white shadow-lg'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              {t('projects.educationalOnly')}
+            </button>
+            <button
+              onClick={() => setCategoryFilter('performative')}
+              className={`px-6 py-2 rounded-lg font-medium transition-all ${
+                categoryFilter === 'performative'
+                  ? 'bg-purple-600 text-white shadow-lg'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              {t('projects.performativeOnly')}
             </button>
           </div>
         </div>
