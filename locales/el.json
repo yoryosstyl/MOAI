@@ -117,6 +117,8 @@
     "more": "ακόμα",
     "viewDetailsArrow": "Δείτε Λεπτομέρειες →",
     "by": "από",
+    "educational": "Εκπαιδευτικό",
+    "performative": "Performative",
     "categories": {
       "music": "Μουσική",
       "film": "Κινηματογράφος",
@@ -160,6 +162,8 @@
     "loadingProject": "Φόρτωση έργου...",
     "projectNotFound": "Το έργο δεν βρέθηκε",
     "failedToLoadProject": "Αποτυχία φόρτωσης έργου",
+    "educational": "Εκπαιδευτικό",
+    "performative": "Performative",
     "typeOfSharing": "Τύπος Κοινοποίησης",
     "typeOfSharingUpper": "ΤΥΠΟΣ ΚΟΙΝΟΠΟΙΗΣΗΣ",
     "kindOfProject": "Είδος Έργου",

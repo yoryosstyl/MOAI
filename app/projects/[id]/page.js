@@ -117,6 +117,19 @@ export default function ProjectDetailPage() {
 
             <p className="text-lg text-gray-700 mb-6">{project.description}</p>
 
+            {/* Category Badge */}
+            {project.category && (
+              <div className="mb-6">
+                <span className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium ${
+                  project.category === 'educational'
+                    ? 'bg-green-100 text-green-800'
+                    : 'bg-purple-100 text-purple-800'
+                }`}>
+                  {project.category === 'educational' ? t('projectDetail.educational') : t('projectDetail.performative')}
+                </span>
+              </div>
+            )}
+
             {/* Tags */}
             {project.tags && project.tags.length > 0 && (
               <div className="flex flex-wrap gap-2 mb-6">

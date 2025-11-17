@@ -117,6 +117,8 @@
     "more": "more",
     "viewDetailsArrow": "View Details →",
     "by": "by",
+    "educational": "Educational",
+    "performative": "Performative",
     "categories": {
       "music": "Music",
       "film": "Film",
@@ -160,6 +162,8 @@
     "loadingProject": "Loading project...",
     "projectNotFound": "Project not found",
     "failedToLoadProject": "Failed to load project",
+    "educational": "Educational",
+    "performative": "Performative",
     "typeOfSharing": "Type of Sharing",
     "typeOfSharingUpper": "TYPE OF SHARING",
     "kindOfProject": "Kind of Project",
