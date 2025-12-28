@@ -20,7 +20,7 @@
   "landing": {
     "hero": {
       "title": "Connect, Collaborate, Create",
-      "subtitle": "Digital MOAI (Μycelium Organism Artifiacial Intelligence) is a living platform for digital artistic creation and learning.\nIt brings together artists, educators, researchers, and citizens who wish to explore new forms of expression through the body, technology, and collective intelligence.\n\nBy creating an account, you will:\n\ngain access to workshops, webinars, and learning material,\n\nreceive updates on new digital performances and events,\n\nenter the MOAI Academy and its growing resources,\n\nfollow ongoing research and insights from the MOAI Lab.\n\nThe philosophy of MOAI is grounded in a mycelial approach: networks that grow organically, relationships strengthened through collaboration, and communities that shape new spaces for art, reflection, and shared creation.\n\nBy joining, you become part of this network.\nWelcome to MOAI.",
+      "subtitle": "Digital MOAI (Μycelium Organism Artificial Intelligence) is a living platform for digital artistic creation and learning.\nIt brings together artists, educators, researchers, and citizens who wish to explore new forms of expression through the body, technology, and collective intelligence.\n\nBy creating an account, you will:\n\ngain access to workshops, webinars, and learning material,\n\nreceive updates on new digital performances and events,\n\nenter the MOAI Academy and its growing resources,\n\nfollow ongoing research and insights from the MOAI Lab.\n\nThe philosophy of MOAI is grounded in a mycelial approach: networks that grow organically, relationships strengthened through collaboration, and communities that shape new spaces for art, reflection, and shared creation.\n\nBy joining, you become part of this network.\nWelcome to MOAI.",
       "cta": "Get Started"
     },
     "features": {
@@ -39,6 +39,9 @@
         "description": "Connect with artists worldwide, share knowledge, and grow together",
         "button": "Log In"
       }
+    },
+    "euFunding": {
+      "text": "This project is co-funded by the European Union"
     }
   },
   "auth": {

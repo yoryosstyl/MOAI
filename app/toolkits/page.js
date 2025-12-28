@@ -419,6 +419,27 @@ export default function ToolkitsPage() {
             ))}
           </div>
         )}
+
+        {/* EU Funding Section */}
+        <div className="mt-16 pb-8">
+          <div className="bg-white rounded-lg shadow-sm p-6 flex items-center justify-center gap-6 flex-wrap">
+            {/* Black logo for light mode (visible on white background) */}
+            <img
+              src="/eu_black_logo.png"
+              alt="European Union Logo"
+              className="h-16 w-auto object-contain dark:hidden"
+            />
+            {/* White logo for dark mode (visible on dark background) */}
+            <img
+              src="/eu_white_logo.png"
+              alt="European Union Logo"
+              className="h-16 w-auto object-contain hidden dark:block"
+            />
+            <p className="text-gray-600 text-sm text-center max-w-md">
+              {t('landing.euFunding.text')}
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );
