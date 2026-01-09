@@ -420,19 +420,19 @@ export default function ToolkitsPage() {
           </div>
         )}
 
-        {/* EU Funding Section */}
+        {/* Support Section */}
         <div className="mt-16 pb-8">
           <div className="bg-white rounded-lg shadow-sm p-6 flex items-center justify-center gap-6 flex-wrap">
-            {/* Black logo for light mode (visible on white background) */}
+            {/* Light theme logo (visible on white background) */}
             <img
-              src="/eu_black_logo.png"
-              alt="European Union Logo"
+              src="/support_lightTheme.png"
+              alt="Ministry of Culture Support"
               className="h-16 w-auto object-contain dark:hidden"
             />
-            {/* White logo for dark mode (visible on dark background) */}
+            {/* Dark theme logo (visible on dark background) */}
             <img
-              src="/eu_white_logo.png"
-              alt="European Union Logo"
+              src="/support_darkTheme.png"
+              alt="Ministry of Culture Support"
               className="h-16 w-auto object-contain hidden dark:block"
             />
             <p className="text-gray-600 text-sm text-center max-w-md">
