@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTranslation } from '@/contexts/LanguageContext';
+import { useContentTranslation } from '@/hooks/useContentTranslation';
 import { doc, getDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
@@ -12,8 +13,10 @@ export default function NewsDetailPage() {
   const params = useParams();
   const router = useRouter();
   const { user } = useAuth();
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
+  const { translateContent, isTranslating } = useContentTranslation();
   const [news, setNews] = useState(null);
+  const [displayNews, setDisplayNews] = useState(null);
   const [loading, setLoading] = useState(true);
 
   // Check if user is admin
@@ -35,6 +38,27 @@ export default function NewsDetailPage() {
 
     fetchNews();
   }, [params.id]);
+
+  // Translate content when language is English
+  useEffect(() => {
+    const translateNewsContent = async () => {
+      if (!news) {
+        setDisplayNews(null);
+        return;
+      }
+
+      if (language === 'el') {
+        // Greek selected - show original content
+        setDisplayNews(news);
+      } else {
+        // English selected - translate Greek content to English
+        const translated = await translateContent(news, ['title', 'description', 'content']);
+        setDisplayNews(translated);
+      }
+    };
+
+    translateNewsContent();
+  }, [news, language, translateContent]);
 
   const handleDelete = async () => {
     if (!confirm(t('newsDetail.deleteConfirm'))) return;
@@ -58,15 +82,15 @@ export default function NewsDetailPage() {
     });
   };
 
-  if (loading) {
+  if (loading || isTranslating) {
     return (
       <div className="min-h-screen bg-gray-50 py-12 flex items-center justify-center">
-        <div className="text-gray-600">{t('newsDetail.loading')}</div>
+        <div className="text-gray-600">{isTranslating ? t('newsDetail.translating') || 'Translating...' : t('newsDetail.loading')}</div>
       </div>
     );
   }
 
-  if (!news) {
+  if (!news || !displayNews) {
     return (
       <div className="min-h-screen bg-gray-50 py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -172,8 +196,8 @@ export default function NewsDetailPage() {
                 )}
               </div>
 
-              <h1 className="text-4xl font-bold text-gray-900 mb-4">{news.title}</h1>
-              <p className="text-xl text-gray-600">{news.description}</p>
+              <h1 className="text-4xl font-bold text-gray-900 mb-4">{displayNews.title}</h1>
+              <p className="text-xl text-gray-600">{displayNews.description}</p>
             </div>
 
             {/* Platforms */}
@@ -198,7 +222,7 @@ export default function NewsDetailPage() {
             {/* Main Content */}
             <div className="prose prose-lg max-w-none mb-8">
               <div className="text-gray-700 leading-relaxed whitespace-pre-wrap">
-                {news.content}
+                {displayNews.content}
               </div>
             </div>
 

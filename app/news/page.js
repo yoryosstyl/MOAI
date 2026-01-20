@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTranslation } from '@/contexts/LanguageContext';
+import { useContentTranslation } from '@/hooks/useContentTranslation';
 import { collection, query, where, orderBy, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
@@ -12,9 +13,11 @@ export default function NewsPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { user } = useAuth();
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
+  const { translateItems, isTranslating } = useContentTranslation();
   const [news, setNews] = useState([]);
   const [filteredNews, setFilteredNews] = useState([]);
+  const [displayNews, setDisplayNews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [showSubmittedMessage, setShowSubmittedMessage] = useState(false);
@@ -76,6 +79,27 @@ export default function NewsPage() {
       setFilteredNews(news);
     }
   }, [searchQuery, news]);
+
+  // Translate content when language is English
+  useEffect(() => {
+    const translateContent = async () => {
+      if (filteredNews.length === 0) {
+        setDisplayNews([]);
+        return;
+      }
+
+      if (language === 'el') {
+        // Greek selected - show original content
+        setDisplayNews(filteredNews);
+      } else {
+        // English selected - translate Greek content to English
+        const translated = await translateItems(filteredNews, ['title', 'description', 'content']);
+        setDisplayNews(translated);
+      }
+    };
+
+    translateContent();
+  }, [filteredNews, language, translateItems]);
 
   const formatDate = (timestamp) => {
     if (!timestamp) return '';
@@ -194,14 +218,14 @@ export default function NewsPage() {
         </div>
 
         {/* Loading */}
-        {loading && (
+        {(loading || isTranslating) && (
           <div className="text-center py-12">
-            <p className="text-gray-600">{t('news.loading')}</p>
+            <p className="text-gray-600">{isTranslating ? t('news.translating') || 'Translating...' : t('news.loading')}</p>
           </div>
         )}
 
         {/* Empty State */}
-        {!loading && filteredNews.length === 0 && (
+        {!loading && !isTranslating && displayNews.length === 0 && (
           <div className="bg-white rounded-lg shadow-md p-12 text-center">
             <svg
               className="w-16 h-16 mx-auto mb-4 text-gray-400"
@@ -226,9 +250,9 @@ export default function NewsPage() {
         )}
 
         {/* News List */}
-        {!loading && filteredNews.length > 0 && (
+        {!loading && !isTranslating && displayNews.length > 0 && (
           <div className="space-y-6">
-            {filteredNews.map((item) => (
+            {displayNews.map((item) => (
               <Link
                 key={item.id}
                 href={`/news/${item.id}`}

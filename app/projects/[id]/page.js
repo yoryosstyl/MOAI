@@ -5,13 +5,16 @@ import { useParams, useRouter } from 'next/navigation';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { useTranslation } from '@/contexts/LanguageContext';
+import { useContentTranslation } from '@/hooks/useContentTranslation';
 import Link from 'next/link';
 
 export default function ProjectDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
+  const { translateContent, isTranslating } = useContentTranslation();
   const [project, setProject] = useState(null);
+  const [displayProject, setDisplayProject] = useState(null);
   const [owner, setOwner] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -52,6 +55,25 @@ export default function ProjectDetailPage() {
     }
   }, [params.id]);
 
+  // Translate content when language is English
+  useEffect(() => {
+    const translateProjectContent = async () => {
+      if (!project) {
+        setDisplayProject(null);
+        return;
+      }
+
+      if (language === 'el') {
+        setDisplayProject(project);
+      } else {
+        const translated = await translateContent(project, ['name', 'description']);
+        setDisplayProject(translated);
+      }
+    };
+
+    translateProjectContent();
+  }, [project, language, translateContent]);
+
   const handleProfileClick = () => {
     if (owner) {
       // Store current project ID in session storage for back navigation
@@ -60,18 +82,18 @@ export default function ProjectDetailPage() {
     }
   };
 
-  if (loading) {
+  if (loading || isTranslating) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">{t('projectDetail.loadingProject')}</p>
+          <p className="mt-4 text-gray-600">{isTranslating ? t('projectDetail.translating') || 'Translating...' : t('projectDetail.loadingProject')}</p>
         </div>
       </div>
     );
   }
 
-  if (error || !project) {
+  if (error || !project || !displayProject) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
@@ -113,9 +135,9 @@ export default function ProjectDetailPage() {
 
           {/* Project details */}
           <div className="p-8">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">{project.name}</h1>
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">{displayProject.name}</h1>
 
-            <p className="text-lg text-gray-700 mb-6">{project.description}</p>
+            <p className="text-lg text-gray-700 mb-6">{displayProject.description}</p>
 
             {/* Category Badge */}
             {project.category && (

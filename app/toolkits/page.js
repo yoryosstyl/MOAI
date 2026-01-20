@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTranslation } from '@/contexts/LanguageContext';
+import { useContentTranslation } from '@/hooks/useContentTranslation';
 import { collection, query, where, orderBy, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import FavoriteButton from '@/components/FavoriteButton';
@@ -16,9 +17,11 @@ export default function ToolkitsPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { user } = useAuth();
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
+  const { translateItems, isTranslating } = useContentTranslation();
   const [toolkits, setToolkits] = useState([]);
   const [filteredToolkits, setFilteredToolkits] = useState([]);
+  const [displayToolkits, setDisplayToolkits] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchFilters, setSearchFilters] = useState({
     search: '',
@@ -117,6 +120,27 @@ export default function ToolkitsPage() {
 
     setFilteredToolkits(filtered);
   }, [searchFilters, toolkits]);
+
+  // Translate content when language is English
+  useEffect(() => {
+    const translateContent = async () => {
+      if (filteredToolkits.length === 0) {
+        setDisplayToolkits([]);
+        return;
+      }
+
+      if (language === 'el') {
+        // Greek selected - show original content
+        setDisplayToolkits(filteredToolkits);
+      } else {
+        // English selected - translate Greek content to English
+        const translated = await translateItems(filteredToolkits, ['name', 'description', 'popularUseCases']);
+        setDisplayToolkits(translated);
+      }
+    };
+
+    translateContent();
+  }, [filteredToolkits, language, translateItems]);
 
   const handleFilterChange = (filterName, value) => {
     setSearchFilters((prev) => ({ ...prev, [filterName]: value }));
@@ -293,14 +317,14 @@ export default function ToolkitsPage() {
         </div>
 
         {/* Loading */}
-        {loading && (
+        {(loading || isTranslating) && (
           <div className="text-center py-12">
-            <p className="text-gray-600">{t('toolkits.loading')}</p>
+            <p className="text-gray-600">{isTranslating ? t('toolkits.translating') || 'Translating...' : t('toolkits.loading')}</p>
           </div>
         )}
 
         {/* Empty State */}
-        {!loading && filteredToolkits.length === 0 && (
+        {!loading && !isTranslating && displayToolkits.length === 0 && (
           <div className="bg-white rounded-lg shadow-md p-12 text-center">
             <svg
               className="w-16 h-16 mx-auto mb-4 text-gray-400"
@@ -325,9 +349,9 @@ export default function ToolkitsPage() {
         )}
 
         {/* Toolkits Grid */}
-        {!loading && filteredToolkits.length > 0 && (
+        {!loading && !isTranslating && displayToolkits.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredToolkits.map((toolkit) => (
+            {displayToolkits.map((toolkit) => (
               <Link
                 key={toolkit.id}
                 href={`/toolkits/${toolkit.id}`}

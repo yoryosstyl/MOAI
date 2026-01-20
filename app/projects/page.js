@@ -5,14 +5,17 @@ import { useRouter } from 'next/navigation';
 import { collection, getDocs, doc, getDoc, query, orderBy } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { useTranslation } from '@/contexts/LanguageContext';
+import { useContentTranslation } from '@/hooks/useContentTranslation';
 import Link from 'next/link';
 
 export default function ProjectsPage() {
   const router = useRouter();
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
+  const { translateItems, isTranslating } = useContentTranslation();
   const [projects, setProjects] = useState([]);
   const [projectOwners, setProjectOwners] = useState({});
   const [loading, setLoading] = useState(true);
+  const [displayProjects, setDisplayProjects] = useState([]);
   const [searchTitle, setSearchTitle] = useState('');
   const [searchTags, setSearchTags] = useState('');
   const [searchLocation, setSearchLocation] = useState('');
@@ -86,6 +89,27 @@ export default function ProjectsPage() {
 
     return matchesTitle && matchesTags && matchesLocation && matchesAuthor && matchesCategory;
   });
+
+  // Translate content when language is English
+  useEffect(() => {
+    const translateContent = async () => {
+      if (filteredProjects.length === 0) {
+        setDisplayProjects([]);
+        return;
+      }
+
+      if (language === 'el') {
+        // Greek selected - show original content
+        setDisplayProjects(filteredProjects);
+      } else {
+        // English selected - translate Greek content to English
+        const translated = await translateItems(filteredProjects, ['name', 'description']);
+        setDisplayProjects(translated);
+      }
+    };
+
+    translateContent();
+  }, [filteredProjects.length, language, projects, searchTitle, searchTags, searchLocation, searchAuthor, categoryFilter]);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -181,15 +205,15 @@ export default function ProjectsPage() {
         </div>
 
         {/* Loading state */}
-        {loading && (
+        {(loading || isTranslating) && (
           <div className="text-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-            <p className="mt-4 text-gray-600">{t('projects.loading')}</p>
+            <p className="mt-4 text-gray-600">{isTranslating ? t('projects.translating') || 'Translating...' : t('projects.loading')}</p>
           </div>
         )}
 
         {/* No projects state */}
-        {!loading && filteredProjects.length === 0 && (
+        {!loading && !isTranslating && displayProjects.length === 0 && (
           <div className="text-center py-12">
             <p className="text-gray-600 text-lg">
               {projects.length === 0 ? t('projects.noProjectsYet') : t('projects.noMatchingProjects')}
@@ -198,9 +222,9 @@ export default function ProjectsPage() {
         )}
 
         {/* Projects Grid */}
-        {!loading && filteredProjects.length > 0 && (
+        {!loading && !isTranslating && displayProjects.length > 0 && (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredProjects.map((project) => {
+            {displayProjects.map((project) => {
               const owner = projectOwners[project.ownerId];
 
               return (

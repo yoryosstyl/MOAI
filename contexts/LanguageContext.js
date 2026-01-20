@@ -8,11 +8,16 @@ export function LanguageProvider({ children }) {
   const [language, setLanguage] = useState('en');
   const [translations, setTranslations] = useState({});
 
-  // Load language preference from localStorage on mount
+  // Load language preference from localStorage on mount, or auto-detect from browser
   useEffect(() => {
     const savedLanguage = localStorage.getItem('moai-language');
     if (savedLanguage && (savedLanguage === 'en' || savedLanguage === 'el')) {
       setLanguage(savedLanguage);
+    } else {
+      // Auto-detect language from browser settings
+      const browserLanguage = navigator.language || navigator.userLanguage;
+      const detectedLanguage = browserLanguage?.startsWith('el') ? 'el' : 'en';
+      setLanguage(detectedLanguage);
     }
   }, []);
 
