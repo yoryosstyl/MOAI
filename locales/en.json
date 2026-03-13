@@ -761,7 +761,10 @@
     "loading": "Loading...",
     "success": "Profile updated successfully! Redirecting...",
     "error": "Failed to update profile. Please try again.",
-    "phoneError": "Phone number can only contain digits"
+    "phoneError": "Phone number can only contain digits",
+    "interestPlaceholder": "Type an interest and press Enter",
+    "competencyPlaceholder": "Type a skill and press Enter",
+    "addTag": "Add"
   },
   "myProjects": {
     "title": "My Projects",

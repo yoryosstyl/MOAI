@@ -164,7 +164,7 @@ export default function EditToolkitPage() {
     if (logoFile) {
       const timestamp = Date.now();
       const storageRef = ref(storage, `toolkits/logos/${timestamp}_${logoFile.name}`);
-      await uploadBytes(storageRef, logoFile);
+      await uploadBytes(storageRef, logoFile, { contentType: logoFile.type || 'image/png' });
       logoUrl = await getDownloadURL(storageRef);
     }
 

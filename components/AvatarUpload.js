@@ -47,7 +47,7 @@ export default function AvatarUpload({ currentAvatarUrl, userId, onUploadSuccess
 
       // Upload to Firebase Storage
       const storageRef = ref(storage, `avatars/${userId}/${Date.now()}.jpg`);
-      await uploadBytes(storageRef, compressedFile);
+      await uploadBytes(storageRef, compressedFile, { contentType: compressedFile.type || 'image/jpeg' });
 
       // Get download URL
       const downloadURL = await getDownloadURL(storageRef);

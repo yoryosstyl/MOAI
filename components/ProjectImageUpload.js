@@ -59,7 +59,7 @@ export default function ProjectImageUpload({ projectId, currentImages = [], onIm
         const fileName = `${timestamp}_${i}.jpg`;
         const storageRef = ref(storage, `projects/${projectId}/${fileName}`);
 
-        await uploadBytes(storageRef, compressedFile);
+        await uploadBytes(storageRef, compressedFile, { contentType: compressedFile.type || 'image/jpeg' });
         const downloadURL = await getDownloadURL(storageRef);
 
         newImageUrls.push(downloadURL);

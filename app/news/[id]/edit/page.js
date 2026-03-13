@@ -137,7 +137,7 @@ export default function EditNewsPage() {
       if (imageFile) {
         const timestamp = Date.now();
         const storageRef = ref(storage, `news/images/${timestamp}_${imageFile.name}`);
-        await uploadBytes(storageRef, imageFile);
+        await uploadBytes(storageRef, imageFile, { contentType: imageFile.type || 'image/jpeg' });
         const imageUrl = await getDownloadURL(storageRef);
         updateData.imageUrl = imageUrl;
       }

@@ -247,6 +247,7 @@ export default function ToolkitDetailPage() {
                 <div className="flex items-center text-white text-sm">
                   <span>{t('toolkitDetail.addedBy')} {toolkit.author}</span>
                 </div>
+
               </div>
 
               {/* Admin Actions */}
@@ -271,6 +272,29 @@ export default function ToolkitDetailPage() {
 
           {/* Content */}
           <div className="p-8">
+            {/* Website Link - prominent CTA */}
+            {toolkit.websiteUrl && (
+              <div className="mb-8 p-4 bg-blue-50 border border-blue-200 rounded-lg flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <svg className="w-6 h-6 text-blue-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                  </svg>
+                  <span className="text-gray-700 text-sm truncate">{toolkit.websiteUrl}</span>
+                </div>
+                <a
+                  href={toolkit.websiteUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center px-5 py-2.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition font-medium text-sm flex-shrink-0 ml-4"
+                >
+                  {t('toolkitDetail.externalLink')}
+                  <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </a>
+              </div>
+            )}
+
             {/* Description */}
             <div className="mb-8">
               <h2 className="text-2xl font-semibold text-gray-900 mb-3">{t('toolkitDetail.description')}</h2>
@@ -331,28 +355,6 @@ export default function ToolkitDetailPage() {
               </div>
             )}
 
-            {/* Website Link */}
-            {toolkit.websiteUrl && (
-              <div className="mb-8">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-3">{t('toolkitDetail.officialWebsite')}</h2>
-                <a
-                  href={toolkit.websiteUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium"
-                >
-                  {toolkit.websiteUrl}
-                  <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                    />
-                  </svg>
-                </a>
-              </div>
-            )}
           </div>
         </div>
 

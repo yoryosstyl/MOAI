@@ -6,8 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useTranslation } from '@/contexts/LanguageContext';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { db, storage } from '@/lib/firebase';
+import { db } from '@/lib/firebase';
 import imageCompression from 'browser-image-compression';
 import { notifyAdminsNewToolkit } from '@/utils/notifications';
 
@@ -32,7 +31,6 @@ export default function CreateToolkitPage() {
     systemRequirements: '',
   });
 
-  const [logoFile, setLogoFile] = useState(null);
   const [logoPreview, setLogoPreview] = useState(null);
   const [tagInput, setTagInput] = useState('');
   const [saving, setSaving] = useState(false);
@@ -99,9 +97,8 @@ export default function CreateToolkitPage() {
         fileType: 'image/png',
       };
       const compressedFile = await imageCompression(file, options);
-      setLogoFile(compressedFile);
 
-      // Create preview
+      // Convert to base64 data URL
       const reader = new FileReader();
       reader.onloadend = () => {
         setLogoPreview(reader.result);
@@ -136,15 +133,8 @@ export default function CreateToolkitPage() {
     setError('');
 
     try {
-      let logoUrl = '';
-
-      // Upload logo if provided
-      if (logoFile) {
-        const timestamp = Date.now();
-        const storageRef = ref(storage, `toolkits/logos/${timestamp}_${logoFile.name}`);
-        await uploadBytes(storageRef, logoFile);
-        logoUrl = await getDownloadURL(storageRef);
-      }
+      // Use base64 data URL for logo (already generated during preview)
+      const logoUrl = logoPreview || '';
 
       // Create toolkit document
       const toolkitData = {
